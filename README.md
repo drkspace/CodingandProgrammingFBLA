@@ -2,6 +2,7 @@
 Submission by Daniel Kramer for the 2017 FBLA Coding and Programming competition
 
 --Guidelines--
+
  The program must run on Windows XP or higher.
  
 • Solution must run standalone with no programming errors.
