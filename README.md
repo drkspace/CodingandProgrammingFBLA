@@ -1,7 +1,8 @@
 # Coding and Programming FBLA 2017
 Submission by Daniel Kramer from Johns Creek High School for the 2017 FBLA Coding and Programming competition
 
---Guidelines--
+--
+#Guidelines
 
  The program must run on Windows XP or higher.
  
@@ -28,3 +29,11 @@ the following tasks:
 
 • Enter/track, generate, and print report(s) showing customer attendance by time of day
 (AM/PM) and day of week
+
+--
+#To Run
+1. Download the executable for the correct os (Windows or Linux, Mac is not supported at this time)
+2. Run the application 
+3. The program will create a database file called "FEC_database". If you delete it after you add employees/customers, they will be lost forever
+4. Press any of the buttons to navigate to the specific routine
+5. A "Back to menu" button should be located in every routine
