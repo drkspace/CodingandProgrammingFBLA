@@ -1,5 +1,5 @@
 # Coding and Programming FBLA 2017
-Submission by Daniel Kramer for the 2017 FBLA Coding and Programming competition
+Submission by Daniel Kramer from Johns Creek High School for the 2017 FBLA Coding and Programming competition
 
 --Guidelines--
 
