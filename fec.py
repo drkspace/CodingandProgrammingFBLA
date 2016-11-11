@@ -730,13 +730,13 @@ def edit_Employee_Schedule():
 	
 			#Creating a list of buttons
 			dayButtons=[]
-			for i in range(0,8):
+			for i in range(0,7):
 		
 				#Filling the buttons with th days of the week and the corresponding variable
 				dayButtons.append(Checkbutton(frame, text = day_week[i], variable = dayVar[i]))
 	
 			#Put all of the buttons on the grid
-			for i in range(0,8):
+			for i in range(0,7):
 				dayButtons[i].grid(row=6+i,column=0)
 		
 
