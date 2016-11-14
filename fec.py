@@ -217,7 +217,7 @@ def add_Customer():
 			totals.append(AMVar[i].get()+PMVar[i].get())
 
 		#Use the method to add the customer to the database
-		add_customer_to_db(E.get(), E1.get(), totals[0], totals[1], totals[2], totals[3], totals[4], totals[5], totals[6])
+		add_customer_to_db(removeSpaces(E.get()), removeSpaces(E1.get()), totals[0], totals[1], totals[2], totals[3], totals[4], totals[5], totals[6])
 
 	#Method to delete the frame and return to the menu
 	def runMenu():
@@ -619,18 +619,19 @@ def edit_Employee():
 	#Method to goto the editing screen
 	def edit():
 		
+		
+		#Stores the old first and last name and removes the spaces form the users input
+		o_LN=removeSpaces(E1.get())
+		o_FN=removeSpaces(E.get())
+
 		#Select the employee with the matching names
-		cur.execute('SELECT * FROM employee WHERE last_name = ? AND first_name=?',(E1.get(),E.get()))
+		cur.execute('SELECT * FROM employee WHERE last_name = ? AND first_name=?',(o_LN,o_FN))
 
 		#Test to see if there is data in the selection
 		if(len(cur.fetchall())>0):
 
 			#Deletes the toSearch Button
 			toSearch.grid_forget()
-
-			#Stores the old first and last name
-			o_LN=E1.get()
-			o_FN=E.get()
 
 			#Ask the user for the new information
 			#It uses the same input boxes as before so they have the old names already inputted
@@ -643,8 +644,8 @@ def edit_Employee():
 				LN=E1.get()
 
 				#Use 2 different updates because of a limitation in sqlite3
-				cur.execute('UPDATE employee SET last_name = ? WHERE last_name = ? AND first_name = ?',(LN,o_LN,o_FN))
-				cur.execute('UPDATE employee SET first_name = ? WHERE last_name = ? AND first_name = ?',(E.get(),o_LN,o_FN))
+				cur.execute('UPDATE employee SET last_name = ? WHERE last_name = ? AND first_name = ?',(removeSpaces(LN),o_LN,o_FN))
+				cur.execute('UPDATE employee SET first_name = ? WHERE last_name = ? AND first_name = ?',(removeSpaces(E.get()),o_LN,o_FN))
 				
 				#Committing the changes
 				conn.commit()
@@ -885,6 +886,25 @@ def info():
 	text=Text(win)
 	text.insert(INSERT, "Created by Daniel Kramer for the 2016-2017 FBLA Coding & Programming competition.")
 	text.pack()
+
+#Helper method that removes spaces before and/or after strings
+def removeSpaces(string):
+
+	#Converting the string passed in to a char list
+	sList = list(string)
+
+	#Checks to see if the first charater is a space
+	if(sList[0]==' '):
+		del sList[0]
+
+	#Checks to see if the last charater is a space
+	if(sList[len(sList)-1]==' '):
+		del sList[len(sList)-1]
+
+	#Makes the list into a string and retins it
+	string = ''.join(sList)
+	return string
+
 		
 #Creating the menu at the top
 menubar = Menu(window)
