@@ -129,8 +129,6 @@ def addEmployee():
 	dayVar=[]
 	for i in range(0,8):
 		dayVar.append(IntVar())
-
-	#TODO check all
 	
 	#Creating a list of buttons
 	dayButtons=[]
@@ -141,7 +139,12 @@ def addEmployee():
 	
 	#Put all of the buttons on the grid
 	for i in range(0,7):
-		dayButtons[i].grid(row=6+i,column=0)
+		dayButtons[i].grid(row=7+i,column=0)
+
+	#Adds a check all buttons
+	#When the button is checked, calls the checkAll method and passes in the dayButtons list
+	check_All=Checkbutton(frame, text = "Check All Boxes", command = lambda: checkAll(dayButtons, 0) )
+	check_All.grid(row=6,column=0)
 
 	#Method to delete the frame and return to the menu
 	def runMenu():
@@ -158,7 +161,7 @@ def addEmployee():
 		
 	#Button to submit the input
 	submit = Button(frame,text="Submit", command=getInput)
-	submit.grid(row=13, column=0)
+	submit.grid(row=14, column=0)
 
 def add_Customer():	
 	
@@ -190,7 +193,7 @@ def add_Customer():
 		AMVar.append(IntVar())
 		PMVar.append(IntVar())
 
-	#TODO check all
+	
 	#List of buttons for AM and PM selections
 	AMButton=[]
 	PMButton=[]
@@ -200,13 +203,19 @@ def add_Customer():
 	
 	#Put the buttons in the frame
 	for i in range(0,7):
-		AMButton[i].grid(row=6+i, column=1)
-		PMButton[i].grid(row=6+i, column=3)	
+		AMButton[i].grid(row=7+i, column=1)
+		PMButton[i].grid(row=7+i, column=3)	
 	
 	#Put labels for each day of the week
 	for i in range(0,len(day_week)):
 		dayLabel=Label(frame, text=day_week[i]+":")
 		dayLabel.grid(row=6+i, column=0)
+
+	#Adds a check all buttons
+	#When the button is checked, calls the t method and passes in the tmp list
+	check_All=Checkbutton(frame, text = "Check All Boxes", command = lambda: checkAll(AMButton+PMButton, 0) )
+	check_All.grid(row=6,column=1)
+
 
 	#Get the input from each button
 	def get_Input():
@@ -230,7 +239,14 @@ def add_Customer():
 	
 	#Button to get input from the buttons
 	submit = Button(frame,text="submit", command=get_Input)
-	submit.grid(row=13, column=0)
+	submit.grid(row=14, column=0)
+
+	#Method and button for displaying the attendance of the customers
+	def show_customer_attendance():
+		del_menu()
+		print_Attendance_Customer()
+	printCButton=Button(frame, text="Print Customer Attendance", command=show_customer_attendance)
+	printCButton.grid(row=8, column=5)
 
 #Method to set a customers attendance
 def customer_attendance():
@@ -299,7 +315,7 @@ def customer_attendance():
 				intVarListAM.append(IntVar())
 				intVarListPM.append(IntVar())
 	
-			#TODO check all
+			
 			#List of AM and PM Buttons
 			AMButton=[]
 			PMButton=[]
@@ -314,8 +330,13 @@ def customer_attendance():
 
 			#Put all of the buttons on the grid
 			for i in range(0,7):
-				AMButton[i].grid(row=6+i, column=1)
-				PMButton[i].grid(row=6+i, column=2)
+				AMButton[i].grid(row=7+i, column=1)
+				PMButton[i].grid(row=7+i, column=2)
+
+			#Adds a check all buttons
+			#When the button is checked, calls the t method and passes in the tmp list
+			check_All=Checkbutton(frame, text = "Check All Boxes", command = lambda: checkAll(AMButton+PMButton, 0) )
+			check_All.grid(row=6,column=1)
 
 			#Store the customer id in id
 			id=str(data[0][0])	
@@ -375,7 +396,7 @@ def customer_attendance():
 
 			#Button to submit the changes
 			submit = Button(frame,text="submit", command=get_input)
-			submit.grid(row=13, column=0)
+			submit.grid(row=14, column=0)
 
 		#If there is no matching customers		
 		else:
@@ -395,7 +416,7 @@ def customer_attendance():
 
 	#Button to get back to the menu
 	toMenu = Button(frame, text='Back to the Menu', command=toMenu)
-	toMenu.grid(row=5,column=1)	
+	toMenu.grid(row=4,column=1)
 
 #Method to put all of the employees in a table on screen
 def showAll_Employee():
@@ -521,11 +542,21 @@ def print_Attendance_Customer():
 	def runMenu():
 			tbl.grid_remove()
 			toMenu.grid_remove()
+			addCButton.grid_remove()
 			menu()
 
 	#Button to go back to the menu
 	toMenu=Button(window, text="Back to the Menu", command=runMenu)
 	toMenu.grid(row=0, column=0)
+
+	#Method and button for adding an customer to the system
+	def add_customer_():
+		tbl.grid_remove()
+		toMenu.grid_remove()
+		addCButton.grid_remove()
+		add_Customer()
+	addCButton=Button(window, text="Add customers", command=add_customer_)
+	addCButton.grid(row=2, column=0)
 
 #Method to print the schedule of the employees
 def print_Schedule_All():
@@ -727,7 +758,7 @@ def edit_Employee_Schedule():
 			for i in range(0,8):
 				dayVar.append(IntVar())
 
-			#TODO check all
+			
 	
 			#Creating a list of buttons
 			dayButtons=[]
@@ -738,8 +769,12 @@ def edit_Employee_Schedule():
 	
 			#Put all of the buttons on the grid
 			for i in range(0,7):
-				dayButtons[i].grid(row=6+i,column=0)
+				dayButtons[i].grid(row=7+i,column=0)
 		
+			#Adds a check all buttons
+			#When the button is checked, calls the checkAll method and passes in the dayButtons list
+			check_All=Checkbutton(frame, text = "Check All Boxes", command = lambda: checkAll(dayButtons, 0) )
+			check_All.grid(row=6,column=0)
 
 			for i in data:
 
@@ -766,7 +801,7 @@ def edit_Employee_Schedule():
 			
 				#Button to submit the schedule and go back to the menu
 				submit = Button(frame,text="submit", command=get_input)
-				submit.grid(row=13, column=0)
+				submit.grid(row=14, column=0)
 					
 	#Button to search with the given name	
 	toSearch = Button(frame, text='Search', command=edit)
@@ -881,10 +916,10 @@ def help():
 #Method for displaying the information about the program
 def info():
 	win=Tk()
-	win.geometry("200x200")
+	win.geometry("202x200")
 	win.title("Info")
 	text=Text(win)
-	text.insert(INSERT, "Created by Daniel Kramer for the 2016-2017 FBLA Coding & Programming competition.")
+	text.insert(INSERT, "Created by Daniel Kramer for the 2016-2017 FBLA Coding & Programming competition.\n\nVersion 0.1.1")
 	text.pack()
 
 #Helper method that removes spaces before and/or after strings
@@ -905,6 +940,17 @@ def removeSpaces(string):
 	string = ''.join(sList)
 	return string
 
+#Method that checks all checkboxes in a list of buttons
+#if mode is 0 -> select all buttons
+#if mode is 1 -> deselect all buttons
+def checkAll(list_of_checkbox, mode):
+
+	#Loop through the list
+	for i in xrange(len(list_of_checkbox)):
+		if(mode==0):
+			list_of_checkbox[i].select()
+		if(mode==1):
+			list_of_checkbox[i].deselect()
 		
 #Creating the menu at the top
 menubar = Menu(window)
