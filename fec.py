@@ -16,8 +16,12 @@ conn = sqlite3.connect('FEC_Storage.db')
 #Making a cursor to be able to manipulate the database
 cur = conn.cursor()
 
-#Lis tof the days of the week for reference later in the program
+#List of the days of the week for reference later in the program
 day_week=['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+
+#Color of the rows 
+row_Color_1 = "#8ae234"
+row_Color_2 = "#729fcf" 
 
 #making a new window
 window =Tk()
@@ -127,18 +131,18 @@ def addEmployee():
 	
 	#Creating a list for the variables from the buttons
 	dayVar=[]
-	for i in range(0,8):
+	for i in xrange(7):
 		dayVar.append(IntVar())
 	
 	#Creating a list of buttons
 	dayButtons=[]
-	for i in range(0,7):
+	for i in xrange(7):
 		
 		#Filling the buttons with th days of the week and the corresponding variable
 		dayButtons.append(Checkbutton(frame, text = day_week[i], variable = dayVar[i]))
 	
 	#Put all of the buttons on the grid
-	for i in range(0,7):
+	for i in xrange(7):
 		dayButtons[i].grid(row=7+i,column=0)
 
 	#Adds a check all buttons
@@ -189,7 +193,7 @@ def add_Customer():
 	#List to store the vars for the buttons
 	AMVar=[]
 	PMVar=[]
-	for i in range(0,8):
+	for i in xrange(7):
 		AMVar.append(IntVar())
 		PMVar.append(IntVar())
 
@@ -197,17 +201,17 @@ def add_Customer():
 	#List of buttons for AM and PM selections
 	AMButton=[]
 	PMButton=[]
-	for i in range(0,8):
+	for i in xrange(7):
 		AMButton.append(Checkbutton(frame, text="AM", variable = AMVar[i], onvalue=2, offvalue=0))
 		PMButton.append(Checkbutton(frame, text="PM", variable = PMVar[i]))
 	
 	#Put the buttons in the frame
-	for i in range(0,7):
+	for i in xrange(7):
 		AMButton[i].grid(row=7+i, column=1)
 		PMButton[i].grid(row=7+i, column=3)	
 	
 	#Put labels for each day of the week
-	for i in range(0,len(day_week)):
+	for i in xrange(len(day_week)):
 		dayLabel=Label(frame, text=day_week[i]+":")
 		dayLabel.grid(row=6+i, column=0)
 
@@ -222,7 +226,7 @@ def add_Customer():
 		
 		#Sum the button values to either 0,1,2,3
 		totals=[]
-		for i in range(0,8):
+		for i in xrange(7):
 			totals.append(AMVar[i].get()+PMVar[i].get())
 
 		#Use the method to add the customer to the database
@@ -311,7 +315,7 @@ def customer_attendance():
 			#List of variables for the AM and PM buttons
 			intVarListAM=[]
 			intVarListPM=[]
-			for i in range(0,8):
+			for i in xrange(7):
 				intVarListAM.append(IntVar())
 				intVarListPM.append(IntVar())
 	
@@ -319,7 +323,7 @@ def customer_attendance():
 			#List of AM and PM Buttons
 			AMButton=[]
 			PMButton=[]
-			for i in range(0,8):
+			for i in xrange(7):
 
 				#Button for the AM selection
 				#Has values of 0 and 2 for the way the time is stored in the database
@@ -329,7 +333,7 @@ def customer_attendance():
 				PMButton.append(Checkbutton(frame, text="PM", variable = intVarListPM[i]))
 
 			#Put all of the buttons on the grid
-			for i in range(0,7):
+			for i in xrange(7):
 				AMButton[i].grid(row=7+i, column=1)
 				PMButton[i].grid(row=7+i, column=2)
 
@@ -349,7 +353,7 @@ def customer_attendance():
 			for i in attend:
 
 				#Loop to have all of the buttons selected if they were selected before
-				for k in range(0,8):
+				for k in xrange(8):
 					if(i[k]>=4):
 						continue
 					if(i[k]==0):
@@ -363,7 +367,7 @@ def customer_attendance():
 						PMButton[k-1].select()
 
 			#Display all of the days of the week
-			for i in range(0,len(day_week)):
+			for i in xrange(len(day_week)):
 				dayLabel=Label(frame, text=day_week[i]+":")
 				dayLabel.grid(row=6+i, column=0)
 			
@@ -373,7 +377,7 @@ def customer_attendance():
 				
 				#Add up each day total and store it in total
 				total=[]
-				for i in range(0,8):
+				for i in xrange(8):
 					total.append(intVarListAM[i].get()+intVarListPM[i].get())
 
 				#Have to update each day's attendance individually, limitation in sqlite3
@@ -456,8 +460,8 @@ def showAll_Employee():
 		color_assigner*=-1
 
 	#Set the color of the columns depending on the color assigner
-	tbl.tag_configure(str(1), background='#6CBABE')
-	tbl.tag_configure(str(-1), background='#A4E462')
+	tbl.tag_configure(str(1), background=row_Color_1)
+	tbl.tag_configure(str(-1), background=row_Color_2)
 
 	#Method to remove the table and go back to the menu
 	def runMenu():
@@ -535,8 +539,8 @@ def print_Attendance_Customer():
 			color_assigner*=-1
 
 		#Setting the background color depending on the color assigned
-		tbl.tag_configure(str(1), background='#6CBABE')
-		tbl.tag_configure(str(-1), background='#A4E462')
+		tbl.tag_configure(str(1), background=row_Color_1)
+		tbl.tag_configure(str(-1), background=row_Color_2)
 
 	#Method to run the menu and delete the table
 	def runMenu():
@@ -597,8 +601,32 @@ def print_Schedule_All():
 
 	#Storing the selection to schedule
 	schedule = cur.fetchall()
+
+	#Method for changing the number stored for the correct word	
+	def change_number_to_word(numlist):
+	
+		#Loop through the numlist	
+		for i in xrange(len(numlist)):
+
+			#change numlist to a tuple
+			numlist=list(numlist)
+
+			#If it is 0, change it to Absent
+			if numlist[i]==0:
+				numlist[i]="Absent"
+
+			#If it is 1, change it to Present
+			if numlist[i]==1:
+				numlist[i]="Present"
+
+		#Return the updates numlist
+		return numlist	
+
 	for i in schedule:
-		
+
+		#Change the numbers to words		
+		i=change_number_to_word(i)
+
 		#Selecting the first and last name with the matching employee id
 		cur.execute('SELECT last_name, first_name FROM EMPLOYEE WHERE employee_id = '+str(i[0]))
 		for k in cur.fetchall():
@@ -610,8 +638,8 @@ def print_Schedule_All():
 		color_assigner*=-1
 
 	#Set the color of the columns depending on the color assigner
-	tbl.tag_configure(str(1), background='#6CBABE')
-	tbl.tag_configure(str(-1), background='#A4E462')
+	tbl.tag_configure(str(1), background= row_Color_1)
+	tbl.tag_configure(str(-1), background= row_Color_2)
 
 	#Method to remove the table and go back to the menu
 	def runMenu():
@@ -755,20 +783,18 @@ def edit_Employee_Schedule():
 
 			#Creating a list for the variables from the buttons
 			dayVar=[]
-			for i in range(0,8):
+			for i in xrange(7):
 				dayVar.append(IntVar())
 
-			
-	
 			#Creating a list of buttons
 			dayButtons=[]
-			for i in range(0,7):
+			for i in xrange(7):
 		
 				#Filling the buttons with th days of the week and the corresponding variable
 				dayButtons.append(Checkbutton(frame, text = day_week[i], variable = dayVar[i]))
 	
 			#Put all of the buttons on the grid
-			for i in range(0,7):
+			for i in xrange(7):
 				dayButtons[i].grid(row=7+i,column=0)
 		
 			#Adds a check all buttons
@@ -783,7 +809,7 @@ def edit_Employee_Schedule():
 				for j in cur.fetchall():
 
 					#Loop to have all of the buttons selected if they were selected before
-					for k in range(0,8):
+					for k in xrange(7):
 
 						#Test to see if the value isn't a valid value
 						if(j[k]>=4):
