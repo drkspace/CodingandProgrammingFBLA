@@ -5,10 +5,7 @@
 #https://github.com/drkspace/CodingandProgrammingFBLA
 ##############
 
-
-#TODO Allow for file loading
-#TODO Formatting
-
+#TODO Better Formatting
 
 #importing all from Tkinter
 from Tkinter import *
@@ -26,8 +23,8 @@ import random
 #Version number
 version = "0.2.0"
 
-db_file = "FEC_Storage.db"
 #Setting up a connection to the sqlite database
+db_file = "FEC_Storage.db"
 conn = sqlite3.connect(db_file)
 
 #Making a cursor to be able to manipulate the database
@@ -985,6 +982,16 @@ def save_file():
 	#Closes the location pointer
 	f.close()
 
+#Method to open a file
+#Not working
+#TODO Get Working
+def open_file():
+	
+	f = tkFileDialog.askopenfilename()
+	db_file = f
+	cur.executescript(db_file)
+	
+	
 #Helper method that removes spaces before and/or after strings
 def removeSpaces(string):
 
@@ -1017,17 +1024,14 @@ def checkAll(list_of_checkbox, mode):
 		
 #Creating the menu at the top
 menubar = Menu(window)
-helpmenu = Menu(menubar, tearoff=1)
+helpmenu = Menu(menubar, tearoff=0)
 
-#Creating a file menu at the top
-file_Menue = Menu(menubar, tearoff=0)
-
-#Adding the help and info options
+#Adding the help, info and, save options
+#Unable to get open to work
 helpmenu.add_command(label="Help", command=help)
 helpmenu.add_command(label="Info", command=info)
-
-#Add the save option in the file menu
-file_Menue.add_command(label="Save", command=save_file)
+helpmenu.add_command(label="Save", command=save_file)
+#helpmenu.add_command(label="open", command=open_file)
 
 #Creating the help cascade
 menubar.add_cascade(label="Help", menu=helpmenu)		
