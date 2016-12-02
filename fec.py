@@ -1,3 +1,14 @@
+##############
+#Daniel Kramer, Johns Creek High School
+#2016-2017 FBLA Coding and Programming Competition
+#https://github.com/drkspace/CodingandProgrammingFBLA
+##############
+
+#TODO Allow for file saving
+#TODO Allow for file loading
+#TODO Formatting
+
+
 #importing all from Tkinter
 from Tkinter import *
 import ttk
@@ -9,6 +20,10 @@ import sqlite3
 
 #Importing Random for Ids
 import random
+
+#Version number
+version = "0.1.2"
+
 
 #Setting up a connection to the sqlite database
 conn = sqlite3.connect('FEC_Storage.db')
@@ -945,7 +960,7 @@ def info():
 	win.geometry("202x200")
 	win.title("Info")
 	text=Text(win)
-	text.insert(INSERT, "Created by Daniel Kramer for the 2016-2017 FBLA Coding & Programming competition.\n\nVersion 0.1.1")
+	text.insert(INSERT, "Created by Daniel Kramer for the 2016-2017 FBLA Coding & Programming competition.\n\nVersion "+version)
 	text.pack()
 
 #Helper method that removes spaces before and/or after strings
@@ -954,15 +969,15 @@ def removeSpaces(string):
 	#Converting the string passed in to a char list
 	sList = list(string)
 
-	#Checks to see if the first charater is a space
+	#Checks to see if the first character is a space
 	if(sList[0]==' '):
 		del sList[0]
 
-	#Checks to see if the last charater is a space
+	#Checks to see if the last character is a space
 	if(sList[len(sList)-1]==' '):
 		del sList[len(sList)-1]
 
-	#Makes the list into a string and retins it
+	#Makes the list into a string and returns it
 	string = ''.join(sList)
 	return string
 
