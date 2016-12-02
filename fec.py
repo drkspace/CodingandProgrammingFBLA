@@ -1,11 +1,13 @@
 ##############
 #Daniel Kramer, Johns Creek High School
-#Version 0.2.0
+#Version 0.2.1
 #2016-2017 FBLA Coding and Programming Competition
 #https://github.com/drkspace/CodingandProgrammingFBLA
 ##############
 
 #TODO Better Formatting
+#TODO Allow deleteing of employees/customers
+#TODO allow the user to change the row colors
 
 #importing all from Tkinter
 from Tkinter import *
@@ -21,7 +23,7 @@ import sqlite3
 import random 
 
 #Version number
-version = "0.2.0"
+version = "0.2.1"
 
 #Setting up a connection to the sqlite database
 db_file = "FEC_Storage.db"
@@ -989,7 +991,8 @@ def open_file():
 	
 	f = tkFileDialog.askopenfilename()
 	db_file = f
-	cur.executescript(db_file)
+	conn=sqlite3.connect(db_file)
+	cur=conn.cursor()
 	
 	
 #Helper method that removes spaces before and/or after strings
@@ -1025,16 +1028,18 @@ def checkAll(list_of_checkbox, mode):
 #Creating the menu at the top
 menubar = Menu(window)
 helpmenu = Menu(menubar, tearoff=0)
+filemenu = Menu(menubar, tearoff=0)
 
 #Adding the help, info and, save options
 #Unable to get open to work
 helpmenu.add_command(label="Help", command=help)
 helpmenu.add_command(label="Info", command=info)
-helpmenu.add_command(label="Save", command=save_file)
-#helpmenu.add_command(label="open", command=open_file)
+filemenu.add_command(label="Save", command=save_file)
+filemenu.add_command(label="Open", command=open_file)
 
-#Creating the help cascade
-menubar.add_cascade(label="Help", menu=helpmenu)		
+#Creating the help and file cascade
+menubar.add_cascade(label="File", menu=filemenu)
+menubar.add_cascade(label="Help", menu=helpmenu)
 window.config(menu=menubar)
 
 #To make the tables if they are not present
