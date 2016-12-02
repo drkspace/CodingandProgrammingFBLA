@@ -1,10 +1,11 @@
 ##############
 #Daniel Kramer, Johns Creek High School
+#Version 0.2.0
 #2016-2017 FBLA Coding and Programming Competition
 #https://github.com/drkspace/CodingandProgrammingFBLA
 ##############
 
-#TODO Allow for file saving
+
 #TODO Allow for file loading
 #TODO Formatting
 
@@ -14,19 +15,20 @@ from Tkinter import *
 import ttk
 import Tkinter
 import tkMessageBox
+import tkFileDialog
 
 #Importing sqlite
 import sqlite3
 
 #Importing Random for Ids
-import random
+import random 
 
 #Version number
-version = "0.1.2"
+version = "0.2.0"
 
-
+db_file = "FEC_Storage.db"
 #Setting up a connection to the sqlite database
-conn = sqlite3.connect('FEC_Storage.db')
+conn = sqlite3.connect(db_file)
 
 #Making a cursor to be able to manipulate the database
 cur = conn.cursor()
@@ -963,6 +965,26 @@ def info():
 	text.insert(INSERT, "Created by Daniel Kramer for the 2016-2017 FBLA Coding & Programming competition.\n\nVersion "+version)
 	text.pack()
 
+#Method to allow the user to save a file
+def save_file():
+		
+	#Opening a box for a user entering a new save file
+	f = tkFileDialog.asksaveasfile(mode='w', defaultextension=".db")
+
+	#If the user leaves the box w/o entering a file
+	if f is None:
+		return
+
+	#Open the file and copy it to a string
+	with open(db_file) as myfile:
+  		data=myfile.read()
+
+	#Write the old file to the new location
+	f.write(data)
+
+	#Closes the location pointer
+	f.close()
+
 #Helper method that removes spaces before and/or after strings
 def removeSpaces(string):
 
@@ -995,11 +1017,17 @@ def checkAll(list_of_checkbox, mode):
 		
 #Creating the menu at the top
 menubar = Menu(window)
-helpmenu = Menu(menubar, tearoff=0)
+helpmenu = Menu(menubar, tearoff=1)
+
+#Creating a file menu at the top
+file_Menue = Menu(menubar, tearoff=0)
 
 #Adding the help and info options
 helpmenu.add_command(label="Help", command=help)
 helpmenu.add_command(label="Info", command=info)
+
+#Add the save option in the file menu
+file_Menue.add_command(label="Save", command=save_file)
 
 #Creating the help cascade
 menubar.add_cascade(label="Help", menu=helpmenu)		
