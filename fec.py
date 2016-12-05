@@ -6,8 +6,12 @@
 ##############
 
 #TODO Better Formatting
+#TODO Open new database
+#TODO Open old database
+#TODO Combine Similar Methods to get line count down
 #TODO Allow deleteing of employees/customers
-#TODO allow the user to change the row colors
+#TODO Allow the user to change the row colors
+#TODO Allow selecting customer/employee from table to edit
 
 #importing all from Tkinter
 from Tkinter import *
@@ -65,7 +69,7 @@ def create_table():
 	#1 - PM
 	#2 - AM
 	#3 - AM/PM
-	cur.execute('CREATE TABLE IF NOT EXISTS customer_attendance(customer_id REAL, sun_attend REAL, mon_attend REAL, tues_attend REAL, wend_attend REAL, thurs_attend REAL, fri_attend REAL, sat_attend REAL)')
+	cur.execute('CREATE TABLE IF NOT EXISTS customer_schedule(customer_id REAL, sun_attend REAL, mon_attend REAL, tues_attend REAL, wend_attend REAL, thurs_attend REAL, fri_attend REAL, sat_attend REAL)')
 
 #Adds an employee to the database
 def add_Employee_to_db(fName, lName, sun, mon, tues, wend, thur, fri, sat):
@@ -119,7 +123,7 @@ def add_customer_to_db(fName, lName, sun, mon, tues, wend, thur, fri, sat):
 	cur.execute('INSERT INTO customer(customer_id, first_name, last_name) VALUES(?,?,?)', (rndID,fName,lName))
 	
 	#Insert the days attended and id into the employee_schedule table	
-	cur.execute('INSERT INTO customer_attendance(customer_id, sun_attend, mon_attend, tues_attend, wend_attend, thurs_attend, fri_attend, sat_attend) VALUES(?,?,?,?,?,?,?,?)', (rndID,sun,mon,tues,wend,thur,fri,sat))
+	cur.execute('INSERT INTO customer_schedule(customer_id, sun_attend, mon_attend, tues_attend, wend_attend, thurs_attend, fri_attend, sat_attend) VALUES(?,?,?,?,?,?,?,?)', (rndID,sun,mon,tues,wend,thur,fri,sat))
 
 	#Commit the changes to save
 	conn.commit()
@@ -362,7 +366,7 @@ def customer_attendance():
 			id=str(data[0][0])	
 
 			#Selecting the data from customer attendance with the correct customer id
-			cur.execute('SELECT * FROM customer_attendance WHERE customer_id = '+id)
+			cur.execute('SELECT * FROM customer_schedule WHERE customer_id = '+id)
 
 			#Storing the attendance in attend
 			attend = cur.fetchall()
@@ -397,13 +401,13 @@ def customer_attendance():
 					total.append(intVarListAM[i].get()+intVarListPM[i].get())
 
 				#Have to update each day's attendance individually, limitation in sqlite3
-				cur.execute("UPDATE customer_attendance SET sun_attend = ? WHERE customer_id = ?",(str(total[0]),id))
-				cur.execute("UPDATE customer_attendance SET mon_attend = ? WHERE customer_id = ?",(str(total[1]),id))
-				cur.execute("UPDATE customer_attendance SET tues_attend = ? WHERE customer_id = ?",(str(total[2]),id))
-				cur.execute("UPDATE customer_attendance SET wend_attend = ? WHERE customer_id = ?",(str(total[3]),id))
-				cur.execute("UPDATE customer_attendance SET thurs_attend = ? WHERE customer_id = ?",(str(total[4]),id))
-				cur.execute("UPDATE customer_attendance SET fri_attend = ? WHERE customer_id = ?",(str(total[5]),id))
-				cur.execute("UPDATE customer_attendance SET sat_attend = ? WHERE customer_id = ?",(str(total[6]),id))
+				cur.execute("UPDATE customer_schedule SET sun_attend = ? WHERE customer_id = ?",(str(total[0]),id))
+				cur.execute("UPDATE customer_schedule SET mon_attend = ? WHERE customer_id = ?",(str(total[1]),id))
+				cur.execute("UPDATE customer_schedule SET tues_attend = ? WHERE customer_id = ?",(str(total[2]),id))
+				cur.execute("UPDATE customer_schedule SET wend_attend = ? WHERE customer_id = ?",(str(total[3]),id))
+				cur.execute("UPDATE customer_schedule SET thurs_attend = ? WHERE customer_id = ?",(str(total[4]),id))
+				cur.execute("UPDATE customer_schedule SET fri_attend = ? WHERE customer_id = ?",(str(total[5]),id))
+				cur.execute("UPDATE customer_schedule SET sat_attend = ? WHERE customer_id = ?",(str(total[6]),id))
 				
 				#Commit the changes
 				conn.commit()
@@ -524,7 +528,7 @@ def print_Attendance_Customer():
 	color_assigner = 1
 
 	#Selecting everything from customer attendance
-	cur.execute('SELECT * FROM customer_attendance')
+	cur.execute('SELECT * FROM customer_schedule')
 
 	#Storing the customer attendance in attendance
 	attendance = cur.fetchall()
@@ -857,6 +861,24 @@ def edit_Employee_Schedule():
 	#Button to go back to the menu
 	toMenu = Button(frame, text='Back to the Menu', command=toMenu)
 	toMenu.grid(row=5,column=1)
+
+#Method to delete an employee/customer from their database
+#If dbType is 0 - Employee
+#If dbType is 1 - Customer
+def delete_from_Database(dbType, Id):
+	db = ""
+	if dbType = 0:
+		db = "employee"
+	else if dbType = 1:
+		db = "customer"
+	else:
+		print "There as been an error, invalid dbType"
+
+	cur.execute('DELETE FROM ? WHERE ?_id=?',(db,db,Id))
+	cur.execute('DELETE FROM ?_schedule WHERE ?_id=?',(db,db,Id))
+
+
+
 
 #Method for editing the schedule
 def edit_schedule(eId,sun,mon,tues,wed,thur,fri,sat):
