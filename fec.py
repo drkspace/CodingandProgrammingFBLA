@@ -422,7 +422,7 @@ def customer_attendance():
 			def delete_record():
 				delete_from_Database(1,id)
 				frame.grid_forget()
-				menu
+				menu()
 			#Button to delete the person
 			deleteButton = Button(frame, text='Delete Record', command = delete_record)
 			deleteButton.grid(row=14, column=0)
@@ -716,8 +716,9 @@ def edit_Employee():
 		cur.execute('SELECT * FROM employee WHERE last_name = ? AND first_name=?',(o_LN,o_FN))
 
 		#Test to see if there is data in the selection
-		if(len(cur.fetchall())>0):
-
+		tmp = cur.fetchall()
+		if(len(tmp)>0):
+			id = tmp[0][0]
 			#Deletes the toSearch Button
 			toSearch.grid_forget()
 
@@ -743,6 +744,15 @@ def edit_Employee():
 	
 				#Returning to the menu
 				menu()
+
+			
+			def delete_record():
+				delete_from_Database(0,id)
+				frame.grid_forget()
+				menu()
+			#Button to delete the person
+			deleteButton = Button(frame, text='Delete Record', command = delete_record)
+			deleteButton.grid(row=14, column=0)
 
 			#Button to submit the new information
 			submit = Button(frame,text="submit", command=get_input)
@@ -876,7 +886,7 @@ def edit_Employee_Schedule():
 #If dbType is 1 - Customer
 def delete_from_Database(dbType, Id):
 
-	#Changes the int to the coresponging string
+	#Changes the int to the coresponding string
 	db = ""
 	if dbType == 0:
 		db = "employee"
@@ -884,10 +894,11 @@ def delete_from_Database(dbType, Id):
 		db = "customer"
 	else:
 		print "There as been an error, invalid dbType"
+		return
 
 	#Delete the row in the databases with the matching id
-	cur.execute('DELETE FROM ? WHERE ?_id=?',(db,db,Id))
-	cur.execute('DELETE FROM ?_schedule WHERE ?_id=?',(db,db,Id))
+	cur.execute('DELETE FROM '+db+' WHERE '+db+'_id = '+str(Id))
+	cur.execute('DELETE FROM '+db+'_schedule WHERE '+db+'_id = '+str(Id))
 	conn.commit()
 
 #Method for editing the schedule
