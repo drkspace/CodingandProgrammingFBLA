@@ -1,6 +1,6 @@
 ##############
 #Daniel Kramer, Johns Creek High School
-#Version 0.2.1
+#Version 0.2.2
 #2016-2017 FBLA Coding and Programming Competition
 #https://github.com/drkspace/CodingandProgrammingFBLA
 ##############
@@ -12,6 +12,7 @@
 #TODO Allow deleteing of employees/customers
 #TODO Allow the user to change the row colors
 #TODO Allow selecting customer/employee from table to edit
+#TODO Refined search in the tables
 
 #importing all from Tkinter
 from Tkinter import *
@@ -27,7 +28,7 @@ import sqlite3
 import random 
 
 #Version number
-version = "0.2.1"
+version = "0.2.2"
 
 #Setting up a connection to the sqlite database
 db_file = "FEC_Storage.db"
@@ -418,9 +419,17 @@ def customer_attendance():
 				#Run the menu
 				menu()
 
+			def delete_record():
+				delete_from_Database(1,id)
+				frame.grid_forget()
+				menu
+			#Button to delete the person
+			deleteButton = Button(frame, text='Delete Record', command = delete_record)
+			deleteButton.grid(row=14, column=0)
+
 			#Button to submit the changes
 			submit = Button(frame,text="submit", command=get_input)
-			submit.grid(row=14, column=0)
+			submit.grid(row=15, column=0)
 
 		#If there is no matching customers		
 		else:
@@ -866,19 +875,20 @@ def edit_Employee_Schedule():
 #If dbType is 0 - Employee
 #If dbType is 1 - Customer
 def delete_from_Database(dbType, Id):
+
+	#Changes the int to the coresponging string
 	db = ""
-	if dbType = 0:
+	if dbType == 0:
 		db = "employee"
-	else if dbType = 1:
+	elif dbType == 1:
 		db = "customer"
 	else:
 		print "There as been an error, invalid dbType"
 
+	#Delete the row in the databases with the matching id
 	cur.execute('DELETE FROM ? WHERE ?_id=?',(db,db,Id))
 	cur.execute('DELETE FROM ?_schedule WHERE ?_id=?',(db,db,Id))
-
-
-
+	conn.commit()
 
 #Method for editing the schedule
 def edit_schedule(eId,sun,mon,tues,wed,thur,fri,sat):
