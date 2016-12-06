@@ -9,7 +9,7 @@
 #TODO Open new database
 #TODO Open old database
 #TODO Combine Similar Methods to get line count down
-#TODO Allow the user to change the row colors
+#TODO Allow the user to save the changed row color between uses
 #TODO Allow selecting customer/employee from table to edit
 #TODO Refined search in the tables
 
@@ -1071,18 +1071,31 @@ def checkAll(list_of_checkbox, mode):
 		if(mode==1):
 			list_of_checkbox[i].deselect()
 
-def Change_chart_color(color):
+#Method to change the color of the rows in the charts
+#Gets the old color passed in
+#Gets row color var number passed in
+def Change_chart_color(color,var):
 
 	#Call the tkColorChooser which opens a popup box with a color slider
 	color_result=tkColorChooser.askcolor(color, title="Please Pick a new Color")
+
+	#Test to see if the user press cancel
+	#If true, return out of the method
 	if color_result == (None,None):
 		return
 
 	#Converts the rgb returned by the color chooser and converts it into the hex code
 	color_result_hex= '#%02x%02x%02x' % (color_result[0][0],color_result[0][1],color_result[0][2])
 
-	#return the result
-	return color_result_hex
+	#Test from the var to see what row color needs to be changed
+	if var == 1:
+		global row_Color_1
+		row_Color_1=color_result_hex
+	elif var == 2: 
+		global row_Color_2
+		row_Color_2=color_result_hex
+	else:
+		return
 		
 #Creating the menu at the top
 menubar = Menu(window)
@@ -1098,8 +1111,8 @@ helpmenu.add_command(label="Info", command=info)
 filemenu.add_command(label="Save", command=save_file)
 filemenu.add_command(label="Open", command=open_file)
 options.add_cascade(label="Change chart color", menu=color_options)
-color_options.add_command(label="Change Color 1", command = lambda: Change_chart_color(row_Color_1))
-color_options.add_command(label="Change Color 2", command = lambda: Change_chart_color(row_Color_2))
+color_options.add_command(label="Change Color 1", command = lambda: Change_chart_color(row_Color_1,1))
+color_options.add_command(label="Change Color 2", command = lambda: Change_chart_color(row_Color_2,2))
 
 #Creating the help and file cascade
 menubar.add_cascade(label="File", menu=filemenu)
