@@ -1,6 +1,6 @@
 ##############
 #Daniel Kramer, Johns Creek High School
-#Version 0.2.3
+#Version 0.3.0
 #2016-2017 FBLA Coding and Programming Competition
 #https://github.com/drkspace/CodingandProgrammingFBLA
 ##############
@@ -28,7 +28,7 @@ import sqlite3
 import random 
 
 #Version number
-version = "0.2.3"
+version = "0.3.0"
 
 #Setting up a connection to the sqlite database
 db_file = "FEC_Storage.db"
