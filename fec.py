@@ -1075,6 +1075,8 @@ def Change_chart_color(color):
 
 	#Call the tkColorChooser which opens a popup box with a color slider
 	color_result=tkColorChooser.askcolor(color, title="Please Pick a new Color")
+	if color_result == (None,None):
+		return
 
 	#Converts the rgb returned by the color chooser and converts it into the hex code
 	color_result_hex= '#%02x%02x%02x' % (color_result[0][0],color_result[0][1],color_result[0][2])
@@ -1086,6 +1088,8 @@ def Change_chart_color(color):
 menubar = Menu(window)
 helpmenu = Menu(menubar, tearoff=0)
 filemenu = Menu(menubar, tearoff=0)
+options = Menu(menubar, tearoff=0)
+color_options=Menu()
 
 #Adding the help, info and, save options
 #Unable to get open to work
@@ -1093,11 +1097,14 @@ helpmenu.add_command(label="Help", command=help)
 helpmenu.add_command(label="Info", command=info)
 filemenu.add_command(label="Save", command=save_file)
 filemenu.add_command(label="Open", command=open_file)
-filemenu.add_command(label="Change Chart Color", command=Change_chart_color)
+options.add_cascade(label="Change chart color", menu=color_options)
+color_options.add_command(label="Change Color 1", command = lambda: Change_chart_color(row_Color_1))
+color_options.add_command(label="Change Color 2", command = lambda: Change_chart_color(row_Color_2))
 
 #Creating the help and file cascade
 menubar.add_cascade(label="File", menu=filemenu)
 menubar.add_cascade(label="Help", menu=helpmenu)
+menubar.add_cascade(label="Options", menu=options)
 window.config(menu=menubar)
 
 #To make the tables if they are not present
