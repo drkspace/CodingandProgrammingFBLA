@@ -1,6 +1,6 @@
 ##############
 #Daniel Kramer, Johns Creek High School
-#Version 0.2.2
+#Version 0.2.3
 #2016-2017 FBLA Coding and Programming Competition
 #https://github.com/drkspace/CodingandProgrammingFBLA
 ##############
@@ -9,7 +9,6 @@
 #TODO Open new database
 #TODO Open old database
 #TODO Combine Similar Methods to get line count down
-#TODO Allow deleteing of employees/customers
 #TODO Allow the user to change the row colors
 #TODO Allow selecting customer/employee from table to edit
 #TODO Refined search in the tables
@@ -20,6 +19,7 @@ import ttk
 import Tkinter
 import tkMessageBox
 import tkFileDialog
+import tkColorChooser
 
 #Importing sqlite
 import sqlite3
@@ -28,7 +28,7 @@ import sqlite3
 import random 
 
 #Version number
-version = "0.2.2"
+version = "0.2.3"
 
 #Setting up a connection to the sqlite database
 db_file = "FEC_Storage.db"
@@ -718,7 +718,10 @@ def edit_Employee():
 		#Test to see if there is data in the selection
 		tmp = cur.fetchall()
 		if(len(tmp)>0):
+
+			#Sets the id
 			id = tmp[0][0]
+
 			#Deletes the toSearch Button
 			toSearch.grid_forget()
 
@@ -958,7 +961,7 @@ def menu():
 	def edit_Employee_Run():
 		del_menu()
 		edit_Employee()
-	editButton = Button(frame, text ="Edit an Employee's details", command = edit_Employee_Run)
+	editButton = Button(frame, text ="Edit/Delete an Employee's details", command = edit_Employee_Run)
 	editButton.grid(row=4, column =0)
 		
 	#Method and button for editing an employees work schedule
@@ -979,7 +982,7 @@ def menu():
 	def edit_Customer_attednace():
 		del_menu()
 		customer_attendance()
-	editCButton=Button(frame, text="Change Customers attendance", command=edit_Customer_attednace)
+	editCButton=Button(frame, text="Change/Delete Customers Information", command=edit_Customer_attednace)
 	editCButton.grid(row=2, column=2)
 
 	#Method and button for displaying the attendance of the customers
@@ -1067,6 +1070,17 @@ def checkAll(list_of_checkbox, mode):
 			list_of_checkbox[i].select()
 		if(mode==1):
 			list_of_checkbox[i].deselect()
+
+def Change_chart_color(color):
+
+	#Call the tkColorChooser which opens a popup box with a color slider
+	color_result=tkColorChooser.askcolor(color, title="Please Pick a new Color")
+
+	#Converts the rgb returned by the color chooser and converts it into the hex code
+	color_result_hex= '#%02x%02x%02x' % (color_result[0][0],color_result[0][1],color_result[0][2])
+
+	#return the result
+	return color_result_hex
 		
 #Creating the menu at the top
 menubar = Menu(window)
@@ -1079,6 +1093,7 @@ helpmenu.add_command(label="Help", command=help)
 helpmenu.add_command(label="Info", command=info)
 filemenu.add_command(label="Save", command=save_file)
 filemenu.add_command(label="Open", command=open_file)
+filemenu.add_command(label="Change Chart Color", command=Change_chart_color)
 
 #Creating the help and file cascade
 menubar.add_cascade(label="File", menu=filemenu)
