@@ -1,13 +1,12 @@
 ##############
 #Daniel Kramer, Johns Creek High School
-#Version 0.3.0
+#Version 0.4.0
 #2016-2017 FBLA Coding and Programming Competition
 #https://github.com/drkspace/CodingandProgrammingFBLA
 ##############
 
 #TODO Better Formatting
 #TODO Open new database
-#TODO Open old database
 #TODO Combine Similar Methods to get line count down
 #TODO Allow the user to save the changed row color between uses
 #TODO Allow selecting customer/employee from table to edit
@@ -28,7 +27,7 @@ import sqlite3
 import random 
 
 #Version number
-version = "0.3.0"
+version = "0.4.0"
 
 #Setting up a connection to the sqlite database
 db_file = "FEC_Storage.db"
@@ -1031,13 +1030,22 @@ def save_file():
 	f.close()
 
 #Method to open a file
-#Not working
-#TODO Get Working
+#No checking to see if the file is in the right format
 def open_file():
 	
-	f = tkFileDialog.askopenfilename()
-	db_file = f
+	#Opens a open box
+	db_file = tkFileDialog.askopenfilename()
+
+	#If the user preses cancel
+	if db_file is None:
+		return
+
+	#sets conn to the global variable and changes the connection location to that file
+	global conn
 	conn=sqlite3.connect(db_file)
+
+	#sets conn to the global variable and changes the connection location to that file
+	global cur
 	cur=conn.cursor()
 	
 	
@@ -1116,8 +1124,8 @@ color_options.add_command(label="Change Color 2", command = lambda: Change_chart
 
 #Creating the help and file cascade
 menubar.add_cascade(label="File", menu=filemenu)
-menubar.add_cascade(label="Help", menu=helpmenu)
 menubar.add_cascade(label="Options", menu=options)
+menubar.add_cascade(label="Help", menu=helpmenu)
 window.config(menu=menubar)
 
 #To make the tables if they are not present
