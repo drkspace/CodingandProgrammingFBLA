@@ -12,7 +12,7 @@
 #TODO Allow selecting customer/employee from table to edit
 #TODO Refined search in the tables
 
-#importing all from Tkinter
+#Importing all from Tkinter
 from Tkinter import *
 import ttk
 import Tkinter
@@ -26,11 +26,22 @@ import sqlite3
 #Importing Random for Ids
 import random 
 
+#Importing config parser
+import ConfigParser
+
 #Version number
 version = "0.4.0"
 
+#Seting up config file parser
+Config = ConfigParser.ConfigParser()
+Config.read("config.ini")
+
+#Getting the variables form the config
+db_file=Config.get('DatabaseFile', 'Database')
+row_Color_1 = Config.get('Colors', 'Row_1')
+row_Color_2 = Config.get('Colors', 'Row_2')
+
 #Setting up a connection to the sqlite database
-db_file = "FEC_Storage.db"
 conn = sqlite3.connect(db_file)
 
 #Making a cursor to be able to manipulate the database
@@ -40,9 +51,7 @@ cur = conn.cursor()
 day_week=['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 day_week_short=['sun','mon','tues','wend','thurs','fri','sat']
 
-#Color of the rows 
-row_Color_1 = "#8ae234"
-row_Color_2 = "#729fcf" 
+
 
 #making a new window
 window =Tk()
@@ -1044,6 +1053,11 @@ def open_file():
 	global cur
 	cur=conn.cursor()
 	
+	#Save the new database file to the config file
+	cfgfile = open("config.ini",'w')
+	Config.set('DatabaseFile', 'Database', db_file)
+	Config.write(cfgfile)
+	cfgfile.close()
 	
 #Helper method that removes spaces before and/or after strings
 def removeSpaces(string):
@@ -1095,9 +1109,21 @@ def Change_chart_color(color,var):
 	if var == 1:
 		global row_Color_1
 		row_Color_1=color_result_hex
+
+		#Save the new database file to the config file
+		cfgfile = open("config.ini",'w')
+		Config.set('Colors', 'Row_1', row_Color_1)
+		Config.write(cfgfile)
+		cfgfile.close()
 	elif var == 2: 
 		global row_Color_2
 		row_Color_2=color_result_hex
+
+		#Save the new database file to the config file
+		cfgfile = open("config.ini",'w')
+		Config.set('Colors', 'Row_2', row_Color_2)
+		Config.write(cfgfile)
+		cfgfile.close()
 	else:
 		return
 		
