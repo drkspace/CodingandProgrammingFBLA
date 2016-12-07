@@ -32,7 +32,7 @@ the following tasks:
 
 --
 #To Run
-1. Download the executable for the correct os (Windows or Linux, Mac is not supported at this time)
+1. Download the executable for Linux
 2. Run the application 
 3. The program will create a database file called "FEC_database". If you delete it after you add employees/customers, they will be lost forever
 4. Press any of the buttons to navigate to the specific routine
