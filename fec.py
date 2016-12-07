@@ -38,6 +38,7 @@ cur = conn.cursor()
 
 #List of the days of the week for reference later in the program
 day_week=['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+day_week_short=['sun','mon','tues','wend','thurs','fri','sat']
 
 #Color of the rows 
 row_Color_1 = "#8ae234"
@@ -397,17 +398,12 @@ def customer_attendance():
 				
 				#Add up each day total and store it in total
 				total=[]
-				for i in xrange(8):
+				for i in xrange(7):
 					total.append(intVarListAM[i].get()+intVarListPM[i].get())
-
-				#Have to update each day's attendance individually, limitation in sqlite3
-				cur.execute("UPDATE customer_schedule SET sun_attend = ? WHERE customer_id = ?",(str(total[0]),id))
-				cur.execute("UPDATE customer_schedule SET mon_attend = ? WHERE customer_id = ?",(str(total[1]),id))
-				cur.execute("UPDATE customer_schedule SET tues_attend = ? WHERE customer_id = ?",(str(total[2]),id))
-				cur.execute("UPDATE customer_schedule SET wend_attend = ? WHERE customer_id = ?",(str(total[3]),id))
-				cur.execute("UPDATE customer_schedule SET thurs_attend = ? WHERE customer_id = ?",(str(total[4]),id))
-				cur.execute("UPDATE customer_schedule SET fri_attend = ? WHERE customer_id = ?",(str(total[5]),id))
-				cur.execute("UPDATE customer_schedule SET sat_attend = ? WHERE customer_id = ?",(str(total[6]),id))
+				for i in xrange(7):
+					#Have to update each day's attendance individually, limitation in sqlite3
+					cur.execute("UPDATE customer_schedule SET "+day_week_short[i]+"_attend = ? WHERE customer_id = ?",(str(total[i]),id))
+				
 				
 				#Commit the changes
 				conn.commit()
@@ -860,9 +856,13 @@ def edit_Employee_Schedule():
 						if(j[k]==1):
 							dayButtons[k-1].select()
 				
-				#Method for editing the schedule and going back to the menu						
+				#Method for editing the schedule and going back to the menu
+										
 				def get_input():
-					edit_schedule(i[0], sun.get(), mon.get(), tues.get(), wed.get(), thur.get(), fri.get(), sat.get())
+					#dayButtons_var=[]
+					#for i in xrange(7):
+						#dayButtons_var.append(dayVar[i].get())
+					edit_schedule(i[0], dayVar)
 					frame.grid_forget()
 					menu()
 			
@@ -904,16 +904,12 @@ def delete_from_Database(dbType, Id):
 	conn.commit()
 
 #Method for editing the schedule
-def edit_schedule(eId,sun,mon,tues,wed,thur,fri,sat):
+def edit_schedule(eId, attend_list):
 
-	#Have to call separate UPDATE commands because of a limitation in sqlite3
-	cur.execute('UPDATE employee_schedule SET sun_attend= ? WHERE employee_id= ?',(sun, eId))
-	cur.execute('UPDATE employee_schedule SET mon_attend=? WHERE employee_id=?',(mon, eId))
-	cur.execute('UPDATE employee_schedule SET tues_attend=? WHERE employee_id=?',(tues, eId))
-	cur.execute('UPDATE employee_schedule SET wend_attend=? WHERE employee_id=?',(wed, eId))
-	cur.execute('UPDATE employee_schedule SET thurs_attend=? WHERE employee_id=?',(thur, eId))
-	cur.execute('UPDATE employee_schedule SET fri_attend=? WHERE employee_id=?',(fri, eId))
-	cur.execute('UPDATE employee_schedule SET sat_attend=? WHERE employee_id=?',(sat, eId))
+	for i in xrange(len(attend_list)):
+		#Have to call separate UPDATE commands because of a limitation in sqlite3
+		cur.execute('UPDATE employee_schedule SET '+day_week_short[i]+'_attend= ? WHERE employee_id= ?',(str(attend_list[i].get()),eId))
+	
 
 	#Committing the change to save it
 	conn.commit()
