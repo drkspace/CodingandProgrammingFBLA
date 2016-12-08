@@ -1,14 +1,12 @@
 ##############
 #Daniel Kramer, Johns Creek High School
-#Version 0.4.0
+#Version 0.5.0
 #2016-2017 FBLA Coding and Programming Competition
 #https://github.com/drkspace/CodingandProgrammingFBLA
 ##############
 
 #TODO Better Formatting
-#TODO Open new database
 #TODO Combine Similar Methods to get line count down
-#TODO Allow the user to save the changed row color between uses
 #TODO Allow selecting customer/employee from table to edit
 #TODO Refined search in the tables
 
@@ -30,7 +28,7 @@ import random
 import ConfigParser
 
 #Version number
-version = "0.4.0"
+version = "0.5.0"
 
 #Seting up config file parser
 Config = ConfigParser.ConfigParser()
@@ -1059,6 +1057,22 @@ def open_file():
 	Config.write(cfgfile)
 	cfgfile.close()
 	
+#Method for making a new database
+def new_database():
+
+	#Creating name for new database
+	db_file="Untitled.db"
+
+	#sets conn to the global variable and changes the connection location to that file
+	global conn
+	conn=sqlite3.connect(db_file)
+
+	#sets conn to the global variable and changes the connection location to that file
+	global cur
+	cur=conn.cursor()
+
+	create_table()
+
 #Helper method that removes spaces before and/or after strings
 def removeSpaces(string):
 
@@ -1140,6 +1154,7 @@ helpmenu.add_command(label="Help", command=help)
 helpmenu.add_command(label="Info", command=info)
 filemenu.add_command(label="Save", command=save_file)
 filemenu.add_command(label="Open", command=open_file)
+filemenu.add_command(label="New", command=new_database)
 options.add_cascade(label="Change chart color", menu=color_options)
 color_options.add_command(label="Change Color 1", command = lambda: Change_chart_color(row_Color_1,1))
 color_options.add_command(label="Change Color 2", command = lambda: Change_chart_color(row_Color_2,2))
