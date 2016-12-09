@@ -1,12 +1,11 @@
 ##############
 #Daniel Kramer, Johns Creek High School
-#Version 0.5.1
+#Version 0.5.2
 #2016-2017 FBLA Coding and Programming Competition
 #https://github.com/drkspace/CodingandProgrammingFBLA
 ##############
 
 #TODO Better Formatting
-#TODO Combine Similar Methods to get line count down
 #TODO Allow selecting customer/employee from table to edit
 #TODO Refined search in the tables
 #TODO Allow sorting the tables
@@ -29,7 +28,7 @@ import random
 import ConfigParser
 
 #Version number
-version = "0.5.1"
+version = "0.5.2"
 
 #Seting up config file parser
 Config = ConfigParser.ConfigParser()
@@ -162,7 +161,8 @@ def addEmployee():
 	#Method to store the variables in the sql database
 	def getInput():
 		add_Employee_or_Customer_to_db(E.get(), E1.get(), dayVar[0].get(), dayVar[1].get(), dayVar[2].get(), dayVar[3].get(), dayVar[4].get(), dayVar[5].get(), dayVar[6].get(), 'employee')
-		
+		frame.grid_forget()
+		menu()
 	#Button to submit the input
 	submit = Button(frame,text="Submit", command=getInput)
 	submit.grid(row=14, column=0)
@@ -228,6 +228,8 @@ def add_Customer():
 		totals=[]
 		for i in xrange(7):
 			totals.append(AMVar[i].get()+PMVar[i].get())
+		frame.grid_forget()
+		menu()
 
 		#Use the method to add the customer to the database
 		add_Employee_or_Customer_to_db(removeSpaces(E.get()), removeSpaces(E1.get()), totals[0], totals[1], totals[2], totals[3], totals[4], totals[5], totals[6], 'customer')
@@ -972,7 +974,7 @@ def help():
 	win.geometry("300x250")
 	win.title("Help")
 	text=Text(win)
-	text.insert(INSERT, "Press one of the Buttons to goto that desired section\nFor sections where you can enter user information, you can enter more than one person at a time without having to go back to the menu")
+	text.insert(INSERT, "Press one of the Buttons to goto that\ndesired section\n\nUse the options in file to open/save a\ndatabase\n\nUse the options menu to change the colors of the tables\n\n")
 	text.pack()
 
 #Method for displaying the information about the program
