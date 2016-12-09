@@ -1,6 +1,6 @@
 ##############
 #Daniel Kramer, Johns Creek High School
-#Version 0.5.0
+#Version 0.5.1
 #2016-2017 FBLA Coding and Programming Competition
 #https://github.com/drkspace/CodingandProgrammingFBLA
 ##############
@@ -9,6 +9,7 @@
 #TODO Combine Similar Methods to get line count down
 #TODO Allow selecting customer/employee from table to edit
 #TODO Refined search in the tables
+#TODO Allow sorting the tables
 
 #Importing all from Tkinter
 from Tkinter import *
@@ -28,7 +29,7 @@ import random
 import ConfigParser
 
 #Version number
-version = "0.5.0"
+version = "0.5.1"
 
 #Seting up config file parser
 Config = ConfigParser.ConfigParser()
@@ -80,7 +81,7 @@ def create_table():
 	cur.execute('CREATE TABLE IF NOT EXISTS customer_schedule(customer_id REAL, sun_attend REAL, mon_attend REAL, tues_attend REAL, wend_attend REAL, thurs_attend REAL, fri_attend REAL, sat_attend REAL)')
 
 #Adds an employee to the database
-def add_Employee_to_db(fName, lName, sun, mon, tues, wend, thur, fri, sat):
+def add_Employee_or_Customer_to_db(fName, lName, sun, mon, tues, wend, thur, fri, sat, type):
 
 	#Generate a random Id for the employee
 	rndID = random.randrange(0,10000000)
@@ -89,7 +90,7 @@ def add_Employee_to_db(fName, lName, sun, mon, tues, wend, thur, fri, sat):
 	while(True):
 
 		#Tries to SELECT employees with the generated ID
-		cur.execute('SELECT * FROM employee WHERE employee_id = '+str(rndID))
+		cur.execute('SELECT * FROM '+type+' WHERE '+type+'_id = '+str(rndID))
 	
 		#If there exist an employee with that id, generate another id
 		if(len(cur.fetchall())!=0):
@@ -100,39 +101,10 @@ def add_Employee_to_db(fName, lName, sun, mon, tues, wend, thur, fri, sat):
 			break
 
 	#Insert the names and id into the employee table 
-	cur.execute('INSERT INTO employee(employee_id, first_name, last_name) VALUES(?,?,?)', (rndID,fName,lName))
+	cur.execute('INSERT INTO '+type+'('+type+'_id, first_name, last_name) VALUES(?,?,?)', (rndID,fName,lName))
 	
-	cur.execute('INSERT INTO employee_schedule(employee_id, sun_attend, mon_attend, tues_attend, wend_attend, thurs_attend, fri_attend, sat_attend) VALUES(?,?,?,?,?,?,?,?)', (rndID,sun,mon,tues,wend,thur,fri,sat))
+	cur.execute('INSERT INTO '+type+'_schedule('+type+'_id, sun_attend, mon_attend, tues_attend, wend_attend, thurs_attend, fri_attend, sat_attend) VALUES(?,?,?,?,?,?,?,?)', (rndID,sun,mon,tues,wend,thur,fri,sat))
 	
-	#Commit the changes to save
-	conn.commit()
-
-#Adds a customer to the database
-def add_customer_to_db(fName, lName, sun, mon, tues, wend, thur, fri, sat):
-
-	#Generate a random Id for the customer
-	rndID = random.randrange(10,10000000)
-
-	#Test to see if the ID is already used with another customer
-	while(True):
-
-		#Tries to SELECT employees with the generated ID
-		cur.execute('SELECT * FROM employee WHERE employee_id = '+str(rndID))
-
-		#If there exist an employee with that id, generate another id
-		if(len(cur.fetchall())!=0):
-			rndID = random.randrange(0,10000000)
-
-		#Break out of the loop if there were no matching id's found
-		else:	
-			break
-
-	#Insert the names and id into the customer table 
-	cur.execute('INSERT INTO customer(customer_id, first_name, last_name) VALUES(?,?,?)', (rndID,fName,lName))
-	
-	#Insert the days attended and id into the employee_schedule table	
-	cur.execute('INSERT INTO customer_schedule(customer_id, sun_attend, mon_attend, tues_attend, wend_attend, thurs_attend, fri_attend, sat_attend) VALUES(?,?,?,?,?,?,?,?)', (rndID,sun,mon,tues,wend,thur,fri,sat))
-
 	#Commit the changes to save
 	conn.commit()
 
@@ -189,7 +161,7 @@ def addEmployee():
 
 	#Method to store the variables in the sql database
 	def getInput():
-		add_Employee_to_db(E.get(), E1.get(), dayVar[0].get(), dayVar[1].get(), dayVar[2].get(), dayVar[3].get(), dayVar[4].get(), dayVar[5].get(), dayVar[6].get())
+		add_Employee_or_Customer_to_db(E.get(), E1.get(), dayVar[0].get(), dayVar[1].get(), dayVar[2].get(), dayVar[3].get(), dayVar[4].get(), dayVar[5].get(), dayVar[6].get(), 'employee')
 		
 	#Button to submit the input
 	submit = Button(frame,text="Submit", command=getInput)
@@ -258,7 +230,7 @@ def add_Customer():
 			totals.append(AMVar[i].get()+PMVar[i].get())
 
 		#Use the method to add the customer to the database
-		add_customer_to_db(removeSpaces(E.get()), removeSpaces(E1.get()), totals[0], totals[1], totals[2], totals[3], totals[4], totals[5], totals[6])
+		add_Employee_or_Customer_to_db(removeSpaces(E.get()), removeSpaces(E1.get()), totals[0], totals[1], totals[2], totals[3], totals[4], totals[5], totals[6], 'customer')
 
 	#Method to delete the frame and return to the menu
 	def runMenu():
@@ -1148,8 +1120,7 @@ filemenu = Menu(menubar, tearoff=0)
 options = Menu(menubar, tearoff=0)
 color_options=Menu()
 
-#Adding the help, info and, save options
-#Unable to get open to work
+#Adding all of the menu options
 helpmenu.add_command(label="Help", command=help)
 helpmenu.add_command(label="Info", command=info)
 filemenu.add_command(label="Save", command=save_file)
@@ -1173,3 +1144,5 @@ menu()
 
 #starting the window
 window.mainloop()
+
+
