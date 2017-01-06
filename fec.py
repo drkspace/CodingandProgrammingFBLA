@@ -62,8 +62,6 @@ window.title("Our Family Center for Entertainment")
 
 #Used to make all the necessary tables in the database
 #If the table already exist, nothing happens to that database here
-
-
 def create_table():
 
 	#Create a table for the employee's names and is's
@@ -83,9 +81,12 @@ def create_table():
 	#3 - AM/PM
 	cur.execute('CREATE TABLE IF NOT EXISTS customer_schedule(customer_id REAL, sun_attend REAL, mon_attend REAL, tues_attend REAL, wend_attend REAL, thurs_attend REAL, fri_attend REAL, sat_attend REAL)')
 
+#Method to delete the frame and return to the menu
+def runMenu(frame):
+    frame.grid_forget()
+    menu()
+
 #Adds an employee to the database
-
-
 def add_to_db(fName, lName, sun, mon, tues, wend, thur, fri, sat, type):
 
 	#Generate a random Id for the employee
@@ -153,16 +154,11 @@ def addEmployee():
 
 	#Adds a check all buttons
 	#When the button is checked, calls the checkAll method and passes in the dayButtons list
-	check_All = Checkbutton(frame, text="Check All Boxes", command=lambda: checkAll(dayButtons, 0))
+	check_All = Checkbutton(frame, text="Check All Boxes", command = lambda: checkAll(dayButtons, 0))
 	check_All.grid(row=6, column=0)
 
-	#Method to delete the frame and return to the menu
-	def runMenu():
-		frame.grid_forget()
-		menu()
-
 	#Button to return to the menu
-	toMenu = Button(frame, text="Back to the Menu", command=runMenu)
+	toMenu = Button(frame, text="Back to the Menu", command = lambda: runMenu(frame))
 	toMenu.grid(row=7, column=5)
 
 	#Method to store the variables in the sql database
@@ -242,13 +238,8 @@ def add_Customer():
 		#Use the method to add the customer to the database
 		add_to_db(removeSpaces(E.get()), removeSpaces(E1.get()), totals[0], totals[1], totals[2], totals[3], totals[4], totals[5], totals[6], 'customer')
 
-	#Method to delete the frame and return to the menu
-	def runMenu():
-		frame.grid_forget()
-		menu()
-
 	#Button to return to the menu
-	toMenu = Button(frame, text="Back to the Menu", command=runMenu)
+	toMenu = Button(frame, text="Back to the Menu", command=lambda: runMenu(frame))
 	toMenu.grid(row=7, column=5)
 
 	#Button to get input from the buttons
@@ -263,8 +254,6 @@ def add_Customer():
 	printCButton.grid(row=8, column=5)
 
 #Method to set a customers attendance
-
-
 def customer_attendance():
 
 	#Creating a new frame to have all of the modules held in
@@ -424,18 +413,11 @@ def customer_attendance():
 	toSearch = Button(frame, text='Search', command=edit)
 	toSearch.grid(row=5, column=0)
 
-	#Method to delete the frame and run the menu
-	def toMenu():
-		frame.grid_forget()
-		menu()
-
 	#Button to get back to the menu
-	toMenu = Button(frame, text='Back to the Menu', command=toMenu)
+	toMenu = Button(frame, text='Back to the Menu', command = lambda: runMenu(frame))
 	toMenu.grid(row=4, column=1)
 
 #Method to put all of the employees in a table on screen
-
-
 def showAll_Employee():
 
 	#Creating a new table
@@ -578,8 +560,6 @@ def print_Attendance_Customer():
 	addCButton.grid(row=2, column=0)
 
 #Method to print the schedule of the employees
-
-
 def print_Schedule_All():
 
 	#Creating the table
@@ -722,11 +702,11 @@ def edit_Employee():
 
 			#Method for setting the first and last names in the database
 			def get_input():
-				LN = E1.get()
+				LN = lName_Entry.get()
 
 				#Use 2 different updates because of a limitation in sqlite3
 				cur.execute('UPDATE employee SET last_name = ? WHERE last_name = ? AND first_name = ?', (removeSpaces(LN), old_LN, old_FN))
-				cur.execute('UPDATE employee SET first_name = ? WHERE last_name = ? AND first_name = ?', (removeSpaces(E.get()), old_LN, old_FN))
+				cur.execute('UPDATE employee SET first_name = ? WHERE last_name = ? AND first_name = ?', (removeSpaces(fName_Entry.get()), old_LN, old_FN))
 
 				#Committing the changes
 				conn.commit()
@@ -752,19 +732,12 @@ def edit_Employee():
 	#Button to search with what the user has inputed
 	toSearch = Button(frame, text='Search', command=edit)
 	toSearch.grid(row=5, column=0)
-
-	#Method to delete the frame and return to the menu
-	def toMenu():
-		frame.grid_forget()
-		menu()
-
+    
 	#Button to return to the menu
-	toMenu = Button(frame, text='Back to the Menu', command=toMenu)
+	toMenu = Button(frame, text='Back to the Menu', command=lambda: runMenu(frame))
 	toMenu.grid(row=5, column=1)
 
 #Method to edit the employee's schedule
-
-
 def edit_Employee_Schedule():
 
 	#Frame to store all of the modules and to be deleted later on
@@ -869,20 +842,13 @@ def edit_Employee_Schedule():
 	toSearch = Button(frame, text='Search', command=edit)
 	toSearch.grid(row=5, column=0)
 
-	#Method to go back to the menu
-	def toMenu():
-		frame.grid_forget()
-		menu()
-
 	#Button to go back to the menu
-	toMenu = Button(frame, text='Back to the Menu', command=toMenu)
+	toMenu = Button(frame, text='Back to the Menu', command=lambda: runMenu(frame))
 	toMenu.grid(row=5, column=1)
 
 #Method to delete an employee/customer from their database
 #If dbType is 0 - Employee
 #If dbType is 1 - Customer
-
-
 def delete_from_Database(dbType, Id):
 
 	#Changes the int to the corresponding string
@@ -901,11 +867,10 @@ def delete_from_Database(dbType, Id):
 	conn.commit()
 
 #Method for editing the schedule
-
-
 def edit_schedule(eId, attend_list):
 
 	for i in xrange(len(attend_list)):
+        
 		#Have to call separate UPDATE commands because of a limitation in sqlite3
 		cur.execute('UPDATE employee_schedule SET '+day_week_short[i]+'_attend= ? WHERE employee_id= ?', (str(attend_list[i].get()), eId))
 
@@ -913,8 +878,6 @@ def edit_schedule(eId, attend_list):
 	conn.commit()
 
 #Method to run the menu
-
-
 def menu():
 
 	#Label to welcome the user to the system
@@ -988,8 +951,6 @@ def menu():
 	printCButton.grid(row=3, column=2)
 
 #Method for displaying the help box
-
-
 def help():
 	win = Tk()
 	win.geometry("300x250")
@@ -999,8 +960,6 @@ def help():
 	text.pack()
 
 #Method for displaying the information about the program
-
-
 def info():
 	win = Tk()
 	win.geometry("202x200")
@@ -1010,8 +969,6 @@ def info():
 	text.pack()
 
 #Method to allow the user to save a file
-
-
 def save_file():
 
 	#Opening a box for a user entering a new save file
@@ -1033,14 +990,12 @@ def save_file():
 
 #Method to open a file
 #No checking to see if the file is in the right format
-
-
 def open_file():
 
-        #Opens a open box
+    #Opens a open box
     db_file = tkFileDialog.askopenfilename()
 
-        #If the user preses cancel
+    #If the user preses cancel
     if db_file is None:
 		return
 
@@ -1059,8 +1014,6 @@ def open_file():
     cfgfile.close()
 
 #Method for making a new database
-
-
 def new_database():
 
 	#Creating name for new database
@@ -1077,8 +1030,6 @@ def new_database():
 	create_table()
 
 #Helper method that removes spaces before and/or after strings
-
-
 def removeSpaces(string):
 
 	#Converting the string passed in to a char list
@@ -1099,8 +1050,6 @@ def removeSpaces(string):
 #Method that checks all checkboxes in a list of buttons
 #if mode is 0 -> select all buttons
 #if mode is 1 -> deselect all buttons
-
-
 def checkAll(list_of_checkbox, mode):
 
 	#Loop through the list
@@ -1113,8 +1062,6 @@ def checkAll(list_of_checkbox, mode):
 
 #Method to change the color of the rows in the charts
 #Gets the old color passed in
-
-
 #Gets row color var number passed in
 def Change_chart_color(color, var):
 
@@ -1170,10 +1117,10 @@ color_options.add_command(label="Change Color 2", command=lambda: Change_chart_c
 
 
 #Creating the help and file cascade
-menubar.add_cascade(label="File", menu=filemenu)
-menubar.add_cascade(label="Options", menu=options)
-menubar.add_cascade(label="Help", menu=helpmenu)
-window.config(menu=menubar)
+menubar.add_cascade(label="File", menu = filemenu)
+menubar.add_cascade(label="Options", menu = options)
+menubar.add_cascade(label="Help", menu = helpmenu)
+window.config(menu = menubar)
 
 #To make the tables if they are not present
 create_table()
@@ -1182,10 +1129,4 @@ create_table()
 menu()
 
 #starting the window
-
-
 window.mainloop()
-
-
-def test():
-    return 0
