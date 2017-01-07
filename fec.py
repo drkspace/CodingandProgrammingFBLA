@@ -391,7 +391,7 @@ def customer_attendance():
 				menu()
 
 			def delete_record():
-				delete_from_Database(1, id)
+				delete_from_Database('customer', id)
 				frame.grid_forget()
 				menu()
 			#Button to delete the person
@@ -420,57 +420,88 @@ def customer_attendance():
 #Method to put all of the employees in a table on screen
 def showAll_Employee():
 
-	#Creating a new table
-	tbl = ttk.Treeview()
+    #Creating a new table
+    tbl = ttk.Treeview()
+    
+    #Setting the column to be called firstName
+    tbl['columns'] = ('firstName')
+    
+    #Change the leading column to have the text "Last Name"
+    tbl.heading('#0', text='Last Name')
+    
+    #Change the size of the leading column
+    tbl.column('#0', anchor='center', width=100)
+    
+    #Set the firstName column to show "First Name"
+    tbl.heading('firstName', text='First Name')
+    
+    #Change the size of the firstName column
+    tbl.column('firstName', anchor='center', width=100)
+    
+    #Put the table on the grid
+    tbl.grid(row=5, column=0)
+    
+    #Select all of the first and last names form employee
+    cur.execute('SELECT last_name, first_name FROM employee')
+    
+    #Make color assigner so each column would have alternating colors
+    color_assigner = 1
+    
+    #Loop for putting all of the names in the table
+    for i in cur.fetchall():
+        tbl.insert('', 'end', text=i[0], values=(i[1]), tags =(str(color_assigner,)))
+    
+        #Multiply the color assigner by -1 so it would alternate between -1 and 1
+        color_assigner *= -1
+    
+    #Set the color of the columns depending on the color assigner
+    tbl.tag_configure(str(1), background=row_Color_1)
+    tbl.tag_configure(str(-1), background=row_Color_2)
 
-	#Setting the column to be called firstName
-	tbl['columns'] = ('firstName')
-
-	#Change the leading column to have the text "Last Name"
-	tbl.heading('#0', text='Last Name')
-
-	#Change the size of the leading column
-	tbl.column('#0', anchor='center', width=100)
-
-	#Set the firstName column to show "First Name"
-	tbl.heading('firstName', text='First Name')
-
-	#Change the size of the firstName column
-	tbl.column('firstName', anchor='center', width=100)
-
-	#Put the table on the grid
-	tbl.grid(row=5, column=0)
-
-	#Select all of the first and last names form employee
-	cur.execute('SELECT last_name, first_name FROM employee')
-
-	#Make color assigner so each column would have alternating colors
-	color_assigner = 1
-
-	#Loop for putting all of the names in the table
-	for i in cur.fetchall():
-		tbl.insert('', 'end', text=i[0], values=(i[1]), tags =(str(color_assigner,)))
-
-		#Multiply the color assigner by -1 so it would alternate between -1 and 1
-		color_assigner *= -1
-
-	#Set the color of the columns depending on the color assigner
-	tbl.tag_configure(str(1), background=row_Color_1)
-	tbl.tag_configure(str(-1), background=row_Color_2)
-
+    #Return the selected item from the table
+    def selectedItem():
+        curItem = tbl.focus()
+        return tbl.item(curItem)
+        
+    #Test to see if there is an item selected    
+    def isSelected():
+        if selectedItem() is None:
+            return False
+        else:
+            return True
+    
+    #Returns the selection if there is a selection
+    def getSelected(): 
+        if isSelected():
+            employee = selectedItem()
+            return employee
+        else:
+            return None
+    
+    #Return the Id for the selection
+    def getID():
+        employee  = getSelected()
+        val = employee['values']
+        f_name = val[0]
+        cur.execute('SELECT * FROM employee WHERE last_name = ? AND first_name = ?', (employee['text'], f_name))
+        for i in cur.fetchall():
+            return i[0]
+        
+    deleteEmployeeButton = Button(window,  text = "Delete This Employee",  command = lambda: delete_from_Database('employee', getID()) )
+    deleteEmployeeButton.grid(row=2, column=2)    
+    
 	#Method to remove the table and go back to the menu
-	def runMenu():
-			tbl.grid_remove()
-			toMenu.grid_remove()
-			menu()
+    def runMenu():
+            tbl.grid_remove()
+            toMenu.grid_remove()
+            deleteEmployeeButton.grid_remove()
+            menu()
 
-	#Button to go back to the menu
-	toMenu = Button(window, text="Back to the Menu", command=runMenu)
-	toMenu.grid(row=0, column=0)
+    #Button to go back to the menu
+    toMenu = Button(window, text="Back to the Menu", command=runMenu)
+    toMenu.grid(row=0, column=0)
 
 #Method to show the attendance of the customers
-
-
 def print_Attendance_Customer():
 
 	#Making the table
@@ -563,94 +594,122 @@ def print_Attendance_Customer():
 def print_Schedule_All():
 
 	#Creating the table
-	tbl = ttk.Treeview()
-
+    tbl = ttk.Treeview()
+    
 	#Setting the column names
-	tbl['columns'] = ('firstName', day_week[0], day_week[1], day_week[2], day_week[3], day_week[4], day_week[5], day_week[6])
+    tbl['columns'] = ('firstName', day_week[0], day_week[1], day_week[2], day_week[3], day_week[4], day_week[5], day_week[6])
 
 	#Setting the 1st column to display last name
-	tbl.heading('#0', text='Last Name')
-
-	#Setting the size of the first column
-	tbl.column('#0', anchor='center', width=100)
-
-	#Setting the 2nd column to show "First Name"
-	tbl.heading('firstName', text='First Name')
-
-	#Setting the size of the second column
-	tbl.column('firstName', anchor='center', width=100)
-
-	#Setting all of the other columns to show the day of the week
-	for day in day_week:
-		tbl.heading(day, text=day)
-
-		#Meting the size of the column
-		tbl.column(day, anchor='center', width=75)
-
-	#Setting the position of the table
-	tbl.grid(row=5, column=0)
-
-	#Make color assigner so each column would have alternating colors
-	color_assigner = 1
-
-	#Selecting everything from the employee schedule
-	cur.execute('SELECT * FROM employee_schedule')
-
-	#Storing the selection to schedule
-	schedule = cur.fetchall()
-
-	#Method for changing the number stored for the correct word
-	def change_number_to_word(numlist):
-
-		#Loop through the numlist
-		for i in xrange(len(numlist)):
-
-			#change numlist to a tuple
-			numlist = list(numlist)
-
-			#If it is 0, change it to Absent
-			if numlist[i] == 0:
-				numlist[i] = "Absent"
-
-			#If it is 1, change it to Present
-			if numlist[i] == 1:
-				numlist[i] = "Present"
-
-		#Return the updates numlist
-		return numlist
-
-	for i in schedule:
-
-		#Change the numbers to words
-		i = change_number_to_word(i)
-
-		#Selecting the first and last name with the matching employee id
-		cur.execute('SELECT last_name, first_name FROM EMPLOYEE WHERE employee_id = '+str(i[0]))
-		for k in cur.fetchall():
-
-			#Writing the data to the table
-			tbl.insert('', 'end', text=k[0], values=(k[1], i[1], i[2], i[3], i[4], i[5], i[6], i[7]), tags =(str(color_assigner,)))
-
-		#Multiply the color assigner by -1 so it would alternate between -1 and 1
-		color_assigner *= -1
-
-	#Set the color of the columns depending on the color assigner
-	tbl.tag_configure(str(1), background=row_Color_1)
-	tbl.tag_configure(str(-1), background=row_Color_2)
-
-	#Method to remove the table and go back to the menu
-	def runMenu():
-			tbl.grid_remove()
-			toMenu.grid_remove()
-			menu()
-
-	#Button to go back to the menu
-	toMenu = Button(window, text="Back to the Menu", command=runMenu)
-	toMenu.grid(row=0, column=0)
+    tbl.heading('#0', text='Last Name')
+    
+    #Setting the size of the first column
+    tbl.column('#0', anchor='center', width=100)
+    
+    #Setting the 2nd column to show "First Name"
+    tbl.heading('firstName', text='First Name')
+    
+    #Setting the size of the second column
+    tbl.column('firstName', anchor='center', width=100)
+    
+    #Setting all of the other columns to show the day of the week
+    for day in day_week:
+        tbl.heading(day, text=day)
+    
+        #Meting the size of the column
+        tbl.column(day, anchor='center', width=80)
+    
+    #Setting the position of the table
+    tbl.grid(row=2, column=0)
+    
+    #Make color assigner so each column would have alternating colors
+    color_assigner = 1
+    
+    #Selecting everything from the employee schedule
+    cur.execute('SELECT * FROM employee_schedule')
+    
+    #Storing the selection to schedule
+    schedule = cur.fetchall()
+    
+    #Method for changing the number stored for the correct word
+    def change_number_to_word(numlist):
+    
+        #Loop through the numlist
+        for i in xrange(len(numlist)):
+    
+            #change numlist to a tuple
+            numlist = list(numlist)
+    
+            #If it is 0, change it to Absent
+            if numlist[i] == 0:
+                numlist[i] = "Absent"
+    
+            #If it is 1, change it to Present
+            if numlist[i] == 1:
+                numlist[i] = "Present"
+    
+        #Return the updates numlist
+        return numlist
+    
+    for i in schedule:
+    
+        #Change the numbers to words
+        i = change_number_to_word(i)
+    
+        #Selecting the first and last name with the matching employee id
+        cur.execute('SELECT last_name, first_name FROM EMPLOYEE WHERE employee_id = '+str(i[0]))
+        for k in cur.fetchall():
+    
+            #Writing the data to the table
+            tbl.insert('', 'end', text=k[0], values=(k[1], i[1], i[2], i[3], i[4], i[5], i[6], i[7]), tags =(str(color_assigner,)))
+    
+        #Multiply the color assigner by -1 so it would alternate between -1 and 1
+        color_assigner *= -1
+    
+    #Set the color of the columns depending on the color assigner
+    tbl.tag_configure(str(1), background=row_Color_1)
+    tbl.tag_configure(str(-1), background=row_Color_2)
+    
+    #Return the selected item from the table
+    def selectedItem(): 
+        curItem = tbl.focus()
+        return tbl.item(curItem)
+        
+    #Test to see if there is an item selected    
+    def isSelected():
+        if selectedItem() is None:
+            return False
+        else:
+            return True
+    
+    def getSelected(): 
+        if isSelected():
+            employee = selectedItem()
+            return employee
+        else:
+            return None
+    def getID():
+        employee  = getSelected()
+        val = employee['values']
+        f_name = val[0]
+        cur.execute('SELECT * FROM employee WHERE last_name = ? AND first_name = ?', (employee['text'], f_name))
+        for i in cur.fetchall():
+            return i[0]
+        
+    deleteEmployeeButton = Button(window,  text = "Delete This Employee",  command = lambda: delete_from_Database('employee', getID()) )
+    deleteEmployeeButton.grid(row=2, column=2)    
+    
+    #Method to remove the table and go back to the menu
+    def runMenu():
+            tbl.grid_remove()
+            toMenu.grid_remove()
+            deleteEmployeeButton.grid_remove()
+            menu()
+    
+    #Button to go back to the menu
+    toMenu = Button(window, text = "Back to the Menu", command=runMenu)
+    toMenu.grid(row=0, column=0)
 
 #Method to edit an employee
-
-
 def edit_Employee():
 
 	#Making the frame to have all of the modules put into it
@@ -718,7 +777,7 @@ def edit_Employee():
 				menu()
 
 			def delete_record():
-				delete_from_Database(0, id)
+				delete_from_Database('employee', id)
 				frame.grid_forget()
 				menu()
 			#Button to delete the person
@@ -852,18 +911,13 @@ def edit_Employee_Schedule():
 def delete_from_Database(dbType, Id):
 
 	#Changes the int to the corresponding string
-	db = ""
-	if dbType == 0:
-		db = "employee"
-	elif dbType == 1:
-		db = "customer"
-	else:
-		print("There as been an error, invalid dbType")
+	if dbType not in ['employee', 'customer']:
+		print("There has been an error, invalid dbType")
 		return
 
 	#Delete the row in the databases with the matching id
-	cur.execute('DELETE FROM '+db+' WHERE '+db+'_id = '+str(Id))
-	cur.execute('DELETE FROM '+db+'_schedule WHERE '+db+'_id = '+str(Id))
+	cur.execute('DELETE FROM '+dbType+' WHERE '+dbType+'_id = '+str(Id))
+	cur.execute('DELETE FROM '+dbType+'_schedule WHERE '+dbType+'_id = '+str(Id))
 	conn.commit()
 
 #Method for editing the schedule
