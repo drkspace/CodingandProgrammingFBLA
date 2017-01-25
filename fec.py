@@ -31,6 +31,8 @@ import random
 #Importing config parser
 import ConfigParser
 
+##Global Variables##
+
 #Version number
 version = "0.5.2"
 
@@ -392,6 +394,7 @@ def customer_attendance():
 
 			def delete_record():
 				delete_from_Database('customer', id)
+
 				frame.grid_forget()
 				menu()
 			#Button to delete the person
@@ -422,38 +425,38 @@ def showAll_Employee():
 
     #Creating a new table
     tbl = ttk.Treeview()
-    
+
     #Setting the column to be called firstName
     tbl['columns'] = ('firstName')
-    
+
     #Change the leading column to have the text "Last Name"
     tbl.heading('#0', text='Last Name')
-    
+
     #Change the size of the leading column
     tbl.column('#0', anchor='center', width=100)
-    
+
     #Set the firstName column to show "First Name"
     tbl.heading('firstName', text='First Name')
-    
+
     #Change the size of the firstName column
     tbl.column('firstName', anchor='center', width=100)
-    
+
     #Put the table on the grid
-    tbl.grid(row=5, column=0)
-    
+    tbl.grid(row=2, column=0)
+
     #Select all of the first and last names form employee
     cur.execute('SELECT last_name, first_name FROM employee')
-    
+
     #Make color assigner so each column would have alternating colors
     color_assigner = 1
-    
+
     #Loop for putting all of the names in the table
     for i in cur.fetchall():
         tbl.insert('', 'end', text=i[0], values=(i[1]), tags =(str(color_assigner,)))
-    
+
         #Multiply the color assigner by -1 so it would alternate between -1 and 1
         color_assigner *= -1
-    
+
     #Set the color of the columns depending on the color assigner
     tbl.tag_configure(str(1), background=row_Color_1)
     tbl.tag_configure(str(-1), background=row_Color_2)
@@ -462,14 +465,14 @@ def showAll_Employee():
     def selectedItem():
         curItem = tbl.focus()
         return tbl.item(curItem)
-        
+
     #Test to see if there is an item selected    
     def isSelected():
         if selectedItem() is None:
             return False
         else:
             return True
-    
+
     #Returns the selection if there is a selection
     def getSelected(): 
         if isSelected():
@@ -477,7 +480,7 @@ def showAll_Employee():
             return employee
         else:
             return None
-    
+    label_notify=Label(window,  text="The employee has been removed, please refresh the table")
     #Return the Id for the selection
     def getID():
         employee  = getSelected()
@@ -485,13 +488,16 @@ def showAll_Employee():
         f_name = val[0]
         cur.execute('SELECT * FROM employee WHERE last_name = ? AND first_name = ?', (employee['text'], f_name))
         for i in cur.fetchall():
+            label_notify.grid(row=4, column=2)
             return i[0]
-        
-    deleteEmployeeButton = Button(window,  text = "Delete This Employee",  command = lambda: delete_from_Database('employee', getID()) )
+
+
+    deleteEmployeeButton = Button(window,  text = "Delete This Employee",  command = lambda: delete_from_Database('employee', getID()))
     deleteEmployeeButton.grid(row=2, column=2)    
-    
+
 	#Method to remove the table and go back to the menu
     def runMenu():
+            label_notify.grid_remove()
             tbl.grid_remove()
             toMenu.grid_remove()
             deleteEmployeeButton.grid_remove()
@@ -504,189 +510,229 @@ def showAll_Employee():
 #Method to show the attendance of the customers
 def print_Attendance_Customer():
 
-	#Making the table
-	tbl = ttk.Treeview()
-
-	#Setting the columns to the first/last name and the day of the week
-	tbl['columns'] = ('firstName', day_week[0], day_week[1], day_week[2], day_week[3], day_week[4], day_week[5], day_week[6])
-
-	#Setting the 1st column to have the name Last Name
-	tbl.heading('#0', text='Last Name')
-
-	#Setting the 1st column's size
-	tbl.column('#0', anchor='center', width=100)
-
-	#Setting the 2nd column to have the name of First Name
-	tbl.heading('firstName', text='First Name')
-
-	#Setting the size of first name
-	tbl.column('firstName', anchor='center', width=100)
-
-	#Setting all of the other columns to show the day of the week
-	for day in day_week:
-		tbl.heading(day, text=day)
-
-		#Meting the size of the column
-		tbl.column(day, anchor='center', width=75)
-
-	#Putting the table on the grid
-	tbl.grid(row=5, column=0																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																														)
-
-	#Make color assigner so each column would have alternating colors
-	color_assigner = 1
-
-	#Selecting everything from customer attendance
-	cur.execute('SELECT * FROM customer_schedule')
-
-	#Storing the customer attendance in attendance
-	attendance = cur.fetchall()
-	for i in attendance:
-
-		#Selecting the names of the customer with matching id numbers
-		cur.execute('SELECT last_name, first_name FROM customer WHERE customer_id = '+str(i[0]))
-		for k in cur.fetchall():
-
-			#Having AMPM store what the certain cell of the table should display depending on the stored number
-			AMPM = []
-			for j in i:
-				if(j >= 4):
-					continue
-				if(j == 0):
-					AMPM.append('Absent')
-				if(j == 1):
-					AMPM.append('PM')
-				if(j == 2):
-					AMPM.append('AM')
-				if(j == 3):
-					AMPM.append('AM/PM')
-
-			#Inserting the information into the table
-			tbl.insert('', 'end', text=k[0], values=(k[1], AMPM[0], AMPM[1], AMPM[2], AMPM[3], AMPM[4], AMPM[5], AMPM[6]), tags =(str(color_assigner,)))
-
-			#Multiplying color assigner by -1 to have is cycle between -1 and 1
-			color_assigner *= -1
-
-		#Setting the background color depending on the color assigned
-		tbl.tag_configure(str(1), background=row_Color_1)
-		tbl.tag_configure(str(-1), background=row_Color_2)
-
-	#Method to run the menu and delete the table
-	def runMenu():
-			tbl.grid_remove()
-			toMenu.grid_remove()
-			addCButton.grid_remove()
-			menu()
-
-	#Button to go back to the menu
-	toMenu = Button(window, text="Back to the Menu", command=runMenu)
-	toMenu.grid(row=0, column=0)
-
-	#Method and button for adding an customer to the system
-	def add_customer_():
-		tbl.grid_remove()
-		toMenu.grid_remove()
-		addCButton.grid_remove()
-		add_Customer()
-	addCButton = Button(window, text="Add customers", command=add_customer_)
-	addCButton.grid(row=2, column=0)
-
-#Method to print the schedule of the employees
-def print_Schedule_All():
-
-	#Creating the table
+    #Making the table
     tbl = ttk.Treeview()
-    
-	#Setting the column names
+
+    #Setting the columns to the first/last name and the day of the week
     tbl['columns'] = ('firstName', day_week[0], day_week[1], day_week[2], day_week[3], day_week[4], day_week[5], day_week[6])
 
-	#Setting the 1st column to display last name
+    #Setting the 1st column to have the name Last Name
     tbl.heading('#0', text='Last Name')
-    
-    #Setting the size of the first column
+
+    #Setting the 1st column's size
     tbl.column('#0', anchor='center', width=100)
-    
-    #Setting the 2nd column to show "First Name"
+
+    #Setting the 2nd column to have the name of First Name
     tbl.heading('firstName', text='First Name')
-    
-    #Setting the size of the second column
+
+    #Setting the size of first name
     tbl.column('firstName', anchor='center', width=100)
-    
+
+    #Putting the table on the grid
+    tbl.grid(row=2, column=0)	
+
     #Setting all of the other columns to show the day of the week
     for day in day_week:
         tbl.heading(day, text=day)
-    
+
         #Meting the size of the column
-        tbl.column(day, anchor='center', width=80)
-    
-    #Setting the position of the table
-    tbl.grid(row=2, column=0)
-    
+        tbl.column(day, anchor='center', width=75)
+
     #Make color assigner so each column would have alternating colors
     color_assigner = 1
-    
-    #Selecting everything from the employee schedule
-    cur.execute('SELECT * FROM employee_schedule')
-    
-    #Storing the selection to schedule
-    schedule = cur.fetchall()
-    
-    #Method for changing the number stored for the correct word
-    def change_number_to_word(numlist):
-    
-        #Loop through the numlist
-        for i in xrange(len(numlist)):
-    
-            #change numlist to a tuple
-            numlist = list(numlist)
-    
-            #If it is 0, change it to Absent
-            if numlist[i] == 0:
-                numlist[i] = "Absent"
-    
-            #If it is 1, change it to Present
-            if numlist[i] == 1:
-                numlist[i] = "Present"
-    
-        #Return the updates numlist
-        return numlist
-    
-    for i in schedule:
-    
-        #Change the numbers to words
-        i = change_number_to_word(i)
-    
-        #Selecting the first and last name with the matching employee id
-        cur.execute('SELECT last_name, first_name FROM EMPLOYEE WHERE employee_id = '+str(i[0]))
+
+    #Selecting everything from customer attendance
+    cur.execute('SELECT * FROM customer_schedule')
+
+    #Storing the customer attendance in attendance
+    attendance = cur.fetchall()
+    for i in attendance:
+
+        #Selecting the names of the customer with matching id numbers
+        cur.execute('SELECT last_name, first_name FROM customer WHERE customer_id = '+str(i[0]))
         for k in cur.fetchall():
-    
-            #Writing the data to the table
-            tbl.insert('', 'end', text=k[0], values=(k[1], i[1], i[2], i[3], i[4], i[5], i[6], i[7]), tags =(str(color_assigner,)))
-    
-        #Multiply the color assigner by -1 so it would alternate between -1 and 1
-        color_assigner *= -1
-    
-    #Set the color of the columns depending on the color assigner
-    tbl.tag_configure(str(1), background=row_Color_1)
-    tbl.tag_configure(str(-1), background=row_Color_2)
-    
+
+            #Having AMPM store what the certain cell of the table should display depending on the stored number
+            AMPM = []
+            for j in i:
+                if(j >= 4):
+                    continue
+                if(j == 0):
+                    AMPM.append('Absent')
+                if(j == 1):
+                    AMPM.append('PM')
+                if(j == 2):
+                    AMPM.append('AM')
+                if(j == 3):
+                    AMPM.append('AM/PM')
+
+            #Inserting the information into the table
+            tbl.insert('', 'end', text=k[0], values=(k[1], AMPM[0], AMPM[1], AMPM[2], AMPM[3], AMPM[4], AMPM[5], AMPM[6]), tags =(str(color_assigner,)))
+
+            #Multiplying color assigner by -1 to have is cycle between -1 and 1
+            color_assigner *= -1
+
+        #Setting the background color depending on the color assigned
+        tbl.tag_configure(str(1), background=row_Color_1)
+        tbl.tag_configure(str(-1), background=row_Color_2)
+
     #Return the selected item from the table
     def selectedItem(): 
         curItem = tbl.focus()
         return tbl.item(curItem)
-        
+
     #Test to see if there is an item selected    
     def isSelected():
         if selectedItem() is None:
             return False
         else:
             return True
-    
+
+    #Return the employee info is there is a selection
+    def getSelected(): 
+        if isSelected():
+            customer = selectedItem()
+            return customer
+        else:
+            return None
+    label_notify=Label(window,  text="The customer has been deleted")
+    #Return the Id of the employee
+    def getID():
+        customer  = getSelected()
+        val = customer['values']
+        f_name = val[0]
+        cur.execute('SELECT * FROM customer WHERE last_name = ? AND first_name = ?', (customer['text'], f_name))
+        for i in cur.fetchall():
+            label_notify.grid(row=3,  column = 2)
+            return i[0]
+
+    deleteEmployeeButton = Button(window,  text = "Delete This Customer",  command = lambda: delete_from_Database('customer', getID()) )
+    deleteEmployeeButton.grid(row=2, column=2)
+
+    #Method to run the menu and delete the table
+    def runMenu():
+            deleteEmployeeButton.grid_remove()
+
+            label_notify.grid_remove()
+            tbl.grid_remove()
+            toMenu.grid_remove()
+            addCButton.grid_remove()
+            menu()
+
+    #Button to go back to the menu
+    toMenu = Button(window, text="Back to the Menu", command=runMenu)
+    toMenu.grid(row=0, column=0)
+
+    #Method and button for adding an customer to the system
+    def add_customer_():
+        tbl.grid_remove()
+        toMenu.grid_remove()
+        addCButton.grid_remove()
+        deleteEmployeeButton.grid_remove()
+        add_Customer()
+    addCButton = Button(window, text="Add customers", command=add_customer_)
+    addCButton.grid(row=2, column=3)
+
+#Method to print the schedule of the employees
+def print_Schedule_All():
+
+	#Creating the table
+    tbl = ttk.Treeview()
+
+	#Setting the column names
+    tbl['columns'] = ('firstName', day_week[0], day_week[1], day_week[2], day_week[3], day_week[4], day_week[5], day_week[6])
+
+	#Setting the 1st column to display last name
+    tbl.heading('#0', text='Last Name')
+
+    #Setting the size of the first column
+    tbl.column('#0', anchor='center', width=100)
+
+    #Setting the 2nd column to show "First Name"
+    tbl.heading('firstName', text='First Name')
+
+    #Setting the size of the second column
+    tbl.column('firstName', anchor='center', width=100)
+
+    #Setting all of the other columns to show the day of the week
+    for day in day_week:
+        tbl.heading(day, text=day)
+
+        #Meting the size of the column
+        tbl.column(day, anchor='center', width=80)
+
+    #Setting the position of the table
+    tbl.grid(row=2, column=0)
+
+    #Make color assigner so each column would have alternating colors
+    color_assigner = 1
+
+    #Selecting everything from the employee schedule
+    cur.execute('SELECT * FROM employee_schedule')
+
+    #Storing the selection to schedule
+    schedule = cur.fetchall()
+
+    #Method for changing the number stored for the correct word
+    def change_number_to_word(numlist):
+
+        #Loop through the numlist
+        for i in xrange(len(numlist)):
+
+            #change numlist to a tuple
+            numlist = list(numlist)
+
+            #If it is 0, change it to Absent
+            if numlist[i] == 0:
+                numlist[i] = "Absent"
+
+            #If it is 1, change it to Present
+            if numlist[i] == 1:
+                numlist[i] = "Present"
+
+        #Return the updates numlist
+        return numlist
+
+    for i in schedule:
+
+        #Change the numbers to words
+        i = change_number_to_word(i)
+
+        #Selecting the first and last name with the matching employee id
+        cur.execute('SELECT last_name, first_name FROM EMPLOYEE WHERE employee_id = '+str(i[0]))
+        for k in cur.fetchall():
+
+            #Writing the data to the table
+            tbl.insert('', 'end', text=k[0], values=(k[1], i[1], i[2], i[3], i[4], i[5], i[6], i[7]), tags =(str(color_assigner,)))
+
+        #Multiply the color assigner by -1 so it would alternate between -1 and 1
+        color_assigner *= -1
+
+    #Set the color of the columns depending on the color assigner
+    tbl.tag_configure(str(1), background=row_Color_1)
+    tbl.tag_configure(str(-1), background=row_Color_2)
+
+    #Return the selected item from the table
+    def selectedItem(): 
+        curItem = tbl.focus()
+        return tbl.item(curItem)
+
+    #Test to see if there is an item selected    
+    def isSelected():
+        if selectedItem() is None:
+            return False
+        else:
+            return True
+
+    #Return the employee info is there is a selection
     def getSelected(): 
         if isSelected():
             employee = selectedItem()
             return employee
         else:
             return None
+
+    #Return the Id of the employee
     def getID():
         employee  = getSelected()
         val = employee['values']
@@ -694,17 +740,17 @@ def print_Schedule_All():
         cur.execute('SELECT * FROM employee WHERE last_name = ? AND first_name = ?', (employee['text'], f_name))
         for i in cur.fetchall():
             return i[0]
-        
+
     deleteEmployeeButton = Button(window,  text = "Delete This Employee",  command = lambda: delete_from_Database('employee', getID()) )
     deleteEmployeeButton.grid(row=2, column=2)    
-    
+
     #Method to remove the table and go back to the menu
     def runMenu():
             tbl.grid_remove()
             toMenu.grid_remove()
             deleteEmployeeButton.grid_remove()
             menu()
-    
+
     #Button to go back to the menu
     toMenu = Button(window, text = "Back to the Menu", command=runMenu)
     toMenu.grid(row=0, column=0)
@@ -791,7 +837,7 @@ def edit_Employee():
 	#Button to search with what the user has inputed
 	toSearch = Button(frame, text='Search', command=edit)
 	toSearch.grid(row=5, column=0)
-    
+
 	#Button to return to the menu
 	toMenu = Button(frame, text='Back to the Menu', command=lambda: runMenu(frame))
 	toMenu.grid(row=5, column=1)
@@ -924,7 +970,7 @@ def delete_from_Database(dbType, Id):
 def edit_schedule(eId, attend_list):
 
 	for i in xrange(len(attend_list)):
-        
+
 		#Have to call separate UPDATE commands because of a limitation in sqlite3
 		cur.execute('UPDATE employee_schedule SET '+day_week_short[i]+'_attend= ? WHERE employee_id= ?', (str(attend_list[i].get()), eId))
 
@@ -1056,7 +1102,7 @@ def open_file():
 	#sets conn to the global variable and changes the connection location to that file
     global conn
     conn = sqlite3.connect(db_file)
-    
+
     #sets conn to the global variable and changes the connection location to that file
     global cur
     cur = conn.cursor()
