@@ -14,6 +14,9 @@
 #TODO Refined search in the tables
 #TODO Allow sorting the tables (Not reasonably possible)
 
+#Importing all the variables
+from fec_global_variables import *
+
 #Importing all from Tkinter
 from Tkinter import *
 import ttk
@@ -33,32 +36,6 @@ import ConfigParser
 
 #Version number
 version = "0.6.0"
-
-#Setting up config file parser
-Config = ConfigParser.ConfigParser()
-Config.read("config.ini")
-
-#Getting the variables form the config
-db_file = Config.get('DatabaseFile', 'Database')
-row_Color_1 = Config.get('Colors', 'Row_1')
-row_Color_2 = Config.get('Colors', 'Row_2')
-
-#Setting up a connection to the sqlite database
-conn = sqlite3.connect(db_file)
-
-#Making a cursor to be able to manipulate the database
-cur = conn.cursor()
-
-#List of the days of the week for reference later in the program
-day_week = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-day_week_short = ['sun', 'mon', 'tues', 'wend', 'thurs', 'fri', 'sat']
-
-#making a new window
-window = Tk()
-
-#setting the size and title
-window.geometry("1000x500")
-window.title("Our Family Center for Entertainment")
 
 #Used to make all the necessary tables in the database
 #If the table already exist, nothing happens to that database here
@@ -478,6 +455,7 @@ def showAll_Employee():
             return employee
         else:
             return None
+            
     label_notify=Label(window,  text="The employee has been removed, please refresh the table")
     #Return the Id for the selection
     def getID():
@@ -486,7 +464,7 @@ def showAll_Employee():
         f_name = val[0]
         cur.execute('SELECT * FROM employee WHERE last_name = ? AND first_name = ?', (employee['text'], f_name))
         for i in cur.fetchall():
-            label_notify.grid(row=4, column=2)
+            label_notify.grid(row=3, column=0)
             return i[0]
 
     
@@ -500,14 +478,21 @@ def showAll_Employee():
         toMenu.grid_remove()
         deleteEmployeeButton.grid_remove()
         #editEmployeeButton.grid_remove()
-    
+        addEmployeeButton.grid_remove()
+        
     #Method to goto the editing of the employee from the selection
     def edit_employee_(id):
         del_cur_frame()
         edit_employee_from_id(id)
-        
-#    editEmployeeButton = Button(text="Edit this employee",  command = lambda: edit_employee_(getID()))
-#    editEmployeeButton.grid(row=2, column=3)
+    
+    #Method to add an employee to the database from the table
+    def add_employee():
+        del_cur_frame()
+        addEmployee()
+    
+    #Button to add an employee
+    addEmployeeButton = Button(text="Add employee",  command = add_employee)
+    addEmployeeButton.grid(row=2, column=3)
     
 	#Method to remove the table and go back to the menu
     def runMenu():
@@ -755,13 +740,26 @@ def print_Schedule_All():
     deleteEmployeeButton = Button(window,  text = "Delete This Employee",  command = lambda: delete_from_Database('employee', getID()) )
     deleteEmployeeButton.grid(row=2, column=2)    
 
+    def del_cur_frame():
+        tbl.grid_remove()
+        toMenu.grid_remove()
+        deleteEmployeeButton.grid_remove()
+        addEmployeeButton.grid_remove()
+        
+    #Method to add an employee to the database from the table
+    def add_employee():
+        del_cur_frame()
+        addEmployee()
+    
+    #Button to add an employee
+    addEmployeeButton = Button(text="Add employee",  command = add_employee)
+    addEmployeeButton.grid(row=2, column=3)
+    
     #Method to remove the table and go back to the menu
     def runMenu():
-            tbl.grid_remove()
-            toMenu.grid_remove()
-            deleteEmployeeButton.grid_remove()
+            del_cur_frame()
             menu()
-
+            
     #Button to go back to the menu
     toMenu = Button(window, text = "Back to the Menu", command=runMenu)
     toMenu.grid(row=0, column=0)
@@ -771,87 +769,92 @@ def edit_Employee():
 
 	#Making the frame to have all of the modules put into it
 	#To be deleted at the end of the method
-	frame = Frame(window)
-	frame.grid(row=0, column=0)
+    frame = Frame(window)
+    frame.grid(row=0, column=0)
 
 	#Setting the label to tell the user what to do
-	label0 = Label(frame, text='Please enter the old information')
-	label0.grid(row=0, column=0)
+    label0 = Label(frame, text='Please enter the old information')
+    label0.grid(row=0, column=0)
 
 	#Setting the label and input for the first name
-	label = Label(frame, text="Employee's First Name")
-	label.grid(row=1, column=0)
-	fName_Entry = Entry(frame)
-	fName_Entry.grid(row=2, column=0)
+    label = Label(frame, text="Employee's First Name")
+    label.grid(row=1, column=0)
+    fName_Entry = Entry(frame)
+    fName_Entry.grid(row=2, column=0)
 
 	#Setting the label and input for the last name
-	label1 = Label(frame, text="Employee's Last Name")
-	label1.grid(row=3, column=0)
-	lName_Entry = Entry(frame)
-	lName_Entry.grid(row=4, column=0)
+    label1 = Label(frame, text="Employee's Last Name")
+    label1.grid(row=3, column=0)
+    lName_Entry = Entry(frame)
+    lName_Entry.grid(row=4, column=0)
 
 	#Method to goto the editing screen
-	def edit():
+    def edit():
 
 		#Stores the old first and last name and removes the spaces form the users input
-		old_LN = removeSpaces(lName_Entry.get())
-		old_FN = removeSpaces(fName_Entry.get())
+        old_LN = removeSpaces(lName_Entry.get())
+        old_FN = removeSpaces(fName_Entry.get())
 
 		#Select the employee with the matching names
-		cur.execute('SELECT * FROM employee WHERE last_name = ? AND first_name=?', (old_LN, old_FN))
+        cur.execute('SELECT * FROM employee WHERE last_name = ? AND first_name=?', (old_LN, old_FN))
 
 		#Test to see if there is data in the selection
-		tmp = cur.fetchall()
-		if(len(tmp) > 0):
+        tmp = cur.fetchall()
+        if(len(tmp) > 0):
 
 			#Sets the id
-			id = tmp[0][0]
+            id = tmp[0][0]
 
 			#Deletes the toSearch Button
-			toSearch.grid_forget()
+            toSearch.grid_forget()
 
 			#Ask the user for the new information
-			#It uses the same input boxes as before so they have the old names already inputted
-			label0.configure(text="Please enter the new information")
-			label.configure(text="Employee's old first name: "+old_FN)
-			label1.configure(text="Employee's old last name: "+old_LN)
+            #It uses the same input boxes as before so they have the old names already inputted
+            label0.configure(text="Please enter the new information")
+            label.configure(text="Employee's old first name: "+old_FN)
+            label1.configure(text="Employee's old last name: "+old_LN)
 
 			#Method for setting the first and last names in the database
-			def get_input():
-				LN = lName_Entry.get()
-
+            def get_input():
+                LN = lName_Entry.get()
+                FN = fName_Entry.get()
+                
 				#Use 2 different updates because of a limitation in sqlite3
-				cur.execute('UPDATE employee SET last_name = ? WHERE last_name = ? AND first_name = ?', (removeSpaces(LN), old_LN, old_FN))
-				cur.execute('UPDATE employee SET first_name = ? WHERE last_name = ? AND first_name = ?', (removeSpaces(fName_Entry.get()), old_LN, old_FN))
+                cur.execute('UPDATE employee SET last_name = ? WHERE last_name = ? AND first_name = ?', (removeSpaces(LN), old_LN, old_FN))
+                conn.commit()
+                cur.execute('UPDATE employee SET first_name = ? WHERE last_name = ? AND first_name = ?', (removeSpaces(FN), old_LN, old_FN))
 
 				#Committing the changes
-				conn.commit()
+                conn.commit()
 
 				#Deleting the frame
-				frame.grid_forget()
+                frame.grid_forget()
 
 				#Returning to the menu
-				menu()
-
-			def delete_record():
-				delete_from_Database('employee', id)
-				frame.grid_forget()
-				menu()
-			#Button to delete the person
-			deleteButton = Button(frame, text='Delete Record', command=delete_record)
-			deleteButton.grid(row=14, column=0)
-
-			#Button to submit the new information
-			submit = Button(frame, text="submit", command=get_input)
-			submit.grid(row=13, column=0)
-
-	#Button to search with what the user has inputed
-	toSearch = Button(frame, text='Search', command=edit)
-	toSearch.grid(row=5, column=0)
-
-	#Button to return to the menu
-	toMenu = Button(frame, text='Back to the Menu', command=lambda: runMenu(frame))
-	toMenu.grid(row=5, column=1)
+                menu()
+                
+            #Button to submit the new information
+            submit = Button(frame, text="submit", command=get_input)
+            submit.grid(row=13, column=0)
+            
+            def delete_record():
+                delete_from_Database('employee', id)
+                frame.grid_forget()
+                menu()
+                
+            #Button to delete the person
+            deleteButton = Button(frame, text='Delete Record', command=delete_record)
+            deleteButton.grid(row=14, column=0)
+    
+            
+    
+    #Button to search with what the user has inputed
+    toSearch = Button(frame, text='Search', command=edit)
+    toSearch.grid(row=5, column=0)
+    
+    #Button to return to the menu
+    toMenu = Button(frame, text='Back to the Menu', command=lambda: runMenu(frame))
+    toMenu.grid(row=5, column=1)
 
 #Method to edit the employee's schedule
 def edit_Employee_Schedule():
@@ -930,7 +933,7 @@ def edit_Employee_Schedule():
 				for j in cur.fetchall():
 
 					#Loop to have all of the buttons selected if they were selected before
-					for k in xrange(7):
+					for k in xrange(8):
 
 						#Test to see if the value isn't a valid value
 						if(j[k] >= 4):
@@ -1209,35 +1212,44 @@ def Change_chart_color(color, var):
 	else:
 		return
 
-#Creating the menu at the top
-menubar = Menu(window)
-helpmenu = Menu(menubar, tearoff=0)
-filemenu = Menu(menubar, tearoff=0)
-options = Menu(menubar, tearoff=0)
-color_options = Menu()
+#Initilization for the program    
+def __init__():
+    #Creating the menu at the top
+    menubar = Menu(window)
+    helpmenu = Menu(menubar, tearoff=0)
+    filemenu = Menu(menubar, tearoff=0)
+    options = Menu(menubar, tearoff=0)
+    color_options = Menu()
+    
+    #Adding all of the menu options
+    helpmenu.add_command(label="Help", command=help)
+    helpmenu.add_command(label="Info", command=info)
+    filemenu.add_command(label="Save", command=save_file)
+    filemenu.add_command(label="Open", command=open_file)
+    filemenu.add_command(label="New", command=new_database)
+    options.add_cascade(label="Change chart color", menu=color_options)
+    color_options.add_command(label="Change Color 1", command=lambda: Change_chart_color(row_Color_1, 1))
+    color_options.add_command(label="Change Color 2", command=lambda: Change_chart_color(row_Color_2, 2))
+    
+    #Creating the help and file cascade
+    menubar.add_cascade(label="File", menu = filemenu)
+    menubar.add_cascade(label="Options", menu = options)
+    menubar.add_cascade(label="Help", menu = helpmenu)
+    window.config(menu = menubar)
 
-#Adding all of the menu options
-helpmenu.add_command(label="Help", command=help)
-helpmenu.add_command(label="Info", command=info)
-filemenu.add_command(label="Save", command=save_file)
-filemenu.add_command(label="Open", command=open_file)
-filemenu.add_command(label="New", command=new_database)
-options.add_cascade(label="Change chart color", menu=color_options)
-color_options.add_command(label="Change Color 1", command=lambda: Change_chart_color(row_Color_1, 1))
-color_options.add_command(label="Change Color 2", command=lambda: Change_chart_color(row_Color_2, 2))
+#
+def main():
+    
+    #To make the tables if they are not present
+    create_table()
 
+    #Starting the menu
+    menu()
 
-#Creating the help and file cascade
-menubar.add_cascade(label="File", menu = filemenu)
-menubar.add_cascade(label="Options", menu = options)
-menubar.add_cascade(label="Help", menu = helpmenu)
-window.config(menu = menubar)
-
-#To make the tables if they are not present
-create_table()
-
-#Starting the menu
-menu()
-
-#starting the window
-window.mainloop()
+    #starting the window
+    window.mainloop()
+    
+#Starting the program
+if __name__=='__main__':
+    __init__()
+    main()
