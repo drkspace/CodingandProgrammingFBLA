@@ -1,6 +1,6 @@
 #######################################
 #Daniel Kramer, Johns Creek High School
-#Version 0.5.2
+#Version 0.6.0
 #2016-2017 FBLA Coding and Programming Competition
 #https://github.com/drkspace/CodingandProgrammingFBLA
 #######################################
@@ -17,8 +17,6 @@
 #Importing all from Tkinter
 from Tkinter import *
 import ttk
-#import Tkinter
-#import tkMessageBox
 import tkFileDialog
 import tkColorChooser
 
@@ -34,7 +32,7 @@ import ConfigParser
 ##Global Variables##
 
 #Version number
-version = "0.5.2"
+version = "0.6.0"
 
 #Setting up config file parser
 Config = ConfigParser.ConfigParser()
@@ -491,16 +489,29 @@ def showAll_Employee():
             label_notify.grid(row=4, column=2)
             return i[0]
 
-
+    
     deleteEmployeeButton = Button(window,  text = "Delete This Employee",  command = lambda: delete_from_Database('employee', getID()))
     deleteEmployeeButton.grid(row=2, column=2)    
-
+    
+    #Method to delete all the items in the frame
+    def del_cur_frame():
+        label_notify.grid_remove()
+        tbl.grid_remove()
+        toMenu.grid_remove()
+        deleteEmployeeButton.grid_remove()
+        #editEmployeeButton.grid_remove()
+    
+    #Method to goto the editing of the employee from the selection
+    def edit_employee_(id):
+        del_cur_frame()
+        edit_employee_from_id(id)
+        
+#    editEmployeeButton = Button(text="Edit this employee",  command = lambda: edit_employee_(getID()))
+#    editEmployeeButton.grid(row=2, column=3)
+    
 	#Method to remove the table and go back to the menu
     def runMenu():
-            label_notify.grid_remove()
-            tbl.grid_remove()
-            toMenu.grid_remove()
-            deleteEmployeeButton.grid_remove()
+            del_cur_frame()
             menu()
 
     #Button to go back to the menu
@@ -754,7 +765,7 @@ def print_Schedule_All():
     #Button to go back to the menu
     toMenu = Button(window, text = "Back to the Menu", command=runMenu)
     toMenu.grid(row=0, column=0)
-
+   
 #Method to edit an employee
 def edit_Employee():
 
