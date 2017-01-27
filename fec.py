@@ -1237,7 +1237,7 @@ def __init__():
     menubar.add_cascade(label="Help", menu = helpmenu)
     window.config(menu = menubar)
 
-#
+#Main program loop
 def main():
     
     #To make the tables if they are not present
