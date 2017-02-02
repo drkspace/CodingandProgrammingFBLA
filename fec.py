@@ -32,7 +32,8 @@ import random
 #Importing config parser
 import ConfigParser
 
-##Global Variables##
+#Importing to call terminal commands
+from subprocess import call
 
 #Version number
 version = "0.6.0"
@@ -455,7 +456,7 @@ def showAll_Employee():
             return employee
         else:
             return None
-            
+
     label_notify=Label(window,  text="The employee has been removed, please refresh the table")
     #Return the Id for the selection
     def getID():
@@ -467,10 +468,10 @@ def showAll_Employee():
             label_notify.grid(row=3, column=0)
             return i[0]
 
-    
+
     deleteEmployeeButton = Button(window,  text = "Delete This Employee",  command = lambda: delete_from_Database('employee', getID()))
     deleteEmployeeButton.grid(row=2, column=2)    
-    
+
     #Method to delete all the items in the frame
     def del_cur_frame():
         label_notify.grid_remove()
@@ -479,21 +480,21 @@ def showAll_Employee():
         deleteEmployeeButton.grid_remove()
         #editEmployeeButton.grid_remove()
         addEmployeeButton.grid_remove()
-        
+
     #Method to goto the editing of the employee from the selection
     def edit_employee_(id):
         del_cur_frame()
         edit_employee_from_id(id)
-    
+
     #Method to add an employee to the database from the table
     def add_employee():
         del_cur_frame()
         addEmployee()
-    
+
     #Button to add an employee
     addEmployeeButton = Button(text="Add employee",  command = add_employee)
     addEmployeeButton.grid(row=2, column=3)
-    
+
 	#Method to remove the table and go back to the menu
     def runMenu():
             del_cur_frame()
@@ -745,25 +746,25 @@ def print_Schedule_All():
         toMenu.grid_remove()
         deleteEmployeeButton.grid_remove()
         addEmployeeButton.grid_remove()
-        
+
     #Method to add an employee to the database from the table
     def add_employee():
         del_cur_frame()
         addEmployee()
-    
+
     #Button to add an employee
     addEmployeeButton = Button(text="Add employee",  command = add_employee)
     addEmployeeButton.grid(row=2, column=3)
-    
+
     #Method to remove the table and go back to the menu
     def runMenu():
             del_cur_frame()
             menu()
-            
+
     #Button to go back to the menu
     toMenu = Button(window, text = "Back to the Menu", command=runMenu)
     toMenu.grid(row=0, column=0)
-   
+
 #Method to edit an employee
 def edit_Employee():
 
@@ -818,7 +819,7 @@ def edit_Employee():
             def get_input():
                 LN = lName_Entry.get()
                 FN = fName_Entry.get()
-                
+
 				#Use 2 different updates because of a limitation in sqlite3
                 cur.execute('UPDATE employee SET last_name = ? WHERE last_name = ? AND first_name = ?', (removeSpaces(LN), old_LN, old_FN))
                 conn.commit()
@@ -832,26 +833,26 @@ def edit_Employee():
 
 				#Returning to the menu
                 menu()
-                
+
             #Button to submit the new information
             submit = Button(frame, text="submit", command=get_input)
             submit.grid(row=13, column=0)
-            
+
             def delete_record():
                 delete_from_Database('employee', id)
                 frame.grid_forget()
                 menu()
-                
+
             #Button to delete the person
             deleteButton = Button(frame, text='Delete Record', command=delete_record)
             deleteButton.grid(row=14, column=0)
-    
-            
-    
+
+
+
     #Button to search with what the user has inputed
     toSearch = Button(frame, text='Search', command=edit)
     toSearch.grid(row=5, column=0)
-    
+
     #Button to return to the menu
     toMenu = Button(frame, text='Back to the Menu', command=lambda: runMenu(frame))
     toMenu.grid(row=5, column=1)
@@ -1086,21 +1087,19 @@ def info():
 def save_file():
 
 	#Opening a box for a user entering a new save file
-	f = tkFileDialog.asksaveasfile(mode='w', defaultextension=".db")
+    f = tkFileDialog.asksaveasfile(mode='w', defaultextension=".db")
 
 	#If the user leaves the box w/o entering a file
-	if f is None:
-		return
+    if f is None:
+        return
 
-	#Open the file and copy it to a string
-	with open(db_file) as myfile:
-            data = myfile.read()
-
-        #Write the old file to the new location
-        f.write(data)
-
-        #Closes the location pointer
-        f.close()
+    if os == 'Linux':
+        call(['cp', db_file ,  f.name])
+        return
+    elif os == 'Windows':
+        call(['COPY',db_file , f.name])
+        return
+        
 
 #Method to open a file
 #No checking to see if the file is in the right format
@@ -1220,7 +1219,7 @@ def __init__():
     filemenu = Menu(menubar, tearoff=0)
     options = Menu(menubar, tearoff=0)
     color_options = Menu()
-    
+
     #Adding all of the menu options
     helpmenu.add_command(label="Help", command=help)
     helpmenu.add_command(label="Info", command=info)
@@ -1230,7 +1229,7 @@ def __init__():
     options.add_cascade(label="Change chart color", menu=color_options)
     color_options.add_command(label="Change Color 1", command=lambda: Change_chart_color(row_Color_1, 1))
     color_options.add_command(label="Change Color 2", command=lambda: Change_chart_color(row_Color_2, 2))
-    
+
     #Creating the help and file cascade
     menubar.add_cascade(label="File", menu = filemenu)
     menubar.add_cascade(label="Options", menu = options)
@@ -1239,7 +1238,7 @@ def __init__():
 
 #Main program loop
 def main():
-    
+
     #To make the tables if they are not present
     create_table()
 
@@ -1248,7 +1247,7 @@ def main():
 
     #starting the window
     window.mainloop()
-    
+
 #Starting the program
 if __name__=='__main__':
     __init__()

@@ -5,6 +5,11 @@ import sqlite3
 #Importing all from Tkinter
 from Tkinter import *
 
+#Import platfrom to get the os type
+import platform
+
+#Setting the platform
+os = platform.system()
 
 #Setting up config file parser
 Config = ConfigParser.ConfigParser()
