@@ -35,6 +35,7 @@ import ConfigParser
 
 #Importing to call terminal commands
 from subprocess import call
+from shutil import copyfile
 
 #Version number
 version = "0.6.0"
@@ -1098,7 +1099,7 @@ def save_file():
         call(['cp', db_file ,  f.name])
         return
     elif os == 'Windows':
-        call(['COPY',db_file , switch_slash(f.name)])
+        copyfile(db_file, f.name)
         return
         
 
@@ -1111,7 +1112,7 @@ def open_file():
 
     #If the user preses cancel
     if db_file is None:
-		return
+	return
 
 	#sets conn to the global variable and changes the connection location to that file
     global conn
