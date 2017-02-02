@@ -14,8 +14,9 @@
 #TODO Refined search in the tables
 #TODO Allow sorting the tables (Not reasonably possible)
 
-#Importing all the variables
+#Importing all the variables and methods
 from fec_global_variables import *
+from fec_helper_methods import *
 
 #Importing all from Tkinter
 from Tkinter import *
@@ -1097,7 +1098,7 @@ def save_file():
         call(['cp', db_file ,  f.name])
         return
     elif os == 'Windows':
-        call(['COPY',db_file , f.name])
+        call(['COPY',db_file , switch_slash(f.name)])
         return
         
 
@@ -1142,23 +1143,6 @@ def new_database():
 
 	create_table()
 
-#Helper method that removes spaces before and/or after strings
-def removeSpaces(string):
-
-	#Converting the string passed in to a char list
-	sList = list(string)
-
-	#Checks to see if the first character is a space
-	if(sList[0] == ' '):
-		del sList[0]
-
-	#Checks to see if the last character is a space
-	if(sList[len(sList)-1] == ' '):
-		del sList[len(sList)-1]
-
-	#Makes the list into a string and returns it
-	string = ''.join(sList)
-	return string
 
 #Method that checks all checkboxes in a list of buttons
 #if mode is 0 -> select all buttons
