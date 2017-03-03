@@ -1,4 +1,5 @@
 # Coding and Programming FBLA 2017
+(c)Daniel Robert Kramer,2017. All Rights Reseved
 Submission by Daniel Kramer from Johns Creek High School for the 2017 FBLA Coding and Programming competition
 
 --
