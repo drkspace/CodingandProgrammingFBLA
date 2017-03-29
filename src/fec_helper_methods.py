@@ -122,3 +122,18 @@ def checkAll(list_of_checkbox, mode):
 			list_of_checkbox[i].select()
 		if(mode == 1):
 			list_of_checkbox[i].deselect()
+
+#Method to delete an employee/customer from their database
+#If dbType is 0 - Employee
+#If dbType is 1 - Customer
+def delete_from_Database(dbType, Id):
+
+	#Changes the int to the corresponding string
+	if dbType not in ['employee', 'customer']:
+		print("There has been an error, invalid dbType")
+		return
+
+	#Delete the row in the databases with the matching id
+	cur.execute('DELETE FROM '+dbType+' WHERE '+dbType+'_id = '+str(Id))
+	cur.execute('DELETE FROM '+dbType+'_schedule WHERE '+dbType+'_id = '+str(Id))
+	conn.commit()
