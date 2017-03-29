@@ -99,22 +99,22 @@ def addEmployee():
 
 	#Create a new frame for the modules to be put into and to be deleted later on
 	frame = Frame(window)
-	frame.grid(row=0, column=0)
+	frame.grid(row=0, column=0, sticky='w')
 
 	#Taking user input
 	#New label for what the user is going to input
 	label1 = Label(frame, text="Employee's First Name")
-	label1.grid(row=3, column=0)
+	label1.grid(row=3, column=0, sticky='w')
 	E = Entry(frame)
-	E.grid(row=3, column=5)
+	E.grid(row=3, column=5, sticky='w')
 
 	label2 = Label(frame, text="Employee's Last Name")
-	label2.grid(row=4, column=0)
+	label2.grid(row=4, column=0, sticky='w')
 	E1 = Entry(frame)
-	E1.grid(row=4, column=5)
+	E1.grid(row=4, column=5, sticky='w')
 
 	label3 = Label(frame, text="Please select the days the employee is working:")
-	label3.grid(row=5, column=0)
+	label3.grid(row=5, column=0,columnspan=2, sticky='w')
 
 	#Creating a list for the variables from the buttons
 	dayVar = []
@@ -130,16 +130,16 @@ def addEmployee():
 
 	#Put all of the buttons on the grid
 	for i in xrange(7):
-		dayButtons[i].grid(row=7+i, column=0)
+		dayButtons[i].grid(row=7+i, column=0, sticky='w')
 
 	#Adds a check all buttons
 	#When the button is checked, calls the checkAll method and passes in the dayButtons list
 	check_All = Checkbutton(frame, text="Check All Boxes", command = lambda: checkAll(dayButtons, 0))
-	check_All.grid(row=6, column=0)
+	check_All.grid(row=6, column=0, sticky='w')
 
 	#Button to return to the menu
 	toMenu = Button(frame, text="Back to the Menu", command = lambda: runMenu(frame))
-	toMenu.grid(row=7, column=5)
+	toMenu.grid(row=7, column=5, sticky='w')
 
 	#Method to store the variables in the sql database
 	def getInput():
@@ -148,31 +148,31 @@ def addEmployee():
 		menu()
 	#Button to submit the input
 	submit = Button(frame, text="Submit", command=getInput)
-	submit.grid(row=14, column=0)
+	submit.grid(row=14, column=0, sticky='w')
 
 
 def add_Customer():
 
 	#Create a new frame for the modules to be put into and to be deleted later on
 	frame = Frame(window)
-	frame.grid(row=0, column=0)
+	frame.grid(row=0, column=0, sticky='w')
 
 	#taking user input
 	#New label for what the user is going to input
 	label1 = Label(frame, text="Customers's First Name")
-	label1.grid(row=3, column=0)
+	label1.grid(row=3, column=0, sticky='w')
 
 	#Get user input
 	E = Entry(frame)
-	E.grid(row=3, column=5)
+	E.grid(row=3, column=5, sticky='w')
 
 	label2 = Label(frame, text="Customers's Last Name")
-	label2.grid(row=4, column=0)
+	label2.grid(row=4, column=0, sticky='w')
 	E1 = Entry(frame)
-	E1.grid(row=4, column=5)
+	E1.grid(row=4, column=5, sticky='w')
 
 	label3 = Label(frame, text="Please select the days and times the customer is present:")
-	label3.grid(row=5, column=0)
+	label3.grid(row=5, column=0,columnspan=4, sticky='w')
 
 	#List to store the vars for the buttons
 	AMVar = []
@@ -192,18 +192,18 @@ def add_Customer():
 
 	#Put the buttons in the frame
 	for i in xrange(7):
-		AMButton[i].grid(row=7+i, column=1)
-		PMButton[i].grid(row=7+i, column=3)
+		AMButton[i].grid(row=7+i, column=1, sticky='w')
+		PMButton[i].grid(row=7+i, column=3, sticky='w')
 
 	#Put labels for each day of the week
 	for i in xrange(len(day_week)):
 		dayLabel = Label(frame, text=day_week[i]+":")
-		dayLabel.grid(row=7+i, column=0)
+		dayLabel.grid(row=7+i, column=0, sticky='w')
 
 	#Adds a check all buttons
 	#When the button is checked, calls the t method and passes in the tmp list
 	check_All = Checkbutton(frame, text="Check All Boxes", command=lambda: checkAll(AMButton+PMButton, 0))
-	check_All.grid(row=6, column=1)
+	check_All.grid(row=6, column=1, sticky='w')
 
 	#Get the input from each button
 	def get_Input():
@@ -220,18 +220,18 @@ def add_Customer():
 
 	#Button to return to the menu
 	toMenu = Button(frame, text="Back to the Menu", command=lambda: runMenu(frame))
-	toMenu.grid(row=7, column=5)
+	toMenu.grid(row=7, column=5, sticky='w')
 
 	#Button to get input from the buttons
 	submit = Button(frame, text="submit", command=get_Input)
-	submit.grid(row=14, column=0)
+	submit.grid(row=14, column=0, sticky='w')
 
 	#Method and button for displaying the attendance of the customers
 	def show_customer_attendance():
 		del_menu()
 		print_Attendance_Customer()
 	printCButton = Button(frame, text="Print Customer Attendance", command=show_customer_attendance)
-	printCButton.grid(row=8, column=5)
+	printCButton.grid(row=8, column=5, sticky='w')
 
 #Method to set a customers attendance
 def customer_attendance():
@@ -239,23 +239,23 @@ def customer_attendance():
 	#Creating a new frame to have all of the modules held in
 	#To be deleted at the end of the method
 	frame = Frame(window)
-	frame.grid(row=0, column=0)
+	frame.grid(row=0, column=0, sticky='w')
 
 	#Label for the information on what the user has to input
 	label0 = Label(frame, text='Please enter the customers name')
-	label0.grid(row=0, column=0)
+	label0.grid(row=0, column=0, sticky='w')
 	label = Label(frame, text="Customer's First Name")
-	label.grid(row=1, column=0)
+	label.grid(row=1, column=0, sticky='w')
 
 	#Entry for the first name
 	fName_Entry = Entry(frame)
-	fName_Entry.grid(row=2, column=0)
+	fName_Entry.grid(row=2, column=0, sticky='w')
 	label1 = Label(frame, text="Customer's Last Name")
-	label1.grid(row=3, column=0)
+	label1.grid(row=3, column=0, sticky='w')
 
 	#Entry for the last name
 	lName_Entry = Entry(frame)
-	lName_Entry.grid(row=4, column=0)
+	lName_Entry.grid(row=4, column=0, sticky='w')
 
 	#Method for after the user submitted a name
 	#Searches in the customer database
@@ -290,7 +290,7 @@ def customer_attendance():
 
 			#Label to tell the user what he/she needs to input
 			label3 = Label(frame, text="Please select the days and times the customer is present:")
-			label3.grid(row=5, column=0)
+			label3.grid(row=5, column=0, sticky='w')
 
 			#List of variables for the AM and PM buttons
 			intVarListAM = []
@@ -313,13 +313,13 @@ def customer_attendance():
 
 			#Put all of the buttons on the grid
 			for i in xrange(7):
-				AMButton[i].grid(row=7+i, column=1)
-				PMButton[i].grid(row=7+i, column=2)
+				AMButton[i].grid(row=7+i, column=1, sticky='w')
+				PMButton[i].grid(row=7+i, column=2, sticky='w')
 
 			#Adds a check all buttons
 			#When the button is checked, calls the t method and passes in the tmp list
 			check_All = Checkbutton(frame, text="Check All Boxes", command=lambda: checkAll(AMButton+PMButton, 0))
-			check_All.grid(row=6, column=1)
+			check_All.grid(row=6, column=1, sticky='w')
 
 			#Store the customer id in id
 			id = str(data[0][0])
@@ -348,7 +348,7 @@ def customer_attendance():
 			#Display all of the days of the week
 			for i in xrange(len(day_week)):
 				dayLabel = Label(frame, text=day_week[i]+":")
-				dayLabel.grid(row=6+i, column=0)
+				dayLabel.grid(row=6+i, column=0, sticky='w')
 
 			#Method to store what the user has selected at that moment
 			def get_input():
@@ -377,26 +377,26 @@ def customer_attendance():
 				menu()
 			#Button to delete the person
 			deleteButton = Button(frame, text='Delete Record', command=delete_record)
-			deleteButton.grid(row=14, column=0)
+			deleteButton.grid(row=14, column=0, sticky='w')
 
 			#Button to submit the changes
 			submit = Button(frame, text="submit", command=get_input)
-			submit.grid(row=15, column=0)
+			submit.grid(row=15, column=0, sticky='w')
 
 		#If there is no matching customers
 		else:
 
 			#Creating a label explaining to the user that there was no matching name in the database
 			errorLabel = Label(frame, text="Error finding the person you inputed, please check the name")
-			errorLabel.grid(row=7, column=0)
+			errorLabel.grid(row=7, column=0, sticky='w')
 
 	#Button to search within the database to find the person
 	toSearch = Button(frame, text='Search', command=edit)
-	toSearch.grid(row=5, column=0)
+	toSearch.grid(row=5, column=0, sticky='w')
 
 	#Button to get back to the menu
 	toMenu = Button(frame, text='Back to the Menu', command = lambda: runMenu(frame))
-	toMenu.grid(row=4, column=1)
+	toMenu.grid(row=4, column=1, sticky='w')
 
 #Method to put all of the employees in a table on screen
 def showAll_Employee():
@@ -420,7 +420,7 @@ def showAll_Employee():
     tbl.column('firstName', anchor='center', width=100)
 
     #Put the table on the grid
-    tbl.grid(row=2, column=0)
+    tbl.grid(row=2, column=0, sticky='w')
 
     #Select all of the first and last names form employee
     cur.execute('SELECT last_name, first_name FROM employee')
@@ -467,12 +467,12 @@ def showAll_Employee():
         f_name = val[0]
         cur.execute('SELECT * FROM employee WHERE last_name = ? AND first_name = ?', (employee['text'], f_name))
         for i in cur.fetchall():
-            label_notify.grid(row=3, column=0)
+            label_notify.grid(row=3, column=0, sticky='w')
             return i[0]
 
 
     deleteEmployeeButton = Button(window,  text = "Delete This Employee",  command = lambda: delete_from_Database('employee', getID()))
-    deleteEmployeeButton.grid(row=2, column=2)    
+    deleteEmployeeButton.grid(row=2, column=2, sticky='w')    
 
     #Method to delete all the items in the frame
     def del_cur_frame():
@@ -495,7 +495,7 @@ def showAll_Employee():
 
     #Button to add an employee
     addEmployeeButton = Button(text="Add employee",  command = add_employee)
-    addEmployeeButton.grid(row=2, column=3)
+    addEmployeeButton.grid(row=2, column=3, sticky='w')
 
 	#Method to remove the table and go back to the menu
     def runMenu():
@@ -504,7 +504,7 @@ def showAll_Employee():
 
     #Button to go back to the menu
     toMenu = Button(window, text="Back to the Menu", command=runMenu)
-    toMenu.grid(row=0, column=0)
+    toMenu.grid(row=0, column=0, sticky='w')
 
 #Method to show the attendance of the customers
 def print_Attendance_Customer():
@@ -528,7 +528,7 @@ def print_Attendance_Customer():
     tbl.column('firstName', anchor='center', width=100)
 
     #Putting the table on the grid
-    tbl.grid(row=2, column=0)	
+    tbl.grid(row=2, column=0, sticky='w')	
 
     #Setting all of the other columns to show the day of the week
     for day in day_week:
@@ -602,11 +602,11 @@ def print_Attendance_Customer():
         f_name = val[0]
         cur.execute('SELECT * FROM customer WHERE last_name = ? AND first_name = ?', (customer['text'], f_name))
         for i in cur.fetchall():
-            label_notify.grid(row=3,  column = 2)
+            label_notify.grid(row=3,  column = 2, sticky='w')
             return i[0]
 
     deleteEmployeeButton = Button(window,  text = "Delete This Customer",  command = lambda: delete_from_Database('customer', getID()) )
-    deleteEmployeeButton.grid(row=2, column=2)
+    deleteEmployeeButton.grid(row=2, column=2, sticky='w')
 
     #Method to run the menu and delete the table
     def runMenu():
@@ -620,7 +620,7 @@ def print_Attendance_Customer():
 
     #Button to go back to the menu
     toMenu = Button(window, text="Back to the Menu", command=runMenu)
-    toMenu.grid(row=0, column=0)
+    toMenu.grid(row=0, column=0, sticky='w')
 
     #Method and button for adding an customer to the system
     def add_customer_():
@@ -630,7 +630,7 @@ def print_Attendance_Customer():
         deleteEmployeeButton.grid_remove()
         add_Customer()
     addCButton = Button(window, text="Add customers", command=add_customer_)
-    addCButton.grid(row=2, column=3)
+    addCButton.grid(row=2, column=3, sticky='w')
 
 #Method to print the schedule of the employees
 def print_Schedule_All():
@@ -661,7 +661,7 @@ def print_Schedule_All():
         tbl.column(day, anchor='center', width=80)
 
     #Setting the position of the table
-    tbl.grid(row=2, column=0)
+    tbl.grid(row=2, column=0, sticky='w')
 
     #Make color assigner so each column would have alternating colors
     color_assigner = 1
@@ -741,7 +741,7 @@ def print_Schedule_All():
             return i[0]
 
     deleteEmployeeButton = Button(window,  text = "Delete This Employee",  command = lambda: delete_from_Database('employee', getID()) )
-    deleteEmployeeButton.grid(row=2, column=2)    
+    deleteEmployeeButton.grid(row=2, column=2, sticky='w')    
 
     def del_cur_frame():
         tbl.grid_remove()
@@ -756,7 +756,7 @@ def print_Schedule_All():
 
     #Button to add an employee
     addEmployeeButton = Button(text="Add employee",  command = add_employee)
-    addEmployeeButton.grid(row=2, column=3)
+    addEmployeeButton.grid(row=2, column=3, sticky='w')
 
     #Method to remove the table and go back to the menu
     def runMenu():
@@ -765,7 +765,7 @@ def print_Schedule_All():
 
     #Button to go back to the menu
     toMenu = Button(window, text = "Back to the Menu", command=runMenu)
-    toMenu.grid(row=0, column=0)
+    toMenu.grid(row=0, column=0, sticky='w')
 
 #Method to edit an employee
 def edit_Employee():
@@ -773,23 +773,23 @@ def edit_Employee():
 	#Making the frame to have all of the modules put into it
 	#To be deleted at the end of the method
     frame = Frame(window)
-    frame.grid(row=0, column=0)
+    frame.grid(row=0, column=0, sticky='w')
 
 	#Setting the label to tell the user what to do
     label0 = Label(frame, text='Please enter the old information')
-    label0.grid(row=0, column=0)
+    label0.grid(row=0, column=0, sticky='w')
 
 	#Setting the label and input for the first name
     label = Label(frame, text="Employee's First Name")
-    label.grid(row=1, column=0)
+    label.grid(row=1, column=0, sticky='w')
     fName_Entry = Entry(frame)
-    fName_Entry.grid(row=2, column=0)
+    fName_Entry.grid(row=2, column=0, sticky='w')
 
 	#Setting the label and input for the last name
     label1 = Label(frame, text="Employee's Last Name")
-    label1.grid(row=3, column=0)
+    label1.grid(row=3, column=0, sticky='w')
     lName_Entry = Entry(frame)
-    lName_Entry.grid(row=4, column=0)
+    lName_Entry.grid(row=4, column=0, sticky='w')
 
 	#Method to goto the editing screen
     def edit():
@@ -838,7 +838,7 @@ def edit_Employee():
 
             #Button to submit the new information
             submit = Button(frame, text="submit", command=get_input)
-            submit.grid(row=13, column=0)
+            submit.grid(row=13, column=0, sticky='w')
 
             def delete_record():
                 delete_from_Database('employee', id)
@@ -847,40 +847,40 @@ def edit_Employee():
 
             #Button to delete the person
             deleteButton = Button(frame, text='Delete Record', command=delete_record)
-            deleteButton.grid(row=14, column=0)
+            deleteButton.grid(row=14, column=0, sticky='w')
 
 
 
     #Button to search with what the user has inputed
     toSearch = Button(frame, text='Search', command=edit)
-    toSearch.grid(row=5, column=0)
+    toSearch.grid(row=5, column=0, sticky='w')
 
     #Button to return to the menu
     toMenu = Button(frame, text='Back to the Menu', command=lambda: runMenu(frame))
-    toMenu.grid(row=5, column=1)
+    toMenu.grid(row=5, column=1, sticky='w')
 
 #Method to edit the employee's schedule
 def edit_Employee_Schedule():
 
 	#Frame to store all of the modules and to be deleted later on
 	frame = Frame(window)
-	frame.grid(row=0, column=0)
+	frame.grid(row=0, column=0, sticky='w')
 
 	#Label to ask the user for the name
 	label0 = Label(frame, text="Please enter the Employee's name that you want the schedule to be changed for.")
-	label0.grid(row=0, column=0)
+	label0.grid(row=0, column=0, sticky='w')
 
 	#Setting the label and input for the first name
 	label = Label(frame, text="Employee's First Name")
-	label.grid(row=1, column=0)
+	label.grid(row=1, column=0, sticky='w')
 	E = Entry(frame)
-	E.grid(row=2, column=0)
+	E.grid(row=2, column=0, sticky='w')
 
 	#Setting the label and input for the last name
 	label1 = Label(frame, text="Employee's Last Name")
-	label1.grid(row=3, column=0)
+	label1.grid(row=3, column=0, sticky='w')
 	E1 = Entry(frame)
-	E1.grid(row=4, column=0)
+	E1.grid(row=4, column=0, sticky='w')
 
 	#Method for getting the input from the user
 	def edit():
@@ -922,12 +922,12 @@ def edit_Employee_Schedule():
 
 			#Put all of the buttons on the grid
 			for i in xrange(7):
-				dayButtons[i].grid(row=7+i, column=0)
+				dayButtons[i].grid(row=7+i, column=0, sticky='w')
 
 			#Adds a check all buttons
 			#When the button is checked, calls the checkAll method and passes in the dayButtons list
 			check_All = Checkbutton(frame, text="Check All Boxes", command=lambda: checkAll(dayButtons, 0))
-			check_All.grid(row=6, column=0)
+			check_All.grid(row=6, column=0, sticky='w')
 
 			for i in data:
 
@@ -958,15 +958,15 @@ def edit_Employee_Schedule():
 
 				#Button to submit the schedule and go back to the menu
 				submit = Button(frame, text="submit", command=get_input)
-				submit.grid(row=14, column=0)
+				submit.grid(row=14, column=0, sticky='w')
 
 	#Button to search with the given name
 	toSearch = Button(frame, text='Search', command=edit)
-	toSearch.grid(row=5, column=0)
+	toSearch.grid(row=5, column=0, sticky='w')
 
 	#Button to go back to the menu
 	toMenu = Button(frame, text='Back to the Menu', command=lambda: runMenu(frame))
-	toMenu.grid(row=5, column=1)
+	toMenu.grid(row=5, column=1, sticky='w')
 
 #Method to delete an employee/customer from their database
 #If dbType is 0 - Employee
@@ -1000,11 +1000,11 @@ def menu():
 	#Label to welcome the user to the system
 	#Put in the label not in the frame but in the window so it can be centers over the buttons
 	welcomeLabel = Label(window, text="Welcome to the Family Entertainment System")
-	welcomeLabel.grid(row=0, column=0)
+	welcomeLabel.grid(row=0, column=0, sticky='w')
 
 	#Frame to hold all the modules and to be deleted later
 	frame = Frame(window)
-	frame.grid(row=1, column=0)
+	frame.grid(row=1, column=0, sticky='w')
 
 	#Method to delete the frame and the welcome label
 	def del_menu():
@@ -1016,56 +1016,56 @@ def menu():
 		del_menu()
 		addEmployee()
 	addButton = Button(frame, text="Add Employee", command=addButtonCommandAndRemove)
-	addButton.grid(row=1, column=0)
+	addButton.grid(row=1, column=0, sticky='w')
 
 	#Method and button for showing all the employees in the system
 	def showButtonCommandAndRemove():
 		del_menu()
 		showAll_Employee()
 	showButton = Button(frame, text="Show all Employees", command=showButtonCommandAndRemove)
-	showButton.grid(row=2, column=0)
+	showButton.grid(row=2, column=0, sticky='w')
 
 	#Method and button for printing the employee schedule
 	def print_Schedule():
 		del_menu()
 		print_Schedule_All()
 	schedButton = Button(frame, text="Print Weekly Schedule", command=print_Schedule)
-	schedButton.grid(row=3, column=0)
+	schedButton.grid(row=3, column=0, sticky='w')
 
 	#Method and button for editing an employees information
 	def edit_Employee_Run():
 		del_menu()
 		edit_Employee()
 	editButton = Button(frame, text="Edit/Delete an Employee's details", command=edit_Employee_Run)
-	editButton.grid(row=4, column=0)
+	editButton.grid(row=4, column=0, sticky='w')
 
 	#Method and button for editing an employees work schedule
 	def edit_Employee_Schedule_Run():
 		del_menu()
 		edit_Employee_Schedule()
 	editSButton = Button(frame, text="Edit an Employee's Schedule details", command=edit_Employee_Schedule_Run)
-	editSButton.grid(row=5, column=0)
+	editSButton.grid(row=5, column=0, sticky='w')
 
 	#Method and button for adding an customer to the system
 	def add_customer_():
 		del_menu()
 		add_Customer()
 	addCButton = Button(frame, text="Add customers", command=add_customer_)
-	addCButton.grid(row=1, column=2)
+	addCButton.grid(row=1, column=2, sticky='w')
 
 	#Method and button for editing a customers attendance
 	def edit_Customer_attednace():
 		del_menu()
 		customer_attendance()
 	editCButton = Button(frame, text="Change/Delete Customers Information", command=edit_Customer_attednace)
-	editCButton.grid(row=2, column=2)
+	editCButton.grid(row=2, column=2, sticky='w')
 
 	#Method and button for displaying the attendance of the customers
 	def show_customer_attendance():
 		del_menu()
 		print_Attendance_Customer()
 	printCButton = Button(frame, text="Print Customer Attendance", command=show_customer_attendance)
-	printCButton.grid(row=3, column=2)
+	printCButton.grid(row=3, column=2, sticky='w')
 
 #Method for displaying the help box
 def help():
