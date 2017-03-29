@@ -21,8 +21,8 @@ try:
 	from fec_helper_methods import *
 except:
 
-	#TODO make in tkinter
 	print "Please redownload the program from https://github.com/drkspace/CodingandProgrammingFBLA"
+	print "Please don't delete any of the downloaded files"
 	exit(0)
 
 try:
