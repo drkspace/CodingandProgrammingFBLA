@@ -14,28 +14,41 @@
 #TODO Refined search in the tables
 #TODO Allow sorting the tables (Not reasonably possible)
 
-#Importing all the variables and methods
-from fec_global_variables import *
-from fec_helper_methods import *
+from sys import exit
+try:
+	#Importing all the variables and methods
+	from fec_global_variables import *
+	from fec_helper_methods import *
+except:
 
-#Importing all from Tkinter
-from Tkinter import *
-import ttk
-import tkFileDialog
-import tkColorChooser
+	#TODO make in tkinter
+	print "Please redownload the program from https://github.com/drkspace/CodingandProgrammingFBLA"
+	exit(0)
 
-#Importing sqlite
-import sqlite3
+try:
+	#Importing all from Tkinter
+	from Tkinter import *
+	import ttk
+	import tkFileDialog
+	import tkColorChooser
 
-#Importing Random for Ids
-import random
+	#Importing sqlite
+	import sqlite3
 
-#Importing config parser
-import ConfigParser
+	#Importing Random for Ids
+	import random
 
-#Importing to call terminal commands
-from subprocess import call
-from shutil import copyfile
+	#Importing config parser
+	import ConfigParser
+
+	#Importing to call terminal commands
+	from subprocess import call
+	from shutil import copyfile
+
+except:
+	print "Please Run the executabe version located at https://github.com/drkspace/CodingandProgrammingFBLA/releases"
+	print "or please download the following modules:\nTkinter\nsqlite3\nrandom\nConfigParser\nsubprocess\nshutil"
+	exit(0)
 
 #Version number
 version = "0.6.0"
@@ -262,7 +275,7 @@ def customer_attendance():
 	def edit():
 
 		#Selects from the customer table if there is a matching first and last name
-		cur.execute('SELECT * FROM customer WHERE last_name = ? AND first_name=?', (E1.get(), E.get()))
+		cur.execute('SELECT * FROM customer WHERE last_name = ? AND first_name=?', (lName_Entry.get(), fName_Entry.get()))
 
 		#Stores the data in a list
 		data = cur.fetchall()
@@ -387,8 +400,8 @@ def customer_attendance():
 		else:
 
 			#Creating a label explaining to the user that there was no matching name in the database
-			errorLabel = Label(frame, text="Error finding the person you inputed, please check the name")
-			errorLabel.grid(row=7, column=0, sticky='w')
+			errorLabel = Label(frame, text="Unable to find the person you inputed, please check the name again")
+			errorLabel.grid(row=7, column=0, sticky='w',columnspan=3)
 
 	#Button to search within the database to find the person
 	toSearch = Button(frame, text='Search', command=edit)
