@@ -1,7 +1,6 @@
 from random import randrange
 from fec_global_variables import cur
 
-
 #Helper method that removes spaces before and/or after strings
 def removeSpaces(string):
 
@@ -68,4 +67,58 @@ def add_to_db(fName, lName, sun, mon, tues, wend, thur, fri, sat, type):
 	#Commit the changes to save
 	conn.commit()
 
-            
+#Method to delete the frame and return to the menu
+def runMenu(frame):
+    frame.grid_forget()
+    menu()
+
+#Method to change the color of the rows in the charts
+#Gets the old color passed in
+#Gets row color var number passed in
+def Change_chart_color(color, var):
+
+	#Call the tkColorChooser which opens a popup box with a color slider
+	color_result = tkColorChooser.askcolor(color, title="Please Pick a new Color")
+
+	#Test to see if the user press cancel
+	#If true, return out of the method
+	if color_result == (None, None):
+		return
+
+	#Converts the rgb returned by the color chooser and converts it into the hex code
+	color_result_hex = '#%02x%02x%02x' % (color_result[0][0], color_result[0][1], color_result[0][2])
+
+	#Test from the var to see what row color needs to be changed
+	if var == 1:
+		global row_Color_1
+		row_Color_1 = color_result_hex
+
+		#Save the new database file to the config file
+		cfgfile = open("config.ini", 'w')
+		Config.set('Colors', 'Row_1', row_Color_1)
+		Config.write(cfgfile)
+		cfgfile.close()
+	elif var == 2:
+		global row_Color_2
+		row_Color_2 = color_result_hex
+
+		#Save the new database file to the config file
+		cfgfile = open("config.ini", 'w')
+		Config.set('Colors', 'Row_2', row_Color_2)
+		Config.write(cfgfile)
+		cfgfile.close()
+	else:
+		return
+
+#Method that checks all checkboxes in a list of buttons
+#if mode is 0 -> select all buttons
+#if mode is 1 -> deselect all buttons
+def checkAll(list_of_checkbox, mode):
+
+	#Loop through the list
+	for i in xrange(len(list_of_checkbox)):
+
+		if(mode == 0):
+			list_of_checkbox[i].select()
+		if(mode == 1):
+			list_of_checkbox[i].deselect()

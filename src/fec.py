@@ -5,14 +5,10 @@
 #https://github.com/drkspace/CodingandProgrammingFBLA
 #######################################
 
-#To Run:
-# 	Use the compiled version if it exists for your OS
-#	To run on any system, run python fec.py. Must have tkinter and sqlte3 installed to function.
-
 #TODO Make better looking
 #TODO Allow selecting customer/employee from table to edit
 #TODO Refined search in the tables
-#TODO Allow sorting the tables (Not reasonably possible)
+#TODO Allow sorting the tables
 
 from sys import exit
 try:
@@ -23,8 +19,8 @@ try:
 	from customer import customer
 except:
 
-	print "Please redownload the program from https://github.com/drkspace/CodingandProgrammingFBLA"
-	print "Please don't delete any of the downloaded files"
+	print "Please re-download the program from https://github.com/drkspace/CodingandProgrammingFBLA"
+	print "Please don't delete any of the downloaded files or else the program won't work"
 	exit(0)
 
 try:
@@ -48,7 +44,7 @@ try:
 	from shutil import copyfile
 
 except:
-	print "Please Run the executabe version located at https://github.com/drkspace/CodingandProgrammingFBLA/releases"
+	print "Please Run the executable version located at https://github.com/drkspace/CodingandProgrammingFBLA/releases"
 	print "or please download the following modules:\nTkinter\nsqlite3\nrandom\nConfigParser\nsubprocess\nshutil"
 	exit(0)
 
@@ -57,9 +53,10 @@ version = "0.6.0"
 
 #Used to make all the necessary tables in the database
 #If the table already exist, nothing happens to that database here
+#This is to be ran first
 def create_table():
 
-	#Create a table for the employee's names and is's
+	#Create a table for the employee's names and id's
 	cur.execute('CREATE TABLE IF NOT EXISTS employee(employee_id REAL, first_name TEXT, last_name TEXT)')
 
 	#Create a table for the days the employee is working
@@ -69,6 +66,7 @@ def create_table():
 	cur.execute('CREATE TABLE IF NOT EXISTS customer(customer_id REAL, first_name TEXT, last_name TEXT)')
 
 	#Create a table for the times and days the customer attended
+	#Only required to store if the customer is attending in the am or pm
 	#Key for day_attend
 	#0 - Neither AM nor PM
 	#1 - PM
@@ -77,279 +75,6 @@ def create_table():
 	cur.execute('CREATE TABLE IF NOT EXISTS customer_schedule(customer_id REAL, sun_attend REAL, mon_attend REAL, tues_attend REAL, wend_attend REAL, thurs_attend REAL, fri_attend REAL, sat_attend REAL)')
 
 
-
-#Method to set a customers attendance
-def customer_attendance():
-
-	#Creating a new frame to have all of the modules held in
-	#To be deleted at the end of the method
-	frame = Frame(window)
-	frame.grid(row=0, column=0, sticky='w')
-
-	#Label for the information on what the user has to input
-	label0 = Label(frame, text='Please enter the customers name')
-	label0.grid(row=0, column=0, sticky='w')
-	label = Label(frame, text="Customer's First Name")
-	label.grid(row=1, column=0, sticky='w')
-
-	#Entry for the first name
-	fName_Entry = Entry(frame)
-	fName_Entry.grid(row=2, column=0, sticky='w')
-	label1 = Label(frame, text="Customer's Last Name")
-	label1.grid(row=3, column=0, sticky='w')
-
-	#Entry for the last name
-	lName_Entry = Entry(frame)
-	lName_Entry.grid(row=4, column=0, sticky='w')
-
-	#Method for after the user submitted a name
-	#Searches in the customer database
-	def edit():
-
-		#Selects from the customer table if there is a matching first and last name
-		cur.execute('SELECT * FROM customer WHERE last_name = ? AND first_name=?', (lName_Entry.get(), fName_Entry.get()))
-
-		#Stores the data in a list
-		data = cur.fetchall()
-
-		#Test to see if the array has data in it
-		#If it has data, continue to let the user edit the data
-		if(len(data) > 0):
-
-			#Remove the toSearch button
-			toSearch.grid_forget()
-
-			#Store the customers first and last name
-			old_LN = lName_Entry.get()
-			old_FN = fName_Entry.get()
-
-			#Display the old name to the user so they can remember
-			#Use the old labels to save memory
-			label0.configure(text="Please enter the new information")
-			label.configure(text="Customer's first name: "+old_FN)
-			label1.configure(text="Customer's last name: "+old_LN)
-
-			#Remove the text entry from the frame
-			fName_Entry.grid_forget()
-			lName_Entry.grid_forget()
-
-			#Label to tell the user what he/she needs to input
-			label3 = Label(frame, text="Please select the days and times the customer is present:")
-			label3.grid(row=5, column=0, sticky='w')
-
-			#List of variables for the AM and PM buttons
-			intVarListAM = []
-			intVarListPM = []
-			for i in xrange(7):
-				intVarListAM.append(IntVar())
-				intVarListPM.append(IntVar())
-
-			#List of AM and PM Buttons
-			AMButton = []
-			PMButton = []
-			for i in xrange(7):
-
-				#Button for the AM selection
-				#Has values of 0 and 2 for the way the time is stored in the database
-				AMButton.append(Checkbutton(frame, text="AM", variable=intVarListAM[i], onvalue=2, offvalue=0))
-
-				#Button for the PM
-				PMButton.append(Checkbutton(frame, text="PM", variable=intVarListPM[i]))
-
-			#Put all of the buttons on the grid
-			for i in xrange(7):
-				AMButton[i].grid(row=7+i, column=1, sticky='w')
-				PMButton[i].grid(row=7+i, column=2, sticky='w')
-
-			#Adds a check all buttons
-			#When the button is checked, calls the t method and passes in the tmp list
-			check_All = Checkbutton(frame, text="Check All Boxes", command=lambda: checkAll(AMButton+PMButton, 0))
-			check_All.grid(row=6, column=1, sticky='w')
-
-			#Store the customer id in id
-			id = str(data[0][0])
-
-			#Selecting the data from customer attendance with the correct customer id
-			cur.execute('SELECT * FROM customer_schedule WHERE customer_id = '+id)
-
-			#Storing the attendance in attend
-			attend = cur.fetchall()
-			for i in attend:
-
-				#Loop to have all of the buttons selected if they were selected before
-				for k in xrange(8):
-					if(i[k] >= 4):
-						continue
-					if(i[k] == 0):
-						continue
-					if(i[k] == 1):
-						PMButton[k-1].select()
-					if(i[k] == 2):
-						AMButton[k-1].select()
-					if(i[k] == 3):
-						AMButton[k-1].select()
-						PMButton[k-1].select()
-
-			#Display all of the days of the week
-			for i in xrange(len(day_week)):
-				dayLabel = Label(frame, text=day_week[i]+":")
-				dayLabel.grid(row=6+i, column=0, sticky='w')
-
-			#Method to store what the user has selected at that moment
-			def get_input():
-
-				#Add up each day total and store it in total
-				total = []
-				for i in xrange(7):
-					total.append(intVarListAM[i].get()+intVarListPM[i].get())
-				for i in xrange(7):
-					#Have to update each day's attendance individually, limitation in sqlite3
-					cur.execute("UPDATE customer_schedule SET "+day_week_short[i]+"_attend = ? WHERE customer_id = ?", (str(total[i]), id))
-
-				#Commit the changes
-				conn.commit()
-
-				#Delete the frame
-				frame.grid_forget()
-
-				#Run the menu
-				menu()
-
-			def delete_record():
-				delete_from_Database('customer', id)
-
-				frame.grid_forget()
-				menu()
-			#Button to delete the person
-			deleteButton = Button(frame, text='Delete Record', command=delete_record)
-			deleteButton.grid(row=14, column=0, sticky='w')
-
-			#Button to submit the changes
-			submit = Button(frame, text="submit", command=get_input)
-			submit.grid(row=15, column=0, sticky='w')
-
-		#If there is no matching customers
-		else:
-
-			#Creating a label explaining to the user that there was no matching name in the database
-			errorLabel = Label(frame, text="Unable to find the person you inputed, please check the name again")
-			errorLabel.grid(row=7, column=0, sticky='w',columnspan=3)
-
-	#Button to search within the database to find the person
-	toSearch = Button(frame, text='Search', command=edit)
-	toSearch.grid(row=5, column=0, sticky='w')
-
-	#Button to get back to the menu
-	toMenu = Button(frame, text='Back to the Menu', command = lambda: runMenu(frame))
-	toMenu.grid(row=4, column=1, sticky='w')
-
-#Method to put all of the employees in a table on screen
-def showAll_Employee():
-
-    #Creating a new table
-    tbl = ttk.Treeview()
-
-    #Setting the column to be called firstName
-    tbl['columns'] = ('firstName')
-
-    #Change the leading column to have the text "Last Name"
-    tbl.heading('#0', text='Last Name')
-
-    #Change the size of the leading column
-    tbl.column('#0', anchor='center', width=100)
-
-    #Set the firstName column to show "First Name"
-    tbl.heading('firstName', text='First Name')
-
-    #Change the size of the firstName column
-    tbl.column('firstName', anchor='center', width=100)
-
-    #Put the table on the grid
-    tbl.grid(row=2, column=0, sticky='w')
-
-    #Select all of the first and last names form employee
-    cur.execute('SELECT last_name, first_name FROM employee')
-
-    #Make color assigner so each column would have alternating colors
-    color_assigner = 1
-
-    #Loop for putting all of the names in the table
-    for i in cur.fetchall():
-        tbl.insert('', 'end', text=i[0], values=(i[1]), tags =(str(color_assigner,)))
-
-        #Multiply the color assigner by -1 so it would alternate between -1 and 1
-        color_assigner *= -1
-
-    #Set the color of the columns depending on the color assigner
-    tbl.tag_configure(str(1), background=row_Color_1)
-    tbl.tag_configure(str(-1), background=row_Color_2)
-
-    #Return the selected item from the table
-    def selectedItem():
-        curItem = tbl.focus()
-        return tbl.item(curItem)
-
-    #Test to see if there is an item selected    
-    def isSelected():
-        if selectedItem() is None:
-            return False
-        else:
-            return True
-
-    #Returns the selection if there is a selection
-    def getSelected(): 
-        if isSelected():
-            employee = selectedItem()
-            return employee
-        else:
-            return None
-
-    label_notify=Label(window,  text="The employee has been removed, please refresh the table")
-    #Return the Id for the selection
-    def getID():
-        employee  = getSelected()
-        val = employee['values']
-        f_name = val[0]
-        cur.execute('SELECT * FROM employee WHERE last_name = ? AND first_name = ?', (employee['text'], f_name))
-        for i in cur.fetchall():
-            label_notify.grid(row=3, column=0, sticky='w')
-            return i[0]
-
-
-    deleteEmployeeButton = Button(window,  text = "Delete This Employee",  command = lambda: delete_from_Database('employee', getID()))
-    deleteEmployeeButton.grid(row=2, column=2, sticky='w')    
-
-    #Method to delete all the items in the frame
-    def del_cur_frame():
-        label_notify.grid_remove()
-        tbl.grid_remove()
-        toMenu.grid_remove()
-        deleteEmployeeButton.grid_remove()
-        #editEmployeeButton.grid_remove()
-        addEmployeeButton.grid_remove()
-
-    #Method to goto the editing of the employee from the selection
-    def edit_employee_(id):
-        del_cur_frame()
-        edit_employee_from_id(id)
-
-    #Method to add an employee to the database from the table
-    def add_employee():
-        del_cur_frame()
-        addEmployee()
-
-    #Button to add an employee
-    addEmployeeButton = Button(text="Add employee",  command = add_employee)
-    addEmployeeButton.grid(row=2, column=3, sticky='w')
-
-	#Method to remove the table and go back to the menu
-    def runMenu():
-            del_cur_frame()
-            menu()
-
-    #Button to go back to the menu
-    toMenu = Button(window, text="Back to the Menu", command=runMenu)
-    toMenu.grid(row=0, column=0, sticky='w')
 
 #Method to show the attendance of the customers
 def print_Attendance_Customer():
@@ -427,10 +152,7 @@ def print_Attendance_Customer():
 
     #Test to see if there is an item selected    
     def isSelected():
-        if selectedItem() is None:
-            return False
-        else:
-            return True
+        return selectedItem() is not None
 
     #Return the employee info is there is a selection
     def getSelected(): 
@@ -474,6 +196,7 @@ def print_Attendance_Customer():
         addCButton.grid_remove()
         deleteEmployeeButton.grid_remove()
         add_Customer()
+
     addCButton = Button(window, text="Add customers", command=add_customer_)
     addCButton.grid(row=2, column=3, sticky='w')
 
@@ -563,10 +286,8 @@ def print_Schedule_All():
 
     #Test to see if there is an item selected    
     def isSelected():
-        if selectedItem() is None:
-            return False
-        else:
-            return True
+        return selectedItem() is not None
+         
 
     #Return the employee info is there is a selection
     def getSelected(): 
@@ -973,75 +694,7 @@ def open_file():
     Config.write(cfgfile)
     cfgfile.close()
 
-#Method for making a new database
-def new_database():
-
-	#Creating name for new database
-	db_file = "Untitled.db"
-
-	#sets conn to the global variable and changes the connection location to that file
-	global conn
-	conn = sqlite3.connect(db_file)
-
-	#sets conn to the global variable and changes the connection location to that file
-	global cur
-	cur = conn.cursor()
-
-	create_table()
-
-
-#Method that checks all checkboxes in a list of buttons
-#if mode is 0 -> select all buttons
-#if mode is 1 -> deselect all buttons
-def checkAll(list_of_checkbox, mode):
-
-	#Loop through the list
-	for i in xrange(len(list_of_checkbox)):
-
-		if(mode == 0):
-			list_of_checkbox[i].select()
-		if(mode == 1):
-			list_of_checkbox[i].deselect()
-
-#Method to change the color of the rows in the charts
-#Gets the old color passed in
-#Gets row color var number passed in
-def Change_chart_color(color, var):
-
-	#Call the tkColorChooser which opens a popup box with a color slider
-	color_result = tkColorChooser.askcolor(color, title="Please Pick a new Color")
-
-	#Test to see if the user press cancel
-	#If true, return out of the method
-	if color_result == (None, None):
-		return
-
-	#Converts the rgb returned by the color chooser and converts it into the hex code
-	color_result_hex = '#%02x%02x%02x' % (color_result[0][0], color_result[0][1], color_result[0][2])
-
-	#Test from the var to see what row color needs to be changed
-	if var == 1:
-		global row_Color_1
-		row_Color_1 = color_result_hex
-
-		#Save the new database file to the config file
-		cfgfile = open("config.ini", 'w')
-		Config.set('Colors', 'Row_1', row_Color_1)
-		Config.write(cfgfile)
-		cfgfile.close()
-	elif var == 2:
-		global row_Color_2
-		row_Color_2 = color_result_hex
-
-		#Save the new database file to the config file
-		cfgfile = open("config.ini", 'w')
-		Config.set('Colors', 'Row_2', row_Color_2)
-		Config.write(cfgfile)
-		cfgfile.close()
-	else:
-		return
-
-#Initilization for the program    
+#Initialization for the program    
 def __init__():
     #Creating the menu at the top
     menubar = Menu(window)
