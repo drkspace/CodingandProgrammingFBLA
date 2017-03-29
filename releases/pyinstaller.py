@@ -1,0 +1,1 @@
+/home/daniel/pythonstuff/PyInstaller-3.2/pyinstaller.py

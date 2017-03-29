@@ -3,6 +3,8 @@
 
 Submission by Daniel Kramer from Johns Creek High School for the 2017 FBLA Coding and Programming competition
 
+Running in Python 2.7 with use of tkinter and sqlite3
+
 --
 #Guidelines
 
