@@ -43,11 +43,15 @@ try:
 
 	#Importing to call terminal commands
 	from subprocess import call
-	from shutil import copyfile
+
+	#Because Windows is a bad os and won't let me copy files easily
+	if os=='Windows':
+
+		from shutil import copyfile
 
 except:
 	print "Please Run the executable version located at https://github.com/drkspace/CodingandProgrammingFBLA/releases"
-	print "or please download the following modules:\nTkinter\nsqlite3\nrandom\nConfigParser\nsubprocess\nshutil"
+	print "or please download the following modules:\nTkinter\nsqlite3\nrandom\nConfigParser\nsubprocess\nshutil (If running in windows)"
 	exit(0)
 
 #Version number
