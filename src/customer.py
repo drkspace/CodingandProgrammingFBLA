@@ -1,3 +1,4 @@
+#(c)Daniel Robert Kramer,2017. All Rights Reseved
 from fec_global_variables import *
 from fec_helper_methods import runMenu
 import ttk

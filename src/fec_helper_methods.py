@@ -1,3 +1,4 @@
+#(c)Daniel Robert Kramer,2017. All Rights Reseved
 from random import randrange
 from fec_global_variables import cur, run_menu
 

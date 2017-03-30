@@ -1,4 +1,5 @@
 #######################################
+#(c)Daniel Robert Kramer,2017. All Rights Reseved
 #Daniel Kramer, Johns Creek High School
 #Version 0.6.0
 #2016-2017 FBLA Coding and Programming Competition
