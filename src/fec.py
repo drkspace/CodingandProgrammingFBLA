@@ -20,7 +20,7 @@ try:
 	from employee import _employee
 	
 except Exception as e:
-	print str(e)
+	print e
 	print "Please re-download the program from https://github.com/drkspace/CodingandProgrammingFBLA"
 	print "Please don't delete any of the downloaded files or else the program won't work"
 	exit(0)

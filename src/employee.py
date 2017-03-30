@@ -30,19 +30,15 @@ class _employee(object):
 		label3.grid(row=5, column=0,columnspan=100, sticky='w')
 
 		#Creating a list for the variables from the buttons
-		dayVar = []
-		for i in xrange(7):
-			dayVar.append(IntVar())
+		#Filling the list with Tkinters IntVar()
+		dayVar = [IntVar() for i in range(7)]
 
 		#Creating a list of buttons
-		dayButtons = []
-		for i in xrange(7):
-
-			#Filling the buttons with th days of the week and the corresponding variable
-			dayButtons.append(Checkbutton(frame, text=day_week[i], variable=dayVar[i]))
+		#Filling the buttons with the days of the week and the corresponding variable
+		dayButtons = [Checkbutton(frame, text=day_week[i], variable=dayVar[i]) for i in range(7)]
 
 		#Put all of the buttons on the grid
-		for i in xrange(7):
+		for i in range(7):
 			dayButtons[i].grid(row=7+i, column=0, sticky='w')
 
 		#Adds a check all buttons
@@ -86,7 +82,7 @@ class _employee(object):
             #Put the table on the grid
             tbl.grid(row=2, column=0, sticky='w')
 
-            #Select all of the first and last names form employee
+            #Select all of the first and last names form employee and sort it
             cur.execute('SELECT last_name, first_name FROM employee ORDER BY last_name ASC')
 
             #Make color assigner so each column would have alternating colors
@@ -450,16 +446,12 @@ class _employee(object):
 				label1.configure(text="Employee's last name: "+o_LN)
 
 				#Creating a list for the variables from the buttons
-				dayVar = []
-				for i in xrange(7):
-					dayVar.append(IntVar())
+				#Filling the list with Tkinters IntVar()
+				dayVar = [IntVar() for i in range(7)]
 
 				#Creating a list of buttons
-				dayButtons = []
-				for i in xrange(7):
-
-					#Filling the buttons with th days of the week and the corresponding variable
-					dayButtons.append(Checkbutton(frame, text=day_week[i], variable=dayVar[i]))
+				#Filling the buttons with the days of the week and the corresponding variable
+				dayButtons = [Checkbutton(frame, text=day_week[i], variable=dayVar[i]) for i in range(7)]
 
 				#Put all of the buttons on the grid
 				for i in xrange(7):
