@@ -31,20 +31,12 @@ class _customer(object):
 		label3.grid(row=5, column=0,columnspan=4, sticky='w')
 
 		#List to store the vars for the buttons
-		AMVar = []
-		PMVar = []
-		for i in xrange(7):
-			AMVar.append(IntVar())
-			PMVar.append(IntVar())
+		AMVar = [IntVar() for i in range(7)]
+		PMVar = [IntVar() for i in range(7)]
 
 		#List of buttons for AM and PM selections
-		AMButton = []
-		PMButton = []
-		for i in xrange(7):
-
-			#Have the on value set to two for parsing if it was selected later
-			AMButton.append(Checkbutton(frame, text="AM", variable=AMVar[i], onvalue=2, offvalue=0))
-			PMButton.append(Checkbutton(frame, text="PM", variable=PMVar[i]))
+		AMButton = [Checkbutton(frame, text="AM", variable=AMVar[i], onvalue=2, offvalue=0) for i in range(7)]
+		PMButton = [Checkbutton(frame, text="PM", variable=PMVar[i]) for i in range(7)]
 
 		#Put the buttons in the frame
 		for i in xrange(7):
@@ -65,9 +57,7 @@ class _customer(object):
 		def get_Input():
 
 			#Sum the button values to either 0,1,2,3
-			totals = []
-			for i in xrange(7):
-				totals.append(AMVar[i].get()+PMVar[i].get())
+			totals = [AMVar[i].get()+PMVar[i].get() for i in range(7)]
 			frame.grid_forget()
 			run_menu.set(True)
 		    	return
@@ -149,25 +139,17 @@ class _customer(object):
 				label3 = Label(frame, text="Please select the days and times the customer is present:")
 				label3.grid(row=5, column=0, sticky='w')
 
-				#List of variables for the AM and PM buttons
-				intVarListAM = []
-				intVarListPM = []
-				for i in xrange(7):
-					intVarListAM.append(IntVar())
-					intVarListPM.append(IntVar())
+				#List to store the vars for the buttons
+				AMVar = [IntVar() for i in range(7)]
+				PMVar = [IntVar() for i in range(7)]
 
-				#List of AM and PM Buttons
-				AMButton = []
-				PMButton = []
-				for i in xrange(7):
+				#List of buttons for AM and PM selections
+				AMButton = [Checkbutton(frame, text="AM", variable=AMVar[i], onvalue=2, offvalue=0) for i in range(7)]
+				PMButton = [Checkbutton(frame, text="PM", variable=PMVar[i]) for i in range(7)]
 
-					#Button for the AM selection
-					#Has values of 0 and 2 for the way the time is stored in the database
-					AMButton.append(Checkbutton(frame, text="AM", variable=intVarListAM[i], onvalue=2, offvalue=0))
 
-					#Button for the PM
-					PMButton.append(Checkbutton(frame, text="PM", variable=intVarListPM[i]))
 
+		
 				#Put all of the buttons on the grid
 				for i in xrange(7):
 					AMButton[i].grid(row=7+i, column=1, sticky='w')
@@ -213,7 +195,7 @@ class _customer(object):
 					#Add up each day total and store it in total
 					total = []
 					for i in xrange(7):
-						total.append(intVarListAM[i].get()+intVarListPM[i].get())
+						total.append(AMVar[i].get()+PMVar[i].get())
 					for i in xrange(7):
 						#Have to update each day's attendance individually, limitation in sqlite3
 						cur.execute("UPDATE customer_schedule SET "+day_week_short[i]+"_attend = ? WHERE customer_id = ?", (str(total[i]), id))
