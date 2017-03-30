@@ -36,3 +36,5 @@ window = Tk()
 #setting the size and title
 window.geometry("1000x500")
 window.title("Our Family Center for Entertainment")
+
+run_menu=BooleanVar()

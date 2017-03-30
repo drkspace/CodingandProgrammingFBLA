@@ -137,3 +137,5 @@ def delete_from_Database(dbType, Id):
 	cur.execute('DELETE FROM '+dbType+' WHERE '+dbType+'_id = '+str(Id))
 	cur.execute('DELETE FROM '+dbType+'_schedule WHERE '+dbType+'_id = '+str(Id))
 	conn.commit()
+
+

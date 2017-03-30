@@ -1,4 +1,5 @@
 from fec_global_variables import *
+import ttk
 
 class _employee(object):
 
@@ -85,7 +86,7 @@ class _employee(object):
             tbl.grid(row=2, column=0, sticky='w')
 
             #Select all of the first and last names form employee
-            cur.execute('SELECT last_name, first_name FROM employee')
+            cur.execute('SELECT last_name, first_name FROM employee ORDER BY last_name ASC')
 
             #Make color assigner so each column would have alternating colors
             color_assigner = 1
@@ -158,136 +159,14 @@ class _employee(object):
                 #Method to remove the table and go back to the menu
             def runMenu():
                     del_cur_frame()
-                    menu()
+		    run_menu.set(True)
+		    return
 
             #Button to go back to the menu
             toMenu = Button(window, text="Back to the Menu", command=runMenu)
             toMenu.grid(row=0, column=0, sticky='w')
 
-	#Method to show the attendance of the customers
-	def print_Attendance_Customer(self):
-
-	    #Making the table
-	    tbl = ttk.Treeview()
-
-	    #Setting the columns to the first/last name and the day of the week
-	    tbl['columns'] = ('firstName', day_week[0], day_week[1], day_week[2], day_week[3], day_week[4], day_week[5], day_week[6])
-
-	    #Setting the 1st column to have the name Last Name
-	    tbl.heading('#0', text='Last Name')
-
-	    #Setting the 1st column's size
-	    tbl.column('#0', anchor='center', width=100)
-
-	    #Setting the 2nd column to have the name of First Name
-	    tbl.heading('firstName', text='First Name')
-
-	    #Setting the size of first name
-	    tbl.column('firstName', anchor='center', width=100)
-
-	    #Putting the table on the grid
-	    tbl.grid(row=2, column=0, sticky='w')	
-
-	    #Setting all of the other columns to show the day of the week
-	    for day in day_week:
-		tbl.heading(day, text=day)
-
-		#Meting the size of the column
-		tbl.column(day, anchor='center', width=75)
-
-	    #Make color assigner so each column would have alternating colors
-	    color_assigner = 1
-
-	    #Selecting everything from customer attendance
-	    cur.execute('SELECT * FROM customer_schedule')
-
-	    #Storing the customer attendance in attendance
-	    attendance = cur.fetchall()
-	    for i in attendance:
-
-		#Selecting the names of the customer with matching id numbers
-		cur.execute('SELECT last_name, first_name FROM customer WHERE customer_id = '+str(i[0]))
-		for k in cur.fetchall():
-
-		    #Having AMPM store what the certain cell of the table should display depending on the stored number
-		    AMPM = []
-		    for j in i:
-		        if(j >= 4):
-		            continue
-		        if(j == 0):
-		            AMPM.append('Absent')
-		        if(j == 1):
-		            AMPM.append('PM')
-		        if(j == 2):
-		            AMPM.append('AM')
-		        if(j == 3):
-		            AMPM.append('AM/PM')
-
-		    #Inserting the information into the table
-		    tbl.insert('', 'end', text=k[0], values=(k[1], AMPM[0], AMPM[1], AMPM[2], AMPM[3], AMPM[4], AMPM[5], AMPM[6]), tags =(str(color_assigner,)))
-
-		    #Multiplying color assigner by -1 to have is cycle between -1 and 1
-		    color_assigner *= -1
-
-		#Setting the background color depending on the color assigned
-		tbl.tag_configure(str(1), background=row_Color_1)
-		tbl.tag_configure(str(-1), background=row_Color_2)
-
-	    #Return the selected item from the table
-	    def selectedItem(): 
-		curItem = tbl.focus()
-		return tbl.item(curItem)
-
-	    #Test to see if there is an item selected    
-	    def isSelected():
-		return selectedItem() is not None
-
-	    #Return the employee info is there is a selection
-	    def getSelected(): 
-		if isSelected():
-		    customer = selectedItem()
-		    return customer
-		else:
-		    return None
-	    label_notify=Label(window,  text="The customer has been deleted")
-	    #Return the Id of the employee
-	    def getID():
-		customer  = getSelected()
-		val = customer['values']
-		f_name = val[0]
-		cur.execute('SELECT * FROM customer WHERE last_name = ? AND first_name = ?', (customer['text'], f_name))
-		for i in cur.fetchall():
-		    label_notify.grid(row=3,  column = 2, sticky='w')
-		    return i[0]
-
-	    deleteEmployeeButton = Button(window,  text = "Delete This Customer",  command = lambda: delete_from_Database('customer', getID()) )
-	    deleteEmployeeButton.grid(row=2, column=2, sticky='w')
-
-	    #Method to run the menu and delete the table
-	    def runMenu():
-		    deleteEmployeeButton.grid_remove()
-
-		    label_notify.grid_remove()
-		    tbl.grid_remove()
-		    toMenu.grid_remove()
-		    addCButton.grid_remove()
-		    menu()
-
-	    #Button to go back to the menu
-	    toMenu = Button(window, text="Back to the Menu", command=runMenu)
-	    toMenu.grid(row=0, column=0, sticky='w')
-
-	    #Method and button for adding an customer to the system
-	    def add_customer_():
-		tbl.grid_remove()
-		toMenu.grid_remove()
-		addCButton.grid_remove()
-		deleteEmployeeButton.grid_remove()
-		add_Customer()
-
-	    addCButton = Button(window, text="Add customers", command=add_customer_)
-	    addCButton.grid(row=2, column=3, sticky='w')
-
+	
 
 	#Method to print the schedule of the employees
 	def print_Schedule_All(self):
@@ -416,7 +295,8 @@ class _employee(object):
 	    #Method to remove the table and go back to the menu
 	    def runMenu():
 		    del_cur_frame()
-		    menu()
+		    run_menu.set(True)
+		    return
 
 	    #Button to go back to the menu
 	    toMenu = Button(window, text = "Back to the Menu", command=runMenu)
@@ -491,7 +371,8 @@ class _employee(object):
 		        frame.grid_forget()
 
 					#Returning to the menu
-		        menu()
+		        run_menu.set(True)
+		    	return
 
 		    #Button to submit the new information
 		    submit = Button(frame, text="submit", command=get_input)
@@ -500,7 +381,8 @@ class _employee(object):
 		    def delete_record():
 		        delete_from_Database('employee', id)
 		        frame.grid_forget()
-		        menu()
+		        run_menu.set(True)
+		   	 return
 
 		    #Button to delete the person
 		    deleteButton = Button(frame, text='Delete Record', command=delete_record)
@@ -612,7 +494,8 @@ class _employee(object):
 							#dayButtons_var.append(dayVar[i].get())
 						edit_schedule(i[0], dayVar)
 						frame.grid_forget()
-						menu()
+						run_menu.set(True)
+		   				return
 
 					#Button to submit the schedule and go back to the menu
 					submit = Button(frame, text="submit", command=get_input)
@@ -625,4 +508,16 @@ class _employee(object):
 		#Button to go back to the menu
 		toMenu = Button(frame, text='Back to the Menu', command=lambda: runMenu(frame))
 		toMenu.grid(row=5, column=1, sticky='w')
+
+
+	#Method for editing the schedule
+	def edit_schedule(eId, attend_list):
+
+		for i in xrange(len(attend_list)):
+
+			#Have to call separate UPDATE commands because of a limitation in sqlite3
+			cur.execute('UPDATE employee_schedule SET '+day_week_short[i]+'_attend= ? WHERE employee_id= ?', (str(attend_list[i].get()), eId))
+
+		#Committing the change to save it
+		conn.commit()
 

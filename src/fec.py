@@ -76,16 +76,12 @@ def create_table():
 	#3 - AM/PM
 	cur.execute('CREATE TABLE IF NOT EXISTS customer_schedule(customer_id REAL, sun_attend REAL, mon_attend REAL, tues_attend REAL, wend_attend REAL, thurs_attend REAL, fri_attend REAL, sat_attend REAL)')
 
-#Method for editing the schedule
-def edit_schedule(eId, attend_list):
-
-	for i in xrange(len(attend_list)):
-
-		#Have to call separate UPDATE commands because of a limitation in sqlite3
-		cur.execute('UPDATE employee_schedule SET '+day_week_short[i]+'_attend= ? WHERE employee_id= ?', (str(attend_list[i].get()), eId))
-
-	#Committing the change to save it
-	conn.commit()
+#Method to assist the recreation of the menu
+def menu_helper(amethod):
+	run_menu.set(False)
+	amethod()
+	window.wait_variable(run_menu)
+	menu()
 
 #Method to run the menu
 def menu():
@@ -112,56 +108,56 @@ def menu():
 	def addButtonCommandAndRemove():
 		del_menu()
 		employee.addEmployee()
-	addButton = Button(frame, text="Add Employee", command=addButtonCommandAndRemove)
+	addButton = Button(frame, text="Add Employee", command = lambda: menu_helper(addButtonCommandAndRemove))
 	addButton.grid(row=1, column=0, sticky='w')
 
 	#Method and button for showing all the employees in the system
 	def showButtonCommandAndRemove():
 		del_menu()
 		employee.showAll_Employee()
-	showButton = Button(frame, text="Show all Employees", command=showButtonCommandAndRemove)
+	showButton = Button(frame, text="Show all Employees", command = lambda: menu_helper(showButtonCommandAndRemove))
 	showButton.grid(row=2, column=0, sticky='w')
 
 	#Method and button for printing the employee schedule
 	def print_Schedule():
 		del_menu()
 		employee.print_Schedule_All()
-	schedButton = Button(frame, text="Print Weekly Schedule", command=print_Schedule)
+	schedButton = Button(frame, text="Print Weekly Schedule", command = lambda: menu_helper(print_Schedule))
 	schedButton.grid(row=3, column=0, sticky='w')
 
 	#Method and button for editing an employees information
 	def edit_Employee_Run():
 		del_menu()
 		employee.edit_Employee()
-	editButton = Button(frame, text="Edit/Delete an Employee's details", command=edit_Employee_Run)
+	editButton = Button(frame, text="Edit/Delete an Employee's details", command = lambda: menu_helper(edit_Employee_Run))
 	editButton.grid(row=4, column=0, sticky='w')
 
 	#Method and button for editing an employees work schedule
 	def edit_Employee_Schedule_Run():
 		del_menu()
 		employee.edit_Employee_Schedule()
-	editSButton = Button(frame, text="Edit an Employee's Schedule details", command=edit_Employee_Schedule_Run)
+	editSButton = Button(frame, text="Edit an Employee's Schedule details", command = lambda: menu_helper(edit_Employee_Schedule_Run))
 	editSButton.grid(row=5, column=0, sticky='w')
 
 	#Method and button for adding an customer to the system
 	def add_customer_():
 		del_menu()
 		customer.add_Customer()
-	addCButton = Button(frame, text="Add customers", command=add_customer_)
+	addCButton = Button(frame, text="Add customers", command = lambda: menu_helper(add_customer_))
 	addCButton.grid(row=1, column=2, sticky='w')
 
 	#Method and button for editing a customers attendance
 	def edit_Customer_attednace():
 		del_menu()
 		customer.customer_attendance()
-	editCButton = Button(frame, text="Change/Delete Customers Information", command=edit_Customer_attednace)
+	editCButton = Button(frame, text="Change/Delete Customers Information", command = lambda: menu_helper(edit_Customer_attednace))
 	editCButton.grid(row=2, column=2, sticky='w')
 
 	#Method and button for displaying the attendance of the customers
 	def show_customer_attendance():
 		del_menu()
 		customer.print_Attendance_Customer()
-	printCButton = Button(frame, text="Print Customer Attendance", command=show_customer_attendance)
+	printCButton = Button(frame, text="Print Customer Attendance", command = lambda: menu_helper(show_customer_attendance))
 	printCButton.grid(row=3, column=2, sticky='w')
 
 #Method for displaying the help box
