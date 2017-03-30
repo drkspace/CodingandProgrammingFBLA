@@ -98,3 +98,6 @@ ENV/
 
 #PDF
 .pdf
+
+#Hidden files
+.hidden
