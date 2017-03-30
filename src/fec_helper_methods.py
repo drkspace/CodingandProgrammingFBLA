@@ -1,5 +1,5 @@
 from random import randrange
-from fec_global_variables import cur
+from fec_global_variables import cur, run_menu
 
 #Helper method that removes spaces before and/or after strings
 def removeSpaces(string):
@@ -70,7 +70,8 @@ def add_to_db(fName, lName, sun, mon, tues, wend, thur, fri, sat, type):
 #Method to delete the frame and return to the menu
 def runMenu(frame):
     frame.grid_forget()
-    menu()
+    run_menu.set(True)
+    return
 
 #Method to change the color of the rows in the charts
 #Gets the old color passed in

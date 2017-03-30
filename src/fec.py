@@ -19,8 +19,8 @@ try:
 	from customer import _customer
 	from employee import _employee
 	
-except:
-
+except Exception as e:
+	print str(e)
 	print "Please re-download the program from https://github.com/drkspace/CodingandProgrammingFBLA"
 	print "Please don't delete any of the downloaded files or else the program won't work"
 	exit(0)
@@ -28,7 +28,6 @@ except:
 try:
 	#Importing all from Tkinter
 	from Tkinter import *
-	import ttk
 	import tkFileDialog
 	import tkColorChooser
 
@@ -86,10 +85,10 @@ def menu_helper(amethod):
 #Method to run the menu
 def menu():
 
-
+	#Creating an employee and customer object
 	employee = _employee()
-
 	customer = _customer()
+
 	#Label to welcome the user to the system
 	#Put in the label not in the frame but in the window so it can be centers over the buttons
 	welcomeLabel = Label(window, text="Welcome to the Family Entertainment System")

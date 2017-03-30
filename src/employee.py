@@ -1,4 +1,5 @@
 from fec_global_variables import *
+from fec_helper_methods import runMenu
 import ttk
 
 class _employee(object):
@@ -26,7 +27,7 @@ class _employee(object):
 		E1.grid(row=4, column=5, sticky='w')
 
 		label3 = Label(frame, text="Please select the days the employee is working:")
-		label3.grid(row=5, column=0,columnspan=2, sticky='w')
+		label3.grid(row=5, column=0,columnspan=100, sticky='w')
 
 		#Creating a list for the variables from the buttons
 		dayVar = []
@@ -382,7 +383,7 @@ class _employee(object):
 		        delete_from_Database('employee', id)
 		        frame.grid_forget()
 		        run_menu.set(True)
-		   	 return
+		   	return
 
 		    #Button to delete the person
 		    deleteButton = Button(frame, text='Delete Record', command=delete_record)
@@ -408,7 +409,7 @@ class _employee(object):
 
 		#Label to ask the user for the name
 		label0 = Label(frame, text="Please enter the Employee's name that you want the schedule to be changed for.")
-		label0.grid(row=0, column=0, sticky='w')
+		label0.grid(row=0, column=0,columnspan=100, sticky='w')
 
 		#Setting the label and input for the first name
 		label = Label(frame, text="Employee's First Name")
