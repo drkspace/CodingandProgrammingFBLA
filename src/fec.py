@@ -11,12 +11,14 @@
 #TODO Allow sorting the tables
 
 from sys import exit
+
 try:
 	#Importing all the variables and methods
 	from fec_global_variables import *
 	from fec_helper_methods import *
-	from employee import employee
-	from customer import customer
+	from customer import _customer
+	from employee import _employee
+	
 except:
 
 	print "Please re-download the program from https://github.com/drkspace/CodingandProgrammingFBLA"
@@ -89,9 +91,9 @@ def edit_schedule(eId, attend_list):
 def menu():
 
 
-	employee = employee()
+	employee = _employee()
 
-	customer = customer()
+	customer = _customer()
 	#Label to welcome the user to the system
 	#Put in the label not in the frame but in the window so it can be centers over the buttons
 	welcomeLabel = Label(window, text="Welcome to the Family Entertainment System")
@@ -237,7 +239,7 @@ def __init__():
     helpmenu.add_command(label="Info", command=info)
     filemenu.add_command(label="Save", command=save_file)
     filemenu.add_command(label="Open", command=open_file)
-    filemenu.add_command(label="New", command=new_database)
+    #filemenu.add_command(label="", command=new_database)
     options.add_cascade(label="Change chart color", menu=color_options)
     color_options.add_command(label="Change Color 1", command=lambda: Change_chart_color(row_Color_1, 1))
     color_options.add_command(label="Change Color 2", command=lambda: Change_chart_color(row_Color_2, 2))

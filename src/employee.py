@@ -1,12 +1,12 @@
 from fec_global_variables import *
 
-class employee(object):
+class _employee(object):
 
 	def __init__(self):
 		pass
 
 
-	def addEmployee():
+	def addEmployee(self):
 
 		#Create a new frame for the modules to be put into and to be deleted later on
 		frame = Frame(window)
@@ -61,7 +61,7 @@ class employee(object):
 		submit.grid(row=14, column=0, sticky='w')
 
 	#Method to put all of the employees in a table on screen
-	def showAll_Employee():
+	def showAll_Employee(self):
 
             #Creating a new table
             tbl = ttk.Treeview()
@@ -108,7 +108,7 @@ class employee(object):
 
             #Test to see if there is an item selected    
             def isSelected():
-                return selectedItem() is not None:
+                return selectedItem() is not None
 
             #Returns the selection if there is a selection
             def getSelected(): 
@@ -165,7 +165,7 @@ class employee(object):
             toMenu.grid(row=0, column=0, sticky='w')
 
 	#Method to show the attendance of the customers
-	def print_Attendance_Customer():
+	def print_Attendance_Customer(self):
 
 	    #Making the table
 	    tbl = ttk.Treeview()
@@ -290,7 +290,7 @@ class employee(object):
 
 
 	#Method to print the schedule of the employees
-	def print_Schedule_All():
+	def print_Schedule_All(self):
 
 		#Creating the table
 	    tbl = ttk.Treeview()
@@ -425,7 +425,7 @@ class employee(object):
 
 
 	#Method to edit an employee
-	def edit_Employee():
+	def edit_Employee(self):
 
 		#Making the frame to have all of the modules put into it
 		#To be deleted at the end of the method
@@ -518,7 +518,7 @@ class employee(object):
 
 
 	#Method to edit the employee's schedule
-	def edit_Employee_Schedule():
+	def edit_Employee_Schedule(self):
 
 		#Frame to store all of the modules and to be deleted later on
 		frame = Frame(window)

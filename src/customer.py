@@ -1,9 +1,9 @@
-class customer(object):
+class _customer(object):
 
 	def __init__(self):
 		pass
 
-	def add_Customer():
+	def add_Customer(self):
 
 		#Create a new frame for the modules to be put into and to be deleted later on
 		frame = Frame(window)
@@ -86,7 +86,7 @@ class customer(object):
 		printCButton.grid(row=8, column=5, sticky='w')
 
 	#Method to set a customers attendance
-	def customer_attendance():
+	def customer_attendance(self):
 
 		#Creating a new frame to have all of the modules held in
 		#To be deleted at the end of the method
