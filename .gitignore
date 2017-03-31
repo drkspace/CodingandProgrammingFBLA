@@ -101,3 +101,5 @@ ENV/
 
 #Hidden files
 .hidden
+
+FEC_Storage\.db
