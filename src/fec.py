@@ -19,6 +19,7 @@ try:
 	from fec_helper_methods import *
 	from customer import _customer
 	from employee import _employee
+	import colors
 	
 except Exception as e:
 	print e
@@ -94,14 +95,19 @@ def menu():
 	employee = _employee()
 	customer = _customer()
 
+	widgets = []
+	
 	#Label to welcome the user to the system
 	#Put in the label not in the frame but in the window so it can be centers over the buttons
 	welcomeLabel = Label(window, text="Welcome to the Family Entertainment System")
 	welcomeLabel.grid(row=0, column=0, sticky='w')
 
+	widgets.append(welcomeLabel)
+
 	#Frame to hold all the modules and to be deleted later
 	frame = Frame(window)
 	frame.grid(row=1, column=0, sticky='w')
+	widgets.append(frame)
 
 	#Method to delete the frame and the welcome label
 	def del_menu():
@@ -114,13 +120,15 @@ def menu():
 		employee.addEmployee()
 	addButton = Button(frame, text="Add Employee", command = lambda: menu_helper(addButtonCommandAndRemove))
 	addButton.grid(row=1, column=0, sticky='w')
-
+	widgets.append(addButton)	
+	
 	#Method and button for showing all the employees in the system
 	def showButtonCommandAndRemove():
 		del_menu()
 		employee.showAll_Employee()
 	showButton = Button(frame, text="Show all Employees", command = lambda: menu_helper(showButtonCommandAndRemove))
 	showButton.grid(row=2, column=0, sticky='w')
+	widgets.append(showButton)
 
 	#Method and button for printing the employee schedule
 	def print_Schedule():
@@ -128,6 +136,7 @@ def menu():
 		employee.print_Schedule_All()
 	schedButton = Button(frame, text="Print Weekly Schedule", command = lambda: menu_helper(print_Schedule))
 	schedButton.grid(row=3, column=0, sticky='w')
+	widgets.append(schedButton)
 
 	#Method and button for editing an employees information
 	def edit_Employee_Run():
@@ -135,6 +144,7 @@ def menu():
 		employee.edit_Employee()
 	editButton = Button(frame, text="Edit/Delete an Employee's details", command = lambda: menu_helper(edit_Employee_Run))
 	editButton.grid(row=4, column=0, sticky='w')
+	widgets.append(editButton)
 
 	#Method and button for editing an employees work schedule
 	def edit_Employee_Schedule_Run():
@@ -142,6 +152,7 @@ def menu():
 		employee.edit_Employee_Schedule()
 	editSButton = Button(frame, text="Edit an Employee's Schedule details", command = lambda: menu_helper(edit_Employee_Schedule_Run))
 	editSButton.grid(row=5, column=0, sticky='w')
+	widgets.append(editSButton)
 
 	#Method and button for adding an customer to the system
 	def add_customer_():
@@ -149,6 +160,7 @@ def menu():
 		customer.add_Customer()
 	addCButton = Button(frame, text="Add customers", command = lambda: menu_helper(add_customer_))
 	addCButton.grid(row=1, column=2, sticky='w')
+	widgets.append(addCButton)
 
 	#Method and button for editing a customers attendance
 	def edit_Customer_attednace():
@@ -156,6 +168,7 @@ def menu():
 		customer.customer_attendance()
 	editCButton = Button(frame, text="Change/Delete Customers Information", command = lambda: menu_helper(edit_Customer_attednace))
 	editCButton.grid(row=2, column=2, sticky='w')
+	widgets.append(editCButton)
 
 	#Method and button for displaying the attendance of the customers
 	def show_customer_attendance():
@@ -163,6 +176,10 @@ def menu():
 		customer.print_Attendance_Customer()
 	printCButton = Button(frame, text="Print Customer Attendance", command = lambda: menu_helper(show_customer_attendance))
 	printCButton.grid(row=3, column=2, sticky='w')
+	widgets.append(printCButton)
+
+
+	change_color_palet(widgets)
 
 #Method for displaying the help box
 def help():
@@ -253,6 +270,8 @@ def __init__():
 #Main program loop
 def main():
 
+    window.configure(background=colors.background)
+
     #To make the tables if they are not present
     create_table()
 
@@ -266,3 +285,7 @@ def main():
 if __name__=='__main__':
     __init__()
     main()
+    try:
+    	window.destroy()
+    except:
+	print 'Have a nice day!'

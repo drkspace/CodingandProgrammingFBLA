@@ -1,6 +1,8 @@
 #(c)Daniel Robert Kramer,2017. All Rights Reseved
 from random import randrange
-from fec_global_variables import cur, run_menu
+from fec_global_variables import cur, run_menu, window
+from Tkinter import Button
+import colors
 
 #Helper method that removes spaces before and/or after strings
 def removeSpaces(string):
@@ -140,4 +142,11 @@ def delete_from_Database(dbType, Id):
 	cur.execute('DELETE FROM '+dbType+'_schedule WHERE '+dbType+'_id = '+str(Id))
 	conn.commit()
 
+def change_color_palet(widget_list):
 
+	for i in widget_list:
+		i.configure(background=colors.background)
+		if isinstance(i,Button):
+			i.configure(highlightbackground=colors.accent)
+			
+	

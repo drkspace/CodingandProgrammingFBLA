@@ -10,6 +10,8 @@ from Tkinter import *
 #Import platfrom to get the os type
 import platform
 
+import colors
+
 #Setting the platform
 os = platform.system()
 
