@@ -1,30 +1,40 @@
 #(c)Daniel Robert Kramer,2017. All Rights Reseved
 from fec_global_variables import *
-from fec_helper_methods import runMenu
+from fec_helper_methods import *
 import ttk
 
 class _employee(object):
 
 	def addEmployee(self):
 
+		widgets=[]
+
 		#Create a new frame for the modules to be put into and to be deleted later on
 		frame = Frame(window)
 		frame.grid(row=0, column=0, sticky='w')
+		widgets.append(frame)
 
 		#Taking user input
 		#New label for what the user is going to input
 		label1 = Label(frame, text="Employee's First Name")
 		label1.grid(row=3, column=0, sticky='w')
-		E = Entry(frame)
-		E.grid(row=3, column=5, sticky='w')
+		widgets.append(label1)
+
+		first_name = Entry(frame)
+		first_name.grid(row=3, column=5, sticky='w')
+		widgets.append(first_name)
 
 		label2 = Label(frame, text="Employee's Last Name")
 		label2.grid(row=4, column=0, sticky='w')
-		E1 = Entry(frame)
-		E1.grid(row=4, column=5, sticky='w')
+		widgets.append(label2)
+
+		last_name = Entry(frame)
+		last_name.grid(row=4, column=5, sticky='w')
+		widgets.append(last_name)
 
 		label3 = Label(frame, text="Please select the days the employee is working:")
 		label3.grid(row=5, column=0,columnspan=100, sticky='w')
+		widgets.append(label3)
 
 		#Creating a list for the variables from the buttons
 		#Filling the list with Tkinters IntVar()
@@ -37,29 +47,39 @@ class _employee(object):
 		#Put all of the buttons on the grid
 		for i in range(7):
 			dayButtons[i].grid(row=7+i, column=0, sticky='w')
+			widgets.append(dayButtons[i])
 
 		#Adds a check all buttons
 		#When the button is checked, calls the checkAll method and passes in the dayButtons list
 		check_All = Checkbutton(frame, text="Check All Boxes", command = lambda: checkAll(dayButtons, 0))
 		check_All.grid(row=6, column=0, sticky='w')
+		widgets.append(check_All)
 
 		#Button to return to the menu
 		toMenu = Button(frame, text="Back to the Menu", command = lambda: runMenu(frame))
 		toMenu.grid(row=7, column=5, sticky='w')
+		widgets.append(toMenu)
 
 		#Method to store the variables in the sql database
 		def getInput():
-			add_to_db(E.get(), E1.get(), dayVar[0].get(), dayVar[1].get(), dayVar[2].get(), dayVar[3].get(), dayVar[4].get(), dayVar[5].get(), dayVar[6].get(), 'employee')
+			add_to_db(first_name.get(), last_name.get(), dayVar[0].get(), dayVar[1].get(), dayVar[2].get(), dayVar[3].get(), dayVar[4].get(), dayVar[5].get(), dayVar[6].get(), 'employee')
 			runMenu(frame)
+
 		#Button to submit the input
 		submit = Button(frame, text="Submit", command=getInput)
 		submit.grid(row=14, column=0, sticky='w')
-
+		widgets.append(submit)
+		
+		change_color_palet(widgets)
+	
 	#Method to put all of the employees in a table on screen
 	def showAll_Employee(self):
 
+	    widgets=[]
+
             #Creating a new table
             tbl = ttk.Treeview()
+	    widgets.append(tbl)
 
             #Setting the column to be called firstName
             tbl['columns'] = ('firstName')
@@ -113,6 +133,8 @@ class _employee(object):
                         return None
 
             label_notify=Label(window,  text="The employee has been removed, please refresh the table")
+	    widgets.append(label_notify)
+
             #Return the Id for the selection
             def getID():
                 employee  = getSelected()
@@ -125,7 +147,8 @@ class _employee(object):
 
 
             deleteEmployeeButton = Button(window,  text = "Delete This Employee",  command = lambda: delete_from_Database('employee', getID()))
-            deleteEmployeeButton.grid(row=2, column=2, sticky='w')    
+            deleteEmployeeButton.grid(row=2, column=2, sticky='w') 
+	    widgets.append(deleteEmployeeButton)   
 
             #Method to delete all the items in the frame
             def del_cur_frame():
@@ -149,6 +172,7 @@ class _employee(object):
             #Button to add an employee
             addEmployeeButton = Button(text="Add employee",  command = add_employee)
             addEmployeeButton.grid(row=2, column=3, sticky='w')
+	    widgets.append(addEmployeeButton)
 
                 #Method to remove the table and go back to the menu
             def runMenu():
@@ -159,19 +183,22 @@ class _employee(object):
             #Button to go back to the menu
             toMenu = Button(window, text="Back to the Menu", command=runMenu)
             toMenu.grid(row=0, column=0, sticky='w')
+	    widgets.append(toMenu)
 
-	
-
+	    change_color_palet(widgets)
 	#Method to print the schedule of the employees
 	def print_Schedule_All(self):
 
-		#Creating the table
-	    tbl = ttk.Treeview()
+	    widgets=[]	
 
-		#Setting the column names
+	    #Creating the table
+	    tbl = ttk.Treeview()
+	    widgets.append(tbl)
+
+	    #Setting the column names
 	    tbl['columns'] = ('firstName', day_week[0], day_week[1], day_week[2], day_week[3], day_week[4], day_week[5], day_week[6])
 
-		#Setting the 1st column to display last name
+	    #Setting the 1st column to display last name
 	    tbl.heading('#0', text='Last Name')
 
 	    #Setting the size of the first column
@@ -206,7 +233,7 @@ class _employee(object):
 	    def change_number_to_word(numlist):
 
 		#Loop through the numlist
-		for i in xrange(len(numlist)):
+		for i in range(len(numlist)):
 
 		    #change numlist to a tuple
 		    numlist = list(numlist)
@@ -269,7 +296,8 @@ class _employee(object):
 		    return i[0]
 
 	    deleteEmployeeButton = Button(window,  text = "Delete This Employee",  command = lambda: delete_from_Database('employee', getID()) )
-	    deleteEmployeeButton.grid(row=2, column=2, sticky='w')    
+	    deleteEmployeeButton.grid(row=2, column=2, sticky='w')  
+	    widgets.append(deleteEmployeeButton)  
 
 	    def del_cur_frame():
 		tbl.grid_remove()
@@ -285,6 +313,7 @@ class _employee(object):
 	    #Button to add an employee
 	    addEmployeeButton = Button(text="Add employee",  command = add_employee)
 	    addEmployeeButton.grid(row=2, column=3, sticky='w')
+	    widgets.append(addEmployeeButton)
 
 	    #Method to remove the table and go back to the menu
 	    def runMenu():
@@ -295,82 +324,96 @@ class _employee(object):
 	    #Button to go back to the menu
 	    toMenu = Button(window, text = "Back to the Menu", command=runMenu)
 	    toMenu.grid(row=0, column=0, sticky='w')
+	    widgets.append(toMenu)
 
-
+	    change_color_palet(widgets)
 
 	#Method to edit an employee
 	def edit_Employee(self):
 
-		#Making the frame to have all of the modules put into it
-		#To be deleted at the end of the method
+	    widgets=[]
+
+	    #Making the frame to have all of the modules put into it
+	    #To be deleted at the end of the method
 	    frame = Frame(window)
 	    frame.grid(row=0, column=0, sticky='w')
+	    widgets.append(frame)
 
-		#Setting the label to tell the user what to do
+	    #Setting the label to tell the user what to do
 	    label0 = Label(frame, text='Please enter the old information')
 	    label0.grid(row=0, column=0, sticky='w')
+	    widgets.append(label0)
 
-		#Setting the label and input for the first name
+	    #Setting the label and input for the first name
 	    label = Label(frame, text="Employee's First Name")
 	    label.grid(row=1, column=0, sticky='w')
+	    widgets.append(label)
+
 	    fName_Entry = Entry(frame)
 	    fName_Entry.grid(row=2, column=0, sticky='w')
+	    widgets.append(fName_Entry)
 
-		#Setting the label and input for the last name
+	    #Setting the label and input for the last name
 	    label1 = Label(frame, text="Employee's Last Name")
 	    label1.grid(row=3, column=0, sticky='w')
+	    widgets.append(label1)
+
 	    lName_Entry = Entry(frame)
 	    lName_Entry.grid(row=4, column=0, sticky='w')
+	    widgets.append(lName_Entry)
 
-		#Method to goto the editing screen
+	    #Method to goto the editing screen
 	    def edit():
 
-			#Stores the old first and last name and removes the spaces form the users input
+		widgets_1=[]
+
+		#Stores the old first and last name and removes the spaces form the users input
 		old_LN = removeSpaces(lName_Entry.get())
 		old_FN = removeSpaces(fName_Entry.get())
 
-			#Select the employee with the matching names
+		#Select the employee with the matching names
 		cur.execute('SELECT * FROM employee WHERE last_name = ? AND first_name=?', (old_LN, old_FN))
 
-			#Test to see if there is data in the selection
+		#Test to see if there is data in the selection
 		tmp = cur.fetchall()
 		if(len(tmp) > 0):
 
-				#Sets the id
+		    #Sets the id
 		    id = tmp[0][0]
 
-				#Deletes the toSearch Button
+		    #Deletes the toSearch Button
 		    toSearch.grid_forget()
 
-				#Ask the user for the new information
+		    #Ask the user for the new information
 		    #It uses the same input boxes as before so they have the old names already inputted
 		    label0.configure(text="Please enter the new information")
 		    label.configure(text="Employee's old first name: "+old_FN)
 		    label1.configure(text="Employee's old last name: "+old_LN)
 
-				#Method for setting the first and last names in the database
+		    #Method for setting the first and last names in the database
 		    def get_input():
 		        LN = lName_Entry.get()
 		        FN = fName_Entry.get()
 
-					#Use 2 different updates because of a limitation in sqlite3
+			#Use 2 different updates because of a limitation in sqlite3
 		        cur.execute('UPDATE employee SET last_name = ? WHERE last_name = ? AND first_name = ?', (removeSpaces(LN), old_LN, old_FN))
 		        conn.commit()
 		        cur.execute('UPDATE employee SET first_name = ? WHERE last_name = ? AND first_name = ?', (removeSpaces(FN), old_LN, old_FN))
 
-					#Committing the changes
+			#Committing the changes
 		        conn.commit()
 
-					#Deleting the frame
+			#Deleting the frame
 		        frame.grid_forget()
 
-					#Returning to the menu
+			#Returning to the menu
 		        run_menu.set(True)
 		    	return
 
 		    #Button to submit the new information
 		    submit = Button(frame, text="submit", command=get_input)
 		    submit.grid(row=13, column=0, sticky='w')
+		    widgets_1.append(submit)
 
 		    def delete_record():
 		        delete_from_Database('employee', id)
@@ -381,46 +424,61 @@ class _employee(object):
 		    #Button to delete the person
 		    deleteButton = Button(frame, text='Delete Record', command=delete_record)
 		    deleteButton.grid(row=14, column=0, sticky='w')
+		    widgets_1.append(deleteButton)
 
-
-
+		change_color_palet(widgets_1)
 	    #Button to search with what the user has inputed
 	    toSearch = Button(frame, text='Search', command=edit)
 	    toSearch.grid(row=5, column=0, sticky='w')
+	    widgets.append(toSearch)
 
 	    #Button to return to the menu
 	    toMenu = Button(frame, text='Back to the Menu', command=lambda: runMenu(frame))
 	    toMenu.grid(row=5, column=1, sticky='w')
+	    widgets.append(toMenu)
 
+	    change_color_palet(widgets)
 
 	#Method to edit the employee's schedule
 	def edit_Employee_Schedule(self):
 
+		widgets=[]
+		
 		#Frame to store all of the modules and to be deleted later on
 		frame = Frame(window)
 		frame.grid(row=0, column=0, sticky='w')
+		widgets.append(frame)
 
 		#Label to ask the user for the name
 		label0 = Label(frame, text="Please enter the Employee's name that you want the schedule to be changed for.")
 		label0.grid(row=0, column=0,columnspan=100, sticky='w')
+		widgets.append(label0)
 
 		#Setting the label and input for the first name
 		label = Label(frame, text="Employee's First Name")
 		label.grid(row=1, column=0, sticky='w')
-		E = Entry(frame)
-		E.grid(row=2, column=0, sticky='w')
+		widgets.append(label)
+
+		first_name = Entry(frame)
+		first_name.grid(row=2, column=0, sticky='w')
+		widgets.append(first_name)
 
 		#Setting the label and input for the last name
 		label1 = Label(frame, text="Employee's Last Name")
 		label1.grid(row=3, column=0, sticky='w')
-		E1 = Entry(frame)
-		E1.grid(row=4, column=0, sticky='w')
+		widgets.append(label1)
+	
+		last_name = Entry(frame)
+		last_name.grid(row=4, column=0, sticky='w')
+		widgets.append(last_name)
 
 		#Method for getting the input from the user
 		def edit():
 
+			widgets_1=[]		
+
 			#Finding the employee with the searched name
-			cur.execute('SELECT * FROM employee WHERE last_name = ? AND first_name=?', (E1.get(), E.get()))
+			cur.execute('SELECT * FROM employee WHERE last_name = ? AND first_name=?', (last_name.get(), first_name.get()))
 			data = cur.fetchall()
 
 			#Test to see if there data in the selection
@@ -430,12 +488,12 @@ class _employee(object):
 				toSearch.grid_forget()
 
 				#Stores the old last/first names
-				o_LN = E1.get()
-				o_FN = E.get()
+				o_LN = last_name.get()
+				o_FN = first_name.get()
 
 				#Remove the search boxes
-				E.grid_remove()
-				E1.grid_remove()
+				first_name.grid_remove()
+				last_name.grid_remove()
 
 				#Display the old first/last name
 				label0.configure(text="Please enter the new information")
@@ -451,13 +509,16 @@ class _employee(object):
 				dayButtons = [Checkbutton(frame, text=day_week[i], variable=dayVar[i]) for i in range(7)]
 
 				#Put all of the buttons on the grid
-				for i in xrange(7):
+				for i in range(7):
 					dayButtons[i].grid(row=7+i, column=0, sticky='w')
+					widgets_1.append(dayButtons[i])
+					
 
 				#Adds a check all buttons
 				#When the button is checked, calls the checkAll method and passes in the dayButtons list
 				check_All = Checkbutton(frame, text="Check All Boxes", command=lambda: checkAll(dayButtons, 0))
 				check_All.grid(row=6, column=0, sticky='w')
+				widgets_1.append(check_All)
 
 				for i in data:
 
@@ -490,15 +551,21 @@ class _employee(object):
 					#Button to submit the schedule and go back to the menu
 					submit = Button(frame, text="submit", command=get_input)
 					submit.grid(row=14, column=0, sticky='w')
+					widgets_1.append(submit)
+	
+					change_color_palet(widgets_1)
 
 		#Button to search with the given name
 		toSearch = Button(frame, text='Search', command=edit)
 		toSearch.grid(row=5, column=0, sticky='w')
+		widgets.append(toSearch)
 
 		#Button to go back to the menu
 		toMenu = Button(frame, text='Back to the Menu', command=lambda: runMenu(frame))
-		toMenu.grid(row=5, column=1, sticky='w')
+		toMenu.grid(row=5, column=1, sticky='w')	
+		widgets.append(toMenu)
 
+		change_color_palet(widgets)
 
 	#Method for editing the schedule
 	def edit_schedule(eId, attend_list):
