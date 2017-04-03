@@ -285,7 +285,4 @@ def main():
 if __name__=='__main__':
     __init__()
     main()
-    try:
-    	window.destroy()
-    except:
-	print 'Have a nice day!'
+    print 'Have a nice day!'

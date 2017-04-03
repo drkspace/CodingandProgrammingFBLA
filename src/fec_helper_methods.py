@@ -1,7 +1,9 @@
 #(c)Daniel Robert Kramer,2017. All Rights Reseved
 from random import randrange
-from fec_global_variables import cur, run_menu, window
-from Tkinter import Button
+from fec_global_variables import cur, run_menu, window, conn
+from Tkinter import Button, Checkbutton, Entry
+import ttk
+import random
 import colors
 
 #Helper method that removes spaces before and/or after strings
@@ -145,8 +147,19 @@ def delete_from_Database(dbType, Id):
 def change_color_palet(widget_list):
 
 	for i in widget_list:
-		i.configure(background=colors.background)
+		
 		if isinstance(i,Button):
 			i.configure(highlightbackground=colors.accent)
+			i.configure(background=colors.background)
+		elif isinstance(i,Checkbutton):
+			i.configure(highlightbackground=colors.background)
+			i.configure(background=colors.background)
+		elif isinstance(i,Entry):
+			i.configure(highlightbackground=colors.accent)
+			i.configure(background=colors.entry)
+		elif isinstance(i,ttk.Treeview):
+			ttk.Style().configure("Treeview", fieldbackground=colors.table_background)
+		else:
+			i.configure(background=colors.background)
 			
 	
