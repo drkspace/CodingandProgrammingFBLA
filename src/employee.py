@@ -5,10 +5,6 @@ import ttk
 
 class _employee(object):
 
-	def __init__(self):
-		pass
-
-
 	def addEmployee(self):
 
 		#Create a new frame for the modules to be put into and to be deleted later on
