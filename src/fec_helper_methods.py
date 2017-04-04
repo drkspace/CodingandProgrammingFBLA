@@ -1,10 +1,11 @@
 #(c)Daniel Robert Kramer,2017. All Rights Reseved
 from random import randrange
-from fec_global_variables import cur, run_menu, window, conn
-from Tkinter import Button, Checkbutton, Entry
+from fec_global_variables import cur, run_menu, window, conn, color, theme
+from Tkinter import Button, Checkbutton, Entry, Label
 import ttk
 import random
 import colors
+import copy
 
 #Helper method that removes spaces before and/or after strings
 def removeSpaces(string):
@@ -144,22 +145,31 @@ def delete_from_Database(dbType, Id):
 	cur.execute('DELETE FROM '+dbType+'_schedule WHERE '+dbType+'_id = '+str(Id))
 	conn.commit()
 
-def change_color_palet(widget_list):
+def change_color_palet(widget_list, atheme=theme):
+	tmpColor = copy.copy(color)
 
+	if atheme is not theme:
+		tmpColor = colors.colors()
+		tmpColor.set_color_theme(atheme)
+	
 	for i in widget_list:
 		
 		if isinstance(i,Button):
-			i.configure(highlightbackground=colors.accent)
-			i.configure(background=colors.background)
+			i.configure(highlightbackground=tmpColor.accent, background=tmpColor.background, foreground=tmpColor.text_color)
+
 		elif isinstance(i,Checkbutton):
-			i.configure(highlightbackground=colors.background)
-			i.configure(background=colors.background)
+			i.configure(highlightbackground=tmpColor.background, foreground=tmpColor.text_color, background=tmpColor.background)
+
 		elif isinstance(i,Entry):
-			i.configure(highlightbackground=colors.accent)
-			i.configure(background=colors.entry)
+			i.configure(highlightbackground=tmpColor.accent, background=tmpColor.entry)
+
 		elif isinstance(i,ttk.Treeview):
-			ttk.Style().configure("Treeview", fieldbackground=colors.table_background)
+			ttk.Style().configure("Treeview", fieldbackground=tmpColor.table_background)
+
+		elif isinstance(i,Label):
+			i.configure(foreground=tmpColor.text_color, background=tmpColor.background)
+
 		else:
-			i.configure(background=colors.background)
+			i.configure(background=tmpColor.background)
 			
 	

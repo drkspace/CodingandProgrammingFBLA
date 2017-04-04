@@ -543,7 +543,7 @@ class _employee(object):
 						#dayButtons_var=[]
 						#for i in xrange(7):
 							#dayButtons_var.append(dayVar[i].get())
-						edit_schedule(i[0], dayVar)
+						self.edit_schedule(i[0], dayVar)
 						frame.grid_forget()
 						run_menu.set(True)
 		   				return

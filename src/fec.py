@@ -6,7 +6,7 @@
 #https://github.com/drkspace/CodingandProgrammingFBLA
 #######################################
 
-#TODO Make better looking
+#TODO change theme
 #TODO Allow selecting customer/employee from table to edit
 #TODO Refined search in the tables
 #TODO Allow sorting the tables
@@ -242,6 +242,18 @@ def open_file():
     Config.write(cfgfile)
     cfgfile.close()
 
+def change_theme():
+	win = Tk()	
+	win.geometry("200x500")
+	win.title("Change Theme")
+	
+	for i in range(21):
+		aButton = Button(win)
+		aButton.configure(text=colors.theme(i+1).name, command= lambda: color.set_color_theme(colors.theme(i+1)))
+		change_color_palet([aButton], colors.theme(i+1))
+		aButton.grid(row = (i/2)+1, column = i%2)
+
+
 #Initialization for the program    
 def __init__():
     #Creating the menu at the top
@@ -260,6 +272,7 @@ def __init__():
     options.add_cascade(label="Change chart color", menu=color_options)
     color_options.add_command(label="Change Color 1", command=lambda: Change_chart_color(row_Color_1, 1))
     color_options.add_command(label="Change Color 2", command=lambda: Change_chart_color(row_Color_2, 2))
+    options.add_command(label="Change theme color", command = change_theme)
 
     #Creating the help and file cascade
     menubar.add_cascade(label="File", menu = filemenu)
@@ -270,7 +283,7 @@ def __init__():
 #Main program loop
 def main():
 
-    window.configure(background=colors.background)
+    window.configure(background=color.background)
 
     #To make the tables if they are not present
     create_table()

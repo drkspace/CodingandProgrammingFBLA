@@ -23,6 +23,10 @@ Config.read("config.ini")
 db_file = Config.get('DatabaseFile', 'Database')
 row_Color_1 = Config.get('Colors', 'Row_1')
 row_Color_2 = Config.get('Colors', 'Row_2')
+theme = Config.get('Colors', 'theme')
+theme = colors.theme[theme]
+color = colors.colors()
+color.set_color_theme(theme)
 
 #Setting up a connection to the sqlite database
 conn = sqlite3.connect(db_file)
