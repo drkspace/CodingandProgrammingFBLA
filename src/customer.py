@@ -7,7 +7,7 @@ class _customer(object):
 
 	def add_Customer(self):
 
-		widgets=[]
+		#widgets=[]
 
 		#Create a new frame for the modules to be put into and to be deleted later on
 		frame = Frame(window)
@@ -100,7 +100,7 @@ class _customer(object):
 	#Method to set a customers attendance
 	def customer_attendance(self):
 
-		widgets=[]
+		#widgets=[]
 
 		#Creating a new frame to have all of the modules held in
 		#To be deleted at the end of the method
@@ -142,7 +142,7 @@ class _customer(object):
 			#Stores the data in a list
 			data = cur.fetchall()
 		
-			widgets_1=[]
+			#widgets_1=[]
 
 			#Test to see if the array has data in it
 			#If it has data, continue to let the user edit the data
@@ -170,7 +170,8 @@ class _customer(object):
 				#Label to tell the user what he/she needs to input
 				label3 = Label(frame, text="Please select the days and times the customer is present:")
 				label3.grid(row=5, column=0, sticky='w')
-				widgets_1.append(label3)
+				#widgets_1.append(label3)
+				widgets.append(label3)
 
 				#List to store the vars for the buttons
 				AMVar = [IntVar() for i in range(7)]
@@ -187,14 +188,17 @@ class _customer(object):
 				for i in xrange(7):
 					AMButton[i].grid(row=7+i, column=1, sticky='w')
 					PMButton[i].grid(row=7+i, column=2, sticky='w')
-					widgets_1.append(AMButton[i])
-					widgets_1.append(PMButton[i])
+					#widgets_1.append(AMButton[i])
+					#widgets_1.append(PMButton[i])
+					widgets.append(AMButton[i])
+					widgets.append(PMButton[i])
 
 				#Adds a check all buttons
 				#When the button is checked, calls the t method and passes in the tmp list
 				check_All = Checkbutton(frame, text="Check All Boxes", command=lambda: checkAll(AMButton+PMButton, 0))
 				check_All.grid(row=6, column=1, sticky='w')
-				widgets_1.append(check_All)
+				#widgets_1.append(check_All)
+				widgets.append(check_All)
 
 				#Store the customer id in id
 				id = str(data[0][0])
@@ -224,7 +228,8 @@ class _customer(object):
 				for i in xrange(len(day_week)):
 					dayLabel = Label(frame, text=day_week[i]+":")
 					dayLabel.grid(row=6+i, column=0, sticky='w')
-					widgets_1.append(dayLabel)
+					#widgets_1.append(dayLabel)
+					widgets.append(dayLabel)
 
 				#Method to store what the user has selected at that moment
 				def get_input():
@@ -251,13 +256,14 @@ class _customer(object):
 				#Button to delete the person
 				deleteButton = Button(frame, text='Delete Record', command=delete_record)
 				deleteButton.grid(row=14, column=0, sticky='w')
-				widgets_1.append(deleteButton)
+				#widgets_1.append(deleteButton)
+				widgets.append(deleteButton)
 
 				#Button to submit the changes
 				submit = Button(frame, text="submit", command=get_input)
 				submit.grid(row=15, column=0, sticky='w')
-				widgets_1.append(submit)
-			
+				#widgets_1.append(submit)
+				widgets.append(submit)
 				
 
 			#If there is no matching customers
@@ -266,9 +272,10 @@ class _customer(object):
 				#Creating a label explaining to the user that there was no matching name in the database
 				errorLabel = Label(frame, text="Unable to find the person you inputed, please check the name again")
 				errorLabel.grid(row=7, column=0, sticky='w',columnspan=3)
-				widgets_1.append(errorLabel)
+				#widgets_1.append(errorLabel)
+				widgets.append(errorLabel)
 			
-			change_color_palet(widgets_1)
+			change_color_palet(widgets)
 
 		#Button to search within the database to find the person
 		toSearch = Button(frame, text='Search', command=edit)
@@ -285,7 +292,7 @@ class _customer(object):
 	#Method to show the attendance of the customers
 	def print_Attendance_Customer(self):
 
-	    widgets=[]
+	    #widgets=[]
 
 	    #Making the table
 	    tbl = ttk.Treeview()

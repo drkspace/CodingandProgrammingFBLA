@@ -5,6 +5,7 @@ from enum import Enum
 #Found at https://material.io/guidelines/style/color.html#color-color-palette
 
 class theme(Enum):
+	
 	light = 1
 	dark = 2
 	red = 3
@@ -38,12 +39,14 @@ class colors(object):
 		
 	
 	def set_color_theme(self, atheme):
+		
 		if atheme == theme.light:
 			self.background = "#FAFAFA"
 			self.accent = "#F5F5F5"
 			self.entry = "#FFFFFF"
 			self.table_background = "#E0E0E0"
 			self.text_color = "#000000"
+
 		elif atheme == theme.dark:
 			self.background = "#303030"
 			self.accent = "#212121"
@@ -183,6 +186,6 @@ class colors(object):
 			self.entry = "#90A4AE"
 			self.table_background = "#90A4AE"
 			self.text_color = "#000000"
-
+		print "Set theme to {}".format(atheme.name)
 
 

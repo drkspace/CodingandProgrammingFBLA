@@ -7,7 +7,7 @@ class _employee(object):
 
 	def addEmployee(self):
 
-		widgets=[]
+		#widgets=[]
 
 		#Create a new frame for the modules to be put into and to be deleted later on
 		frame = Frame(window)
@@ -75,7 +75,7 @@ class _employee(object):
 	#Method to put all of the employees in a table on screen
 	def showAll_Employee(self):
 
-	    widgets=[]
+	    #widgets=[]
 
             #Creating a new table
             tbl = ttk.Treeview()
@@ -189,7 +189,7 @@ class _employee(object):
 	#Method to print the schedule of the employees
 	def print_Schedule_All(self):
 
-	    widgets=[]	
+	    #widgets=[]	
 
 	    #Creating the table
 	    tbl = ttk.Treeview()
@@ -331,7 +331,7 @@ class _employee(object):
 	#Method to edit an employee
 	def edit_Employee(self):
 
-	    widgets=[]
+	    #widgets=[]
 
 	    #Making the frame to have all of the modules put into it
 	    #To be deleted at the end of the method
@@ -365,7 +365,7 @@ class _employee(object):
 	    #Method to goto the editing screen
 	    def edit():
 
-		widgets_1=[]
+		#widgets=[]
 
 		#Stores the old first and last name and removes the spaces form the users input
 		old_LN = removeSpaces(lName_Entry.get())
@@ -413,7 +413,7 @@ class _employee(object):
 		    #Button to submit the new information
 		    submit = Button(frame, text="submit", command=get_input)
 		    submit.grid(row=13, column=0, sticky='w')
-		    widgets_1.append(submit)
+		    widgets.append(submit)
 
 		    def delete_record():
 		        delete_from_Database('employee', id)
@@ -424,9 +424,9 @@ class _employee(object):
 		    #Button to delete the person
 		    deleteButton = Button(frame, text='Delete Record', command=delete_record)
 		    deleteButton.grid(row=14, column=0, sticky='w')
-		    widgets_1.append(deleteButton)
+		    widgets.append(deleteButton)
 
-		change_color_palet(widgets_1)
+		change_color_palet(widgets)
 	    #Button to search with what the user has inputed
 	    toSearch = Button(frame, text='Search', command=edit)
 	    toSearch.grid(row=5, column=0, sticky='w')
@@ -442,7 +442,7 @@ class _employee(object):
 	#Method to edit the employee's schedule
 	def edit_Employee_Schedule(self):
 
-		widgets=[]
+		#widgets=[]
 		
 		#Frame to store all of the modules and to be deleted later on
 		frame = Frame(window)
@@ -475,7 +475,7 @@ class _employee(object):
 		#Method for getting the input from the user
 		def edit():
 
-			widgets_1=[]		
+			#widgets=[]		
 
 			#Finding the employee with the searched name
 			cur.execute('SELECT * FROM employee WHERE last_name = ? AND first_name=?', (last_name.get(), first_name.get()))
@@ -511,14 +511,14 @@ class _employee(object):
 				#Put all of the buttons on the grid
 				for i in range(7):
 					dayButtons[i].grid(row=7+i, column=0, sticky='w')
-					widgets_1.append(dayButtons[i])
+					widgets.append(dayButtons[i])
 					
 
 				#Adds a check all buttons
 				#When the button is checked, calls the checkAll method and passes in the dayButtons list
 				check_All = Checkbutton(frame, text="Check All Boxes", command=lambda: checkAll(dayButtons, 0))
 				check_All.grid(row=6, column=0, sticky='w')
-				widgets_1.append(check_All)
+				widgets.append(check_All)
 
 				for i in data:
 
@@ -551,9 +551,9 @@ class _employee(object):
 					#Button to submit the schedule and go back to the menu
 					submit = Button(frame, text="submit", command=get_input)
 					submit.grid(row=14, column=0, sticky='w')
-					widgets_1.append(submit)
+					widgets.append(submit)
 	
-					change_color_palet(widgets_1)
+					change_color_palet(widgets)
 
 		#Button to search with the given name
 		toSearch = Button(frame, text='Search', command=edit)

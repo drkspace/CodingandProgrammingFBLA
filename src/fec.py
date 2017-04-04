@@ -95,7 +95,8 @@ def menu():
 	employee = _employee()
 	customer = _customer()
 
-	widgets = []
+	#widgets = []
+	del widgets[:]
 	
 	#Label to welcome the user to the system
 	#Put in the label not in the frame but in the window so it can be centers over the buttons
@@ -246,13 +247,24 @@ def change_theme():
 	win = Tk()	
 	win.geometry("200x500")
 	win.title("Change Theme")
-	
-	for i in range(21):
-		aButton = Button(win)
-		aButton.configure(text=colors.theme(i+1).name, command= lambda: color.set_color_theme(colors.theme(i+1)))
-		change_color_palet([aButton], colors.theme(i+1))
-		aButton.grid(row = (i/2)+1, column = i%2)
+	global color
 
+	def set_theme(atheme):
+		color.set_color_theme(atheme)
+		change_color_palet(widgets)
+		cfgfile = open("config.ini", 'w')
+    		Config.set('Colors', 'theme', atheme.name)
+    		Config.write(cfgfile)
+    		cfgfile.close()
+	buttons = []
+	for i in range(21):
+		buttons.append(Button(win, text=format_enum_name(colors.theme(i+1).name), command=lambda num = i: set_theme(colors.theme(num+1))))
+		change_color_palet([buttons[i]], colors.theme(i+1), False)
+		buttons[i].grid(row = (i/2)+1, column = i%2, sticky='w')
+		
+	#print widgets
+	color.set_color_theme(stheme)
+		
 
 #Initialization for the program    
 def __init__():
@@ -283,7 +295,7 @@ def __init__():
 #Main program loop
 def main():
 
-    window.configure(background=color.background)
+    #window.configure(background=color.background)
 
     #To make the tables if they are not present
     create_table()
@@ -296,6 +308,7 @@ def main():
 
 #Starting the program
 if __name__=='__main__':
+    
     __init__()
     main()
     print 'Have a nice day!'

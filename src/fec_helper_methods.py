@@ -1,6 +1,6 @@
 #(c)Daniel Robert Kramer,2017. All Rights Reseved
 from random import randrange
-from fec_global_variables import cur, run_menu, window, conn, color, theme
+from fec_global_variables import cur, run_menu, window, conn, color, stheme
 from Tkinter import Button, Checkbutton, Entry, Label
 import ttk
 import random
@@ -145,13 +145,17 @@ def delete_from_Database(dbType, Id):
 	cur.execute('DELETE FROM '+dbType+'_schedule WHERE '+dbType+'_id = '+str(Id))
 	conn.commit()
 
-def change_color_palet(widget_list, atheme=theme):
+def change_color_palet(widget_list, atheme=stheme, changewindow=True):
+	
+	global color
 	tmpColor = copy.copy(color)
 
-	if atheme is not theme:
-		tmpColor = colors.colors()
+	if atheme is not stheme:
 		tmpColor.set_color_theme(atheme)
 	
+	if changewindow==True:
+		window.configure(background=tmpColor.background)
+
 	for i in widget_list:
 		
 		if isinstance(i,Button):
@@ -171,5 +175,13 @@ def change_color_palet(widget_list, atheme=theme):
 
 		else:
 			i.configure(background=tmpColor.background)
-			
+	
+def format_enum_name(astr):
+	alist=list(astr)
+	for i in range(len(alist)):
+		if i == 0 or (i is not 0 and alist[i-1] is " "):
+			alist[i]=alist[i].capitalize()
+		if alist[i] is "_":
+			alist[i]=" "
+	return ''.join(alist)
 	

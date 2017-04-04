@@ -23,10 +23,10 @@ Config.read("config.ini")
 db_file = Config.get('DatabaseFile', 'Database')
 row_Color_1 = Config.get('Colors', 'Row_1')
 row_Color_2 = Config.get('Colors', 'Row_2')
-theme = Config.get('Colors', 'theme')
-theme = colors.theme[theme]
+stheme = Config.get('Colors', 'theme')
+stheme = colors.theme[stheme]
 color = colors.colors()
-color.set_color_theme(theme)
+color.set_color_theme(stheme)
 
 #Setting up a connection to the sqlite database
 conn = sqlite3.connect(db_file)
@@ -45,4 +45,8 @@ window = Tk()
 window.geometry("1000x500")
 window.title("Our Family Center for Entertainment")
 
+#Variable to signal when to open the menu
 run_menu=BooleanVar()
+
+#List of curent widgets
+widgets=[]
