@@ -165,7 +165,7 @@ def change_color_palet(widget_list, atheme=stheme, changewindow=True):
 			i.configure(highlightbackground=tmpColor.background, foreground=tmpColor.text_color, background=tmpColor.background)
 
 		elif isinstance(i,Entry):
-			i.configure(highlightbackground=tmpColor.accent, background=tmpColor.entry)
+			i.configure(highlightbackground=tmpColor.accent, background=tmpColor.entry, fg = tmpColor.text_color)
 
 		elif isinstance(i,ttk.Treeview):
 			ttk.Style().configure("Treeview", fieldbackground=tmpColor.table_background)
