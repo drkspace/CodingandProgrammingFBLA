@@ -7,8 +7,6 @@ class _employee(object):
 
 	def addEmployee(self):
 
-		#widgets=[]
-
 		#Create a new frame for the modules to be put into and to be deleted later on
 		frame = Frame(window)
 		frame.grid(row=0, column=0, sticky='w')
@@ -74,8 +72,6 @@ class _employee(object):
 	
 	#Method to put all of the employees in a table on screen
 	def showAll_Employee(self):
-
-	    #widgets=[]
 
             #Creating a new table
             tbl = ttk.Treeview()
@@ -188,8 +184,6 @@ class _employee(object):
 	    change_color_palet(widgets)
 	#Method to print the schedule of the employees
 	def print_Schedule_All(self):
-
-	    #widgets=[]	
 
 	    #Creating the table
 	    tbl = ttk.Treeview()
@@ -331,8 +325,6 @@ class _employee(object):
 	#Method to edit an employee
 	def edit_Employee(self):
 
-	    #widgets=[]
-
 	    #Making the frame to have all of the modules put into it
 	    #To be deleted at the end of the method
 	    frame = Frame(window)
@@ -364,8 +356,6 @@ class _employee(object):
 
 	    #Method to goto the editing screen
 	    def edit():
-
-		#widgets=[]
 
 		#Stores the old first and last name and removes the spaces form the users input
 		old_LN = removeSpaces(lName_Entry.get())
@@ -441,8 +431,6 @@ class _employee(object):
 
 	#Method to edit the employee's schedule
 	def edit_Employee_Schedule(self):
-
-		#widgets=[]
 		
 		#Frame to store all of the modules and to be deleted later on
 		frame = Frame(window)

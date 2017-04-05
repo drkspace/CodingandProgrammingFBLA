@@ -7,8 +7,6 @@ class _customer(object):
 
 	def add_Customer(self):
 
-		#widgets=[]
-
 		#Create a new frame for the modules to be put into and to be deleted later on
 		frame = Frame(window)
 		frame.grid(row=0, column=0, sticky='w')
@@ -141,14 +139,10 @@ class _customer(object):
 
 			#Stores the data in a list
 			data = cur.fetchall()
-		
-			#widgets_1=[]
 
 			#Test to see if the array has data in it
 			#If it has data, continue to let the user edit the data
 			if(len(data) > 0):
-
-				
 
 				#Remove the toSearch button
 				toSearch.grid_forget()
@@ -291,8 +285,6 @@ class _customer(object):
 
 	#Method to show the attendance of the customers
 	def print_Attendance_Customer(self):
-
-	    #widgets=[]
 
 	    #Making the table
 	    tbl = ttk.Treeview()

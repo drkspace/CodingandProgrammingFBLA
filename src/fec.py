@@ -281,10 +281,10 @@ def __init__():
     filemenu.add_command(label="Save", command=save_file)
     filemenu.add_command(label="Open", command=open_file)
     #filemenu.add_command(label="", command=new_database)
-    options.add_cascade(label="Change chart color", menu=color_options)
+    options.add_cascade(label="Change Chart color", menu=color_options)
     color_options.add_command(label="Change Color 1", command=lambda: Change_chart_color(row_Color_1, 1))
     color_options.add_command(label="Change Color 2", command=lambda: Change_chart_color(row_Color_2, 2))
-    options.add_command(label="Change theme color", command = change_theme)
+    options.add_command(label="Change Theme color", command = change_theme)
 
     #Creating the help and file cascade
     menubar.add_cascade(label="File", menu = filemenu)
@@ -294,8 +294,6 @@ def __init__():
 
 #Main program loop
 def main():
-
-    #window.configure(background=color.background)
 
     #To make the tables if they are not present
     create_table()
