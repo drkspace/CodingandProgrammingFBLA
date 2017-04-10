@@ -1,5 +1,5 @@
+#(c)Daniel Robert Kramer,2017. All Rights Reseved
 from enum import Enum
-
 
 #Using googles color palets
 #Found at https://material.io/guidelines/style/color.html#color-color-palette
