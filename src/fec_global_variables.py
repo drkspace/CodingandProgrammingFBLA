@@ -6,6 +6,7 @@ import ConfigParser
 import sqlite3
 #Importing all from Tkinter
 from Tkinter import *
+from tkFont import Font
 
 #Import platfrom to get the os type
 import platform
@@ -50,3 +51,6 @@ run_menu=BooleanVar()
 
 #List of curent widgets
 widgets=[]
+
+#Title font
+title = Font(size=25, weight="bold")

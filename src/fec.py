@@ -95,20 +95,29 @@ def menu():
 	employee = _employee()
 	customer = _customer()
 
-	#widgets = []
+	#Clear the widget list
 	del widgets[:]
+
+
+	window.grid_columnconfigure(0, weight = 1)
+
 	
 	#Label to welcome the user to the system
 	#Put in the label not in the frame but in the window so it can be centers over the buttons
-	welcomeLabel = Label(window, text="Welcome to the Family Entertainment System")
-	welcomeLabel.grid(row=0, column=0, sticky='w')
+	welcomeLabel = Label(window, text="Welcome to the Family Entertainment System", font = title)
+	welcomeLabel.grid(row=0, column=0, sticky=NSEW)
 
 	widgets.append(welcomeLabel)
 
 	#Frame to hold all the modules and to be deleted later
 	frame = Frame(window)
-	frame.grid(row=1, column=0, sticky='w')
+	frame.grid(row=1, column=0, sticky=NSEW)
 	widgets.append(frame)
+	
+	for i in range(2+1):
+		frame.grid_columnconfigure(i, weight = 1)
+
+	
 
 	#Method to delete the frame and the welcome label
 	def del_menu():
@@ -120,7 +129,7 @@ def menu():
 		del_menu()
 		employee.addEmployee()
 	addButton = Button(frame, text="Add Employee", command = lambda: menu_helper(addButtonCommandAndRemove))
-	addButton.grid(row=1, column=0, sticky='w')
+	addButton.grid(row=1, column=0, sticky=NSEW)
 	widgets.append(addButton)	
 	
 	#Method and button for showing all the employees in the system
@@ -128,7 +137,7 @@ def menu():
 		del_menu()
 		employee.showAll_Employee()
 	showButton = Button(frame, text="Show all Employees", command = lambda: menu_helper(showButtonCommandAndRemove))
-	showButton.grid(row=2, column=0, sticky='w')
+	showButton.grid(row=2, column=0, sticky=NSEW)
 	widgets.append(showButton)
 
 	#Method and button for printing the employee schedule
@@ -136,7 +145,7 @@ def menu():
 		del_menu()
 		employee.print_Schedule_All()
 	schedButton = Button(frame, text="Print Weekly Schedule", command = lambda: menu_helper(print_Schedule))
-	schedButton.grid(row=3, column=0, sticky='w')
+	schedButton.grid(row=3, column=0, sticky=NSEW)
 	widgets.append(schedButton)
 
 	#Method and button for editing an employees information
@@ -144,7 +153,7 @@ def menu():
 		del_menu()
 		employee.edit_Employee()
 	editButton = Button(frame, text="Edit/Delete an Employee's details", command = lambda: menu_helper(edit_Employee_Run))
-	editButton.grid(row=4, column=0, sticky='w')
+	editButton.grid(row=4, column=0, sticky=NSEW)
 	widgets.append(editButton)
 
 	#Method and button for editing an employees work schedule
@@ -152,7 +161,7 @@ def menu():
 		del_menu()
 		employee.edit_Employee_Schedule()
 	editSButton = Button(frame, text="Edit an Employee's Schedule details", command = lambda: menu_helper(edit_Employee_Schedule_Run))
-	editSButton.grid(row=5, column=0, sticky='w')
+	editSButton.grid(row=5, column=0, sticky=NSEW)
 	widgets.append(editSButton)
 
 	#Method and button for adding an customer to the system
@@ -160,7 +169,7 @@ def menu():
 		del_menu()
 		customer.add_Customer()
 	addCButton = Button(frame, text="Add customers", command = lambda: menu_helper(add_customer_))
-	addCButton.grid(row=1, column=2, sticky='w')
+	addCButton.grid(row=1, column=2, sticky=NSEW)
 	widgets.append(addCButton)
 
 	#Method and button for editing a customers attendance
@@ -168,7 +177,7 @@ def menu():
 		del_menu()
 		customer.customer_attendance()
 	editCButton = Button(frame, text="Change/Delete Customers Information", command = lambda: menu_helper(edit_Customer_attednace))
-	editCButton.grid(row=2, column=2, sticky='w')
+	editCButton.grid(row=2, column=2, sticky=NSEW)
 	widgets.append(editCButton)
 
 	#Method and button for displaying the attendance of the customers
@@ -176,7 +185,7 @@ def menu():
 		del_menu()
 		customer.print_Attendance_Customer()
 	printCButton = Button(frame, text="Print Customer Attendance", command = lambda: menu_helper(show_customer_attendance))
-	printCButton.grid(row=3, column=2, sticky='w')
+	printCButton.grid(row=3, column=2, sticky=NSEW)
 	widgets.append(printCButton)
 
 
@@ -203,10 +212,10 @@ def info():
 #Method to allow the user to save a file
 def save_file():
 
-	#Opening a box for a user entering a new save file
+    #Opening a box for a user entering a new save file
     f = tkFileDialog.asksaveasfile(mode='w', defaultextension=".db")
 
-	#If the user leaves the box w/o entering a file
+    #If the user leaves the box w/o entering a file
     if f is None:
         return
 
@@ -267,7 +276,7 @@ def change_theme():
 		
 
 #Initialization for the program    
-def __init__():
+def init():
     #Creating the menu at the top
     menubar = Menu(window)
     helpmenu = Menu(menubar, tearoff=0)
@@ -280,7 +289,7 @@ def __init__():
     helpmenu.add_command(label="Info", command=info)
     filemenu.add_command(label="Save", command=save_file)
     filemenu.add_command(label="Open", command=open_file)
-    #filemenu.add_command(label="", command=new_database)
+    
     options.add_cascade(label="Change Chart color", menu=color_options)
     color_options.add_command(label="Change Color 1", command=lambda: Change_chart_color(row_Color_1, 1))
     color_options.add_command(label="Change Color 2", command=lambda: Change_chart_color(row_Color_2, 2))
@@ -306,7 +315,8 @@ def main():
 
 #Starting the program
 if __name__=='__main__':
-    
-    __init__()
+
+    print "Starting up FEC"
+    init()
     main()
     print 'Have a nice day!'
