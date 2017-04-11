@@ -1,7 +1,8 @@
 #(c)Daniel Robert Kramer,2017. All Rights Reseved
 from random import randrange
-from fec_global_variables import cur, run_menu, window, conn, color, stheme
+from fec_global_variables import cur, run_menu, window, conn, color, stheme, Config
 from Tkinter import Button, Checkbutton, Entry, Label
+import tkColorChooser
 import ttk
 import random
 import colors
@@ -12,6 +13,9 @@ def removeSpaces(string):
 
 	#Converting the string passed in to a char list
 	sList = list(string)
+	
+	if len(sList) is 0:
+		return " "
 
 	#Checks to see if the first character is a space
 	if(sList[0] == ' '):
@@ -66,9 +70,9 @@ def add_to_db(fName, lName, sun, mon, tues, wend, thur, fri, sat, type):
 			break
 
 	#Insert the names and id into the employee table
-	cur.execute('INSERT INTO '+type+'('+type+'_id, first_name, last_name) VALUES(?,?,?)', (rndID, fName, lName))
+	#cur.execute('INSERT INTO '+type+'('+type+'_id, first_name, last_name) VALUES(?,?,?)', (rndID, fName, lName))
 
-	cur.execute('INSERT INTO '+type+'_schedule('+type+'_id, sun_attend, mon_attend, tues_attend, wend_attend, thurs_attend, fri_attend, sat_attend) VALUES(?,?,?,?,?,?,?,?)', (rndID, sun, mon, tues, wend, thur, fri, sat))
+	cur.execute('INSERT INTO '+type+'('+type+'_id , first_name, last_name, sun_attend, mon_attend, tues_attend, wend_attend, thurs_attend, fri_attend, sat_attend) VALUES(?,?,?,?,?,?,?,?,?,?)', (rndID, fName, lName, sun, mon, tues, wend, thur, fri, sat))
 
 	#Commit the changes to save
 	conn.commit()
@@ -142,7 +146,6 @@ def delete_from_Database(dbType, Id):
 
 	#Delete the row in the databases with the matching id
 	cur.execute('DELETE FROM '+dbType+' WHERE '+dbType+'_id = '+str(Id))
-	cur.execute('DELETE FROM '+dbType+'_schedule WHERE '+dbType+'_id = '+str(Id))
 	conn.commit()
 
 def change_color_palet(widget_list, atheme=stheme, changewindow=True):

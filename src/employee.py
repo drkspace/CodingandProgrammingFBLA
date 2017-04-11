@@ -136,7 +136,7 @@ class _employee(object):
                 employee  = getSelected()
                 val = employee['values']
                 f_name = val[0]
-                cur.execute('SELECT * FROM employee WHERE last_name = ? AND first_name = ?', (employee['text'], f_name))
+                cur.execute('SELECT * FROM employee WHERE last_name = ? AND first_name = ? ', (employee['text'], f_name))
                 for i in cur.fetchall():
                     label_notify.grid(row=3, column=0, sticky='w')
                     return i[0]
@@ -218,7 +218,7 @@ class _employee(object):
 	    color_assigner = 1
 
 	    #Selecting everything from the employee schedule
-	    cur.execute('SELECT * FROM employee_schedule')
+	    cur.execute('SELECT * FROM employee ORDER BY last_name ASC')
 
 	    #Storing the selection to schedule
 	    schedule = cur.fetchall()
@@ -248,12 +248,8 @@ class _employee(object):
 		#Change the numbers to words
 		i = change_number_to_word(i)
 
-		#Selecting the first and last name with the matching employee id
-		cur.execute('SELECT last_name, first_name FROM EMPLOYEE WHERE employee_id = '+str(i[0]))
-		for k in cur.fetchall():
-
-		    #Writing the data to the table
-		    tbl.insert('', 'end', text=k[0], values=(k[1], i[1], i[2], i[3], i[4], i[5], i[6], i[7]), tags =(str(color_assigner,)))
+		#Writing the data to the table
+		tbl.insert('', 'end', text=i[1], values=(i[2], i[3], i[4], i[5], i[6], i[7], i[8], i[9]), tags =(str(color_assigner,)))
 
 		#Multiply the color assigner by -1 so it would alternate between -1 and 1
 		color_assigner *= -1
@@ -369,7 +365,7 @@ class _employee(object):
 		if(len(tmp) > 0):
 
 		    #Sets the id
-		    id = tmp[0][0]
+		    eid = str(tmp[0][0])
 
 		    #Deletes the toSearch Button
 		    toSearch.grid_forget()
@@ -386,9 +382,10 @@ class _employee(object):
 		        FN = fName_Entry.get()
 
 			#Use 2 different updates because of a limitation in sqlite3
-		        cur.execute('UPDATE employee SET last_name = ? WHERE last_name = ? AND first_name = ?', (removeSpaces(LN), old_LN, old_FN))
+		        cur.execute('UPDATE employee SET last_name = ? WHERE employee_id = ?', (removeSpaces(LN), eid))
 		        conn.commit()
-		        cur.execute('UPDATE employee SET first_name = ? WHERE last_name = ? AND first_name = ?', (removeSpaces(FN), old_LN, old_FN))
+
+		        cur.execute('UPDATE employee SET first_name = ? WHERE employee_id = ?', (removeSpaces(FN), eid))
 
 			#Committing the changes
 		        conn.commit()
@@ -511,7 +508,7 @@ class _employee(object):
 				for i in data:
 
 					#Selecting the data from the schedule with the correct id
-					cur.execute('SELECT * FROM employee_schedule WHERE employee_id=' + str(i[0]))
+					cur.execute('SELECT * FROM employee WHERE employee_id=' + str(i[0]))
 					for j in cur.fetchall():
 
 						#Loop to have all of the buttons selected if they were selected before
@@ -528,9 +525,9 @@ class _employee(object):
 					#Method for editing the schedule and going back to the menu
 
 					def get_input():
-						#dayButtons_var=[]
-						#for i in xrange(7):
-							#dayButtons_var.append(dayVar[i].get())
+						dayButtons_var=[]
+						for k in xrange(7):
+							dayButtons_var.append(dayVar[k].get())
 						self.edit_schedule(i[0], dayVar)
 						frame.grid_forget()
 						run_menu.set(True)
@@ -556,12 +553,12 @@ class _employee(object):
 		change_color_palet(widgets)
 
 	#Method for editing the schedule
-	def edit_schedule(eId, attend_list):
+	def edit_schedule(self, eId, attend_list):
 
 		for i in xrange(len(attend_list)):
 
 			#Have to call separate UPDATE commands because of a limitation in sqlite3
-			cur.execute('UPDATE employee_schedule SET '+day_week_short[i]+'_attend= ? WHERE employee_id= ?', (str(attend_list[i].get()), eId))
+			cur.execute('UPDATE employee SET '+day_week_short[i]+'_attend= ? WHERE employee_id= ?', (str(attend_list[i].get()), eId))
 
 		#Committing the change to save it
 		conn.commit()

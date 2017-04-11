@@ -6,12 +6,9 @@
 #https://github.com/drkspace/CodingandProgrammingFBLA
 #######################################
 
-#TODO change theme
 #TODO Allow selecting customer/employee from table to edit
 #TODO Refined search in the tables
 #TODO Allow sorting the tables
-
-from sys import exit
 
 try:
 	#Importing all the variables and methods
@@ -25,6 +22,7 @@ except Exception as e:
 	print e
 	print "Please re-download the program from https://github.com/drkspace/CodingandProgrammingFBLA"
 	print "Please don't delete any of the downloaded files or else the program won't work"
+	from sys import exit
 	exit(0)
 
 try:
@@ -53,6 +51,7 @@ try:
 except:
 	print "Please Run the executable version located at https://github.com/drkspace/CodingandProgrammingFBLA/releases"
 	print "or please download the following modules:\nTkinter\nsqlite3\nrandom\nConfigParser\nsubprocess\nshutil (If running in windows)"
+	from sys import exit
 	exit(0)
 
 #Version number
@@ -64,13 +63,13 @@ version = "0.6.0"
 def create_table():
 
 	#Create a table for the employee's names and id's
-	cur.execute('CREATE TABLE IF NOT EXISTS employee(employee_id REAL, first_name TEXT, last_name TEXT)')
+	#cur.execute('CREATE TABLE IF NOT EXISTS employee(employee_id REAL, first_name TEXT, last_name TEXT)')
 
 	#Create a table for the days the employee is working
-	cur.execute('CREATE TABLE IF NOT EXISTS employee_schedule(employee_id REAL, sun_attend VALUE, mon_attend VALUE, tues_attend VALUE, wend_attend VALUE, thurs_attend VALUE, fri_attend VALUE, sat_attend VALUE)')
+	cur.execute('CREATE TABLE IF NOT EXISTS employee(employee_id REAL, first_name TEXT, last_name TEXT, sun_attend VALUE, mon_attend VALUE, tues_attend VALUE, wend_attend VALUE, thurs_attend VALUE, fri_attend VALUE, sat_attend VALUE)')
 
 	#Create a table for the the customers names and id's
-	cur.execute('CREATE TABLE IF NOT EXISTS customer(customer_id REAL, first_name TEXT, last_name TEXT)')
+	#cur.execute('CREATE TABLE IF NOT EXISTS customer(customer_id REAL, first_name TEXT, last_name TEXT)')
 
 	#Create a table for the times and days the customer attended
 	#Only required to store if the customer is attending in the am or pm
@@ -79,7 +78,7 @@ def create_table():
 	#1 - PM
 	#2 - AM
 	#3 - AM/PM
-	cur.execute('CREATE TABLE IF NOT EXISTS customer_schedule(customer_id REAL, sun_attend REAL, mon_attend REAL, tues_attend REAL, wend_attend REAL, thurs_attend REAL, fri_attend REAL, sat_attend REAL)')
+	cur.execute('CREATE TABLE IF NOT EXISTS customer(customer_id REAL,first_name TEXT, last_name TEXT, sun_attend REAL, mon_attend REAL, tues_attend REAL, wend_attend REAL, thurs_attend REAL, fri_attend REAL, sat_attend REAL)')
 
 #Method to assist the recreation of the menu
 def menu_helper(amethod):
@@ -100,7 +99,7 @@ def menu():
 
 
 	window.grid_columnconfigure(0, weight = 1)
-
+	window.grid_columnconfigure(1, weight = 1)
 	
 	#Label to welcome the user to the system
 	#Put in the label not in the frame but in the window so it can be centers over the buttons
@@ -116,8 +115,6 @@ def menu():
 	
 	for i in range(2+1):
 		frame.grid_columnconfigure(i, weight = 1)
-
-	
 
 	#Method to delete the frame and the welcome label
 	def del_menu():
@@ -222,6 +219,7 @@ def save_file():
     if os == 'Linux':
         call(['cp', db_file ,  f.name])
         return
+
     elif os == 'Windows':
         copyfile(db_file, f.name)
         return

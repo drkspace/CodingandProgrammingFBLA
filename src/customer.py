@@ -12,6 +12,9 @@ class _customer(object):
 		frame.grid(row=0, column=0, sticky='w')
 		widgets.append(frame)
 
+		for i in range(2+1):
+			frame.grid_columnconfigure(i, weight = 1)
+
 		#taking user input
 		#New label for what the user is going to input
 		label1 = Label(frame, text="Customers's First Name: ")
@@ -198,7 +201,7 @@ class _customer(object):
 				id = str(data[0][0])
 
 				#Selecting the data from customer attendance with the correct customer id
-				cur.execute('SELECT * FROM customer_schedule WHERE customer_id = '+id)
+				cur.execute('SELECT * FROM customer WHERE customer_id = '+id)
 
 				#Storing the attendance in attend
 				attend = cur.fetchall()
@@ -234,7 +237,7 @@ class _customer(object):
 						total.append(AMVar[i].get()+PMVar[i].get())
 					for i in xrange(7):
 						#Have to update each day's attendance individually, limitation in sqlite3
-						cur.execute("UPDATE customer_schedule SET "+day_week_short[i]+"_attend = ? WHERE customer_id = ?", (str(total[i]), id))
+						cur.execute("UPDATE customer SET "+day_week_short[i]+"_attend = ? WHERE customer_id = ?", (str(total[i]), id))
 
 					#Commit the changes
 					conn.commit()
@@ -319,35 +322,34 @@ class _customer(object):
 	    color_assigner = 1
 
 	    #Selecting everything from customer attendance
-	    cur.execute('SELECT * FROM customer_schedule')
+	    cur.execute('SELECT * FROM customer ORDER BY last_name ASC')
 
 	    #Storing the customer attendance in attendance
 	    attendance = cur.fetchall()
 	    for i in attendance:
 
 		#Selecting the names of the customer with matching id numbers
-		cur.execute('SELECT last_name, first_name FROM customer WHERE customer_id = '+str(i[0]))
-		for k in cur.fetchall():
+		
 
-		    #Having AMPM store what the certain cell of the table should display depending on the stored number
-		    AMPM = []
-		    for j in i:
-		        if(j >= 4):
-		            continue
-		        if(j == 0):
-		            AMPM.append('Absent')
-		        if(j == 1):
-		            AMPM.append('PM')
-		        if(j == 2):
-		            AMPM.append('AM')
-		        if(j == 3):
-		            AMPM.append('AM/PM')
+		#Having AMPM store what the certain cell of the table should display depending on the stored number
+		AMPM = []
+		for j in i:
+	        	if(j >= 4):
+	          	    continue
+	       	 	if(j == 0):
+	            	    AMPM.append('Absent')
+	        	if(j == 1):
+	           	    AMPM.append('PM')
+	        	if(j == 2):
+	                    AMPM.append('AM')
+	        	if(j == 3):
+	           	    AMPM.append('AM/PM')
 
-		    #Inserting the information into the table
-		    tbl.insert('', 'end', text=k[0], values=(k[1], AMPM[0], AMPM[1], AMPM[2], AMPM[3], AMPM[4], AMPM[5], AMPM[6]), tags =(str(color_assigner,)))
+		#Inserting the information into the table
+	        tbl.insert('', 'end', text=i[1], values=(i[2], AMPM[0], AMPM[1], AMPM[2], AMPM[3], AMPM[4], AMPM[5], AMPM[6]), tags =(str(color_assigner,)))
 
-		    #Multiplying color assigner by -1 to have is cycle between -1 and 1
-		    color_assigner *= -1
+	        #Multiplying color assigner by -1 to have is cycle between -1 and 1
+		color_assigner *= -1
 
 		#Setting the background color depending on the color assigned
 		tbl.tag_configure(str(1), background=row_Color_1)
