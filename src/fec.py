@@ -8,7 +8,6 @@
 
 #TODO Allow selecting customer/employee from table to edit
 #TODO Refined search in the tables
-#TODO Allow sorting the tables
 
 try:
 	#Importing all the variables and methods
