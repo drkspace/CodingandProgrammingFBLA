@@ -102,7 +102,9 @@ ENV/
 #Hidden files
 .hidden
 
-FEC_Storage\.db
-
 #batch file
 .bat
+
+FEC_Storage\.db
+
+
