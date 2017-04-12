@@ -108,3 +108,5 @@ ENV/
 FEC_Storage\.db
 
 
+
+*.bat
