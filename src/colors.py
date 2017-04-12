@@ -27,7 +27,7 @@ class theme(Enum):
 	brown = 19
 	grey = 20
 	blue_grey = 21
-	
+
 class colors(object):
 	
 	def __init__(self):

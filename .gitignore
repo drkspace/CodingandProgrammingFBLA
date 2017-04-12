@@ -103,3 +103,6 @@ ENV/
 .hidden
 
 FEC_Storage\.db
+
+#batch file
+.bat

@@ -49,7 +49,7 @@ try:
 
 except:
 	print "Please Run the executable version located at https://github.com/drkspace/CodingandProgrammingFBLA/releases"
-	print "or please download the following modules:\nTkinter\nsqlite3\nrandom\nConfigParser\nsubprocess\nshutil (If running in windows)"
+	print "or please download the following modules:\nTkinter\nsqlite3\nrandom\nConfigParser\nsubprocess\nshutil (If running in windows)\nenum34"
 	from sys import exit
 	exit(0)
 
