@@ -16,6 +16,9 @@ import colors
 #Setting the platform
 os = platform.system()
 
+#Version number
+version = "0.9.0"
+
 #Setting up config file parser
 Config = ConfigParser.ConfigParser()
 Config.read("config.ini")

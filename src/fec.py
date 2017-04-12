@@ -1,7 +1,7 @@
 #######################################
 #(c)Daniel Robert Kramer,2017. All Rights Reseved
 #Daniel Kramer, Johns Creek High School
-#Version 0.6.0
+#Version 0.9.0
 #2016-2017 FBLA Coding and Programming Competition
 #https://github.com/drkspace/CodingandProgrammingFBLA
 #######################################
@@ -52,9 +52,6 @@ except:
 	print "or please download the following modules:\nTkinter\nsqlite3\nrandom\nConfigParser\nsubprocess\nshutil (If running in windows)"
 	from sys import exit
 	exit(0)
-
-#Version number
-version = "0.6.0"
 
 #Used to make all the necessary tables in the database
 #If the table already exist, nothing happens to that database here
