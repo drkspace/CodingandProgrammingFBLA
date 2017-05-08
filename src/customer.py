@@ -206,20 +206,20 @@ class _customer(object):
 				#Storing the attendance in attend
 				attend = cur.fetchall()
 				for i in attend:
-
+					
 					#Loop to have all of the buttons selected if they were selected before
-					for k in xrange(8):
+					for k in xrange(3,10):
 						if(i[k] >= 4):
 							continue
 						if(i[k] == 0):
 							continue
 						if(i[k] == 1):
-							PMButton[k-1].select()
+							PMButton[k-3].select()
 						if(i[k] == 2):
-							AMButton[k-1].select()
+							AMButton[k-3].select()
 						if(i[k] == 3):
-							AMButton[k-1].select()
-							PMButton[k-1].select()
+							AMButton[k-3].select()
+							PMButton[k-3].select()
 
 				#Display all of the days of the week
 				for i in xrange(len(day_week)):
@@ -382,10 +382,15 @@ class _customer(object):
 		f_name = val[0]
 		cur.execute('SELECT * FROM customer WHERE last_name = ? AND first_name = ?', (customer['text'], f_name))
 		for i in cur.fetchall():
-		    label_notify.grid(row=3,  column = 2, sticky='w')
+		    label_notify.grid(row=3,  column = 2, sticky='w', columnspan=2)
 		    return i[0]
+	   
+	    def reload(t='customer'):
+		delete_from_Database(t, getID())
+		delete_frame()
+		self.print_Attendance_Customer()
 
-	    deleteEmployeeButton = Button(window,  text = "Delete This Customer",  command = lambda: delete_from_Database('customer', getID()) )
+	    deleteEmployeeButton = Button(window,  text = "Delete This Customer",  command =reload)
 	    deleteEmployeeButton.grid(row=2, column=2, sticky='w')
 	    widgets.append(deleteEmployeeButton)
 
@@ -407,11 +412,14 @@ class _customer(object):
 
 	    #Method and button for adding an customer to the system
 	    def add_customer_():
+		delete_frame()
+		add_Customer()
+
+	    def delete_frame():
 		tbl.grid_remove()
 		toMenu.grid_remove()
 		addCButton.grid_remove()
 		deleteEmployeeButton.grid_remove()
-		add_Customer()
 
 	    addCButton = Button(window, text="Add customers", command=add_customer_)
 	    addCButton.grid(row=2, column=3, sticky='w')

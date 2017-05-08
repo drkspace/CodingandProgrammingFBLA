@@ -116,6 +116,8 @@ def menu():
 	def del_menu():
 		frame.grid_forget()
 		welcomeLabel.grid_forget()
+		window.grid_columnconfigure(0, weight = 0)
+		window.grid_columnconfigure(1, weight = 0)
 
 	#Method and button for adding an employee to the system
 	def addButtonCommandAndRemove():

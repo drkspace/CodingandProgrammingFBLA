@@ -143,7 +143,6 @@ def delete_from_Database(dbType, Id):
 	if dbType not in ['employee', 'customer']:
 		print("There has been an error, invalid dbType")
 		return
-
 	#Delete the row in the databases with the matching id
 	cur.execute('DELETE FROM '+dbType+' WHERE '+dbType+'_id = '+str(Id))
 	conn.commit()

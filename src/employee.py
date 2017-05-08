@@ -72,7 +72,7 @@ class _employee(object):
 	
 	#Method to put all of the employees in a table on screen
 	def showAll_Employee(self):
-
+	
             #Creating a new table
             tbl = ttk.Treeview()
 	    widgets.append(tbl)
@@ -141,9 +141,13 @@ class _employee(object):
                     label_notify.grid(row=3, column=0, sticky='w')
                     return i[0]
 
+	    def reload(t='employee'):
+		delete_from_Database(t, getID())
+		del_cur_frame()
+		self.showAll_Employee()
 
-            deleteEmployeeButton = Button(window,  text = "Delete This Employee",  command = lambda: delete_from_Database('employee', getID()))
-            deleteEmployeeButton.grid(row=2, column=2, sticky='w') 
+            deleteEmployeeButton = Button(window,  text = "Delete This Employee",  command = reload)
+            deleteEmployeeButton.grid(row=0, column=1, sticky='w') 
 	    widgets.append(deleteEmployeeButton)   
 
             #Method to delete all the items in the frame
@@ -163,11 +167,11 @@ class _employee(object):
             #Method to add an employee to the database from the table
             def add_employee():
                 del_cur_frame()
-                addEmployee()
+                self.addEmployee()
 
             #Button to add an employee
             addEmployeeButton = Button(text="Add employee",  command = add_employee)
-            addEmployeeButton.grid(row=2, column=3, sticky='w')
+            addEmployeeButton.grid(row=0, column=2, sticky='w')
 	    widgets.append(addEmployeeButton)
 
                 #Method to remove the table and go back to the menu
@@ -285,6 +289,11 @@ class _employee(object):
 		for i in cur.fetchall():
 		    return i[0]
 
+	    def reload(t='employee'):
+		delete_from_Database(t, getID())
+		del_cur_frame()
+		self.print_Schedule_All()
+
 	    deleteEmployeeButton = Button(window,  text = "Delete This Employee",  command = lambda: delete_from_Database('employee', getID()) )
 	    deleteEmployeeButton.grid(row=2, column=2, sticky='w')  
 	    widgets.append(deleteEmployeeButton)  
@@ -298,10 +307,10 @@ class _employee(object):
 	    #Method to add an employee to the database from the table
 	    def add_employee():
 		del_cur_frame()
-		addEmployee()
+		self.addEmployee()
 
 	    #Button to add an employee
-	    addEmployeeButton = Button(text="Add employee",  command = add_employee)
+	    addEmployeeButton = Button(text="Add employee",  command = lambda: self.add_employee())
 	    addEmployeeButton.grid(row=2, column=3, sticky='w')
 	    widgets.append(addEmployeeButton)
 
@@ -510,17 +519,17 @@ class _employee(object):
 					#Selecting the data from the schedule with the correct id
 					cur.execute('SELECT * FROM employee WHERE employee_id=' + str(i[0]))
 					for j in cur.fetchall():
-
+						
 						#Loop to have all of the buttons selected if they were selected before
-						for k in xrange(8):
-
+						for k in xrange(3,10):
+							
 							#Test to see if the value isn't a valid value
 							if(j[k] >= 4):
 								continue
-							if(j[k] == 0):
+							elif(j[k] == 0):
 								continue
-							if(j[k] == 1):
-								dayButtons[k-1].select()
+							elif(j[k] == 1):
+								dayButtons[k-3].select()
 
 					#Method for editing the schedule and going back to the menu
 
