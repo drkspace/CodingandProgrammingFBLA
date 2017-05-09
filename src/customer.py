@@ -248,8 +248,10 @@ class _customer(object):
 				def delete_record():
 					delete_from_Database('customer', id)
 
+					print 1
 					#Run the menu and delet the frame
 					runMenu(frame)
+					
 				#Button to delete the person
 				deleteButton = Button(frame, text='Delete Record', command=delete_record)
 				deleteButton.grid(row=14, column=0, sticky='w')
@@ -325,31 +327,28 @@ class _customer(object):
 	    cur.execute('SELECT * FROM customer ORDER BY last_name ASC')
 
 	    #Storing the customer attendance in attendance
-	    attendance = cur.fetchall()
-	    for i in attendance:
+            attendance = cur.fetchall()
+            for i in attendance:
 
-		#Selecting the names of the customer with matching id numbers
-		
+                #Having AMPM store what the certain cell of the table should display depending on the stored number
+                AMPM = []
+                for j in i:
+                                if(j >= 4):
+                                        continue
+                                if(j == 0):
+                                        AMPM.append('Absent')
+                                if(j == 1):
+                                        AMPM.append('PM')
+                                if(j == 2):
+                                        AMPM.append('AM')
+                                if(j == 3):
+                                        AMPM.append('AM/PM')
 
-		#Having AMPM store what the certain cell of the table should display depending on the stored number
-		AMPM = []
-		for j in i:
-	        	if(j >= 4):
-	          	    continue
-	       	 	if(j == 0):
-	            	    AMPM.append('Absent')
-	        	if(j == 1):
-	           	    AMPM.append('PM')
-	        	if(j == 2):
-	                    AMPM.append('AM')
-	        	if(j == 3):
-	           	    AMPM.append('AM/PM')
+                #Inserting the information into the table
+                tbl.insert('', 'end', text=i[2], values=(i[1], AMPM[0], AMPM[1], AMPM[2], AMPM[3], AMPM[4], AMPM[5], AMPM[6]), tags =(str(color_assigner,)))
 
-		#Inserting the information into the table
-	        tbl.insert('', 'end', text=i[1], values=(i[2], AMPM[0], AMPM[1], AMPM[2], AMPM[3], AMPM[4], AMPM[5], AMPM[6]), tags =(str(color_assigner,)))
-
-	        #Multiplying color assigner by -1 to have is cycle between -1 and 1
-		color_assigner *= -1
+                #Multiplying color assigner by -1 to have is cycle between -1 and 1
+                color_assigner *= -1
 
 		#Setting the background color depending on the color assigned
 		tbl.tag_configure(str(1), background=row_Color_1)
@@ -357,18 +356,18 @@ class _customer(object):
 
 	    #Return the selected item from the table
 	    def selectedItem(): 
-		curItem = tbl.focus()
-		return tbl.item(curItem)
+			curItem = tbl.focus()
+			return tbl.item(curItem)
 
 	    #Test to see if there is an item selected    
 	    def isSelected():
-		return selectedItem() is not None
+			return selectedItem() is not None
 
 	    #Return the employee info is there is a selection
 	    def getSelected(): 
 		if isSelected():
-		    customer = selectedItem()
-		    return customer
+		    acustomer = selectedItem()
+		    return acustomer
 		else:
 		    return None
 
@@ -377,20 +376,21 @@ class _customer(object):
 
 	    #Return the Id of the employee
 	    def getID():
-		customer  = getSelected()
-		val = customer['values']
-		f_name = val[0]
-		cur.execute('SELECT * FROM customer WHERE last_name = ? AND first_name = ?', (customer['text'], f_name))
-		for i in cur.fetchall():
-		    label_notify.grid(row=3,  column = 2, sticky='w', columnspan=2)
-		    return i[0]
+			acustomer  = getSelected()
+			val = acustomer['values']
+			f_name = val[0]
+			cur.execute('SELECT * FROM customer WHERE last_name IS ? AND first_name IS ?', (acustomer['text'], f_name,))
+			for i in cur.fetchall():
+				label_notify.grid(row=3,  column = 2, sticky='w', columnspan=2)
+				return i[0]
 	   
-	    def reload(t='customer'):
-		delete_from_Database(t, getID())
-		delete_frame()
-		self.print_Attendance_Customer()
+	    def reload(database_type='customer'):
+			
+			delete_from_Database(database_type, getID())
+			delete_frame()
+			self.print_Attendance_Customer()
 
-	    deleteEmployeeButton = Button(window,  text = "Delete This Customer",  command =reload)
+	    deleteEmployeeButton = Button(window,  text = "Delete This Customer",  command = reload)
 	    deleteEmployeeButton.grid(row=2, column=2, sticky='w')
 	    widgets.append(deleteEmployeeButton)
 

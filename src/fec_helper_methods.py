@@ -13,7 +13,7 @@ def removeSpaces(string):
 
 	#Converting the string passed in to a char list
 	sList = list(string)
-	
+
 	if len(sList) is 0:
 		return " "
 
@@ -30,13 +30,13 @@ def removeSpaces(string):
 	return string
 
 def switch_slash(string):
-    
+
     #Converting the string passed in to a char list
     sList = list(string)
-    
+
     #Looping through the char list
     for i in range(len(sList)):
-        
+
         #Switching if the is a / or \
         if sList[i]=='/':
             sList[i]='\\'
@@ -44,10 +44,10 @@ def switch_slash(string):
         elif sList[i]=='\\':
             sList[i]='/'
             continue
-    
+
     #Returning the string
     return ''.join(sList)
-    
+
 
 #Adds an employee or customer to the database
 def add_to_db(fName, lName, sun, mon, tues, wend, thur, fri, sat, type):
@@ -135,31 +135,31 @@ def checkAll(list_of_checkbox, mode):
 			list_of_checkbox[i].deselect()
 
 #Method to delete an employee/customer from their database
-#If dbType is 0 - Employee
-#If dbType is 1 - Customer
 def delete_from_Database(dbType, Id):
 
-	#Changes the int to the corresponding string
+	#Checks to see if the passed in database type is valid
 	if dbType not in ['employee', 'customer']:
 		print("There has been an error, invalid dbType")
 		return
+
 	#Delete the row in the databases with the matching id
-	cur.execute('DELETE FROM '+dbType+' WHERE '+dbType+'_id = '+str(Id))
+	
+	cur.execute('DELETE FROM {} WHERE {}_id = ?'.format(dbType,dbType), (Id,))
 	conn.commit()
 
 def change_color_palet(widget_list, atheme=stheme, changewindow=True):
-	
+
 	global color
 	tmpColor = copy.copy(color)
 
 	if atheme is not stheme:
 		tmpColor.set_color_theme(atheme)
-	
+
 	if changewindow==True:
 		window.configure(background=tmpColor.background)
 
 	for i in widget_list:
-		
+
 		if isinstance(i,Button):
 			i.configure(highlightbackground=tmpColor.accent, background=tmpColor.background, foreground=tmpColor.text_color)
 
@@ -177,7 +177,7 @@ def change_color_palet(widget_list, atheme=stheme, changewindow=True):
 
 		else:
 			i.configure(background=tmpColor.background)
-	
+
 def format_enum_name(astr):
 	alist=list(astr)
 	for i in range(len(alist)):
@@ -186,4 +186,4 @@ def format_enum_name(astr):
 		if alist[i] is "_":
 			alist[i]=" "
 	return ''.join(alist)
-	
+

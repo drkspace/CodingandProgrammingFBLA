@@ -253,7 +253,7 @@ class _employee(object):
 		i = change_number_to_word(i)
 
 		#Writing the data to the table
-		tbl.insert('', 'end', text=i[1], values=(i[2], i[3], i[4], i[5], i[6], i[7], i[8], i[9]), tags =(str(color_assigner,)))
+		tbl.insert('', 'end', text=i[2], values=(i[1], i[3], i[4], i[5], i[6], i[7], i[8], i[9]), tags =(str(color_assigner,)))
 
 		#Multiply the color assigner by -1 so it would alternate between -1 and 1
 		color_assigner *= -1
@@ -294,7 +294,7 @@ class _employee(object):
 		del_cur_frame()
 		self.print_Schedule_All()
 
-	    deleteEmployeeButton = Button(window,  text = "Delete This Employee",  command = lambda: delete_from_Database('employee', getID()) )
+	    deleteEmployeeButton = Button(window,  text = "Delete This Employee",  command = reload )
 	    deleteEmployeeButton.grid(row=2, column=2, sticky='w')  
 	    widgets.append(deleteEmployeeButton)  
 
