@@ -46,7 +46,7 @@ day_week_short = ['sun', 'mon', 'tues', 'wend', 'thurs', 'fri', 'sat']
 window = Tk()
 
 #setting the size and title
-window.geometry("750x500")
+window.geometry("950x500")
 window.title("Our Family Center for Entertainment")
 
 #Variable to signal when to open the menu
