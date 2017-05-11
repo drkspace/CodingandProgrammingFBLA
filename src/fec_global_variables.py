@@ -17,7 +17,7 @@ import colors
 os = platform.system()
 
 #Version number
-version = "0.9.0"
+version = "1.0.0"
 
 #Setting up config file parser
 Config = ConfigParser.ConfigParser()
@@ -46,7 +46,7 @@ day_week_short = ['sun', 'mon', 'tues', 'wend', 'thurs', 'fri', 'sat']
 window = Tk()
 
 #setting the size and title
-window.geometry("1000x500")
+window.geometry("750x500")
 window.title("Our Family Center for Entertainment")
 
 #Variable to signal when to open the menu

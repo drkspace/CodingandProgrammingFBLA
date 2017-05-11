@@ -2,6 +2,7 @@
 from fec_global_variables import *
 from fec_helper_methods import *
 import ttk
+import ConfigParser
 
 class _customer(object):
 
@@ -351,6 +352,8 @@ class _customer(object):
                 color_assigner *= -1
 
 		#Setting the background color depending on the color assigned
+		row_Color_1 = Config.get('Colors', 'Row_1')
+		row_Color_2 = Config.get('Colors', 'Row_2')
 		tbl.tag_configure(str(1), background=row_Color_1)
 		tbl.tag_configure(str(-1), background=row_Color_2)
 
@@ -412,14 +415,15 @@ class _customer(object):
 
 	    #Method and button for adding an customer to the system
 	    def add_customer_():
-		delete_frame()
-		add_Customer()
+			delete_frame()
+			self.add_Customer()
 
 	    def delete_frame():
-		tbl.grid_remove()
-		toMenu.grid_remove()
-		addCButton.grid_remove()
-		deleteEmployeeButton.grid_remove()
+			tbl.grid_remove()
+			toMenu.grid_remove()
+			addCButton.grid_remove()
+			deleteEmployeeButton.grid_remove()
+			label_notify.grid_remove()
 
 	    addCButton = Button(window, text="Add customers", command=add_customer_)
 	    addCButton.grid(row=2, column=3, sticky='w')

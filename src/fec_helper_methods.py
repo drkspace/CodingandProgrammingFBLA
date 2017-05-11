@@ -1,6 +1,6 @@
 #(c)Daniel Robert Kramer,2017. All Rights Reseved
 from random import randrange
-from fec_global_variables import cur, run_menu, window, conn, color, stheme, Config
+from fec_global_variables import cur, run_menu, window, conn, color, stheme, Config, row_Color_1, row_Color_2
 from Tkinter import Button, Checkbutton, Entry, Label
 import tkColorChooser
 import ttk
@@ -99,27 +99,28 @@ def Change_chart_color(color, var):
 	#Converts the rgb returned by the color chooser and converts it into the hex code
 	color_result_hex = '#%02x%02x%02x' % (color_result[0][0], color_result[0][1], color_result[0][2])
 
+	cfgfile = open("config.ini", 'w')
 	#Test from the var to see what row color needs to be changed
 	if var == 1:
-		global row_Color_1
-		row_Color_1 = color_result_hex
-
-		#Save the new database file to the config file
-		cfgfile = open("config.ini", 'w')
-		Config.set('Colors', 'Row_1', row_Color_1)
-		Config.write(cfgfile)
-		cfgfile.close()
+	
+		#Save the new color to the config file
+		Config.set('Colors', 'Row_1', color_result_hex)
 	elif var == 2:
-		global row_Color_2
-		row_Color_2 = color_result_hex
-
-		#Save the new database file to the config file
-		cfgfile = open("config.ini", 'w')
-		Config.set('Colors', 'Row_2', row_Color_2)
-		Config.write(cfgfile)
-		cfgfile.close()
+	
+		#Save the new color to the config file
+		Config.set('Colors', 'Row_2', color_result_hex)
 	else:
+		cfgfile.close()
 		return
+		
+	Config.write(cfgfile)
+	cfgfile.close()
+	
+	global row_Color_1
+	global row_Color_2
+	row_Color_1 = Config.get('Colors', 'Row_1')
+	row_Color_2 = Config.get('Colors', 'Row_2')
+
 
 #Method that checks all checkboxes in a list of buttons
 #if mode is 0 -> select all buttons

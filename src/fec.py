@@ -189,19 +189,23 @@ def menu():
 #Method for displaying the help box
 def help():
 	win = Tk()
-	win.geometry("300x250")
+	win.geometry("500x250")
 	win.title("Help")
 	text = Text(win)
-	text.insert(INSERT, "Press one of the Buttons to goto that\ndesired section\n\nUse the options in file to open/save a\ndatabase\n\nUse the options menu to change the colors of the tables\n\n")
+	text.insert(INSERT, "Press one of the Buttons to goto that desired section")
+	text.insert(INSERT, '\n\nYou can change the chart colors by going to \nOptions->Change chart colors')
+	text.insert(INSERT, '\n\nYou can change the theme by going to Options->Change theme')
+	text.insert(INSERT, '\n\nYou can save by going to File->Save')
+	text.insert(INSERT, '\n\nYou can open a compatable database by going to File->Open\nThis requires you to close and reopen the program')
 	text.pack()
 
 #Method for displaying the information about the program
 def info():
 	win = Tk()
-	win.geometry("202x200")
+	win.geometry("400x200")
 	win.title("Info")
 	text = Text(win)
-	text.insert(INSERT, "Created by Daniel Kramer for the 2016-2017 FBLA Coding & Programming competition.\n\nVersion "+version)
+	text.insert(INSERT, "Created by Daniel Kramer for the 2016-2017 \nFBLA Coding & Programming competition.\n\nVersion "+version)
 	text.pack()
 
 #Method to allow the user to save a file
@@ -232,7 +236,7 @@ def open_file():
 
     #If the user preses cancel
     if db_file is None:
-	return
+		return
 
 	#sets conn to the global variable and changes the connection location to that file
     global conn
